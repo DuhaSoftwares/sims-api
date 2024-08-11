@@ -1,0 +1,596 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.API\\Duha.SIMS.API.csproj": {}
+  },
+  "projects": {
+    "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.API\\Duha.SIMS.API.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.API\\Duha.SIMS.API.csproj",
+        "projectName": "Duha.SIMS.API",
+        "projectPath": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.API\\Duha.SIMS.API.csproj",
+        "packagesPath": "C:\\Users\\acs\\.nuget\\packages\\",
+        "outputPath": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.API\\obj\\publish\\win-x86\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\acs\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.BAL\\Duha.SIMS.BAL.csproj": {
+                "projectPath": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.BAL\\Duha.SIMS.BAL.csproj"
+              },
+              "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj": {
+                "projectPath": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj"
+              },
+              "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.DAL\\Duha.SIMS.DAL.csproj": {
+                "projectPath": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.DAL\\Duha.SIMS.DAL.csproj"
+              },
+              "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.DomainModels\\Duha.SIMS.DomainModels.csproj": {
+                "projectPath": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.DomainModels\\Duha.SIMS.DomainModels.csproj"
+              },
+              "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.ServiceModels\\Duha.SIMS.ServiceModels.csproj": {
+                "projectPath": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.ServiceModels\\Duha.SIMS.ServiceModels.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "Microsoft.AspNet.WebApi.OData": {
+              "target": "Package",
+              "version": "[5.7.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.AspNetCore.OData": {
+              "target": "Package",
+              "version": "[8.2.5, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.5.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303\\RuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "win-x86": {
+          "#import": []
+        }
+      }
+    },
+    "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.BAL\\Duha.SIMS.BAL.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.BAL\\Duha.SIMS.BAL.csproj",
+        "projectName": "Duha.SIMS.BAL",
+        "projectPath": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.BAL\\Duha.SIMS.BAL.csproj",
+        "packagesPath": "C:\\Users\\acs\\.nuget\\packages\\",
+        "outputPath": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.BAL\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\acs\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj": {
+                "projectPath": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj"
+              },
+              "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.DAL\\Duha.SIMS.DAL.csproj": {
+                "projectPath": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.DAL\\Duha.SIMS.DAL.csproj"
+              },
+              "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.ServiceModels\\Duha.SIMS.ServiceModels.csproj": {
+                "projectPath": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.ServiceModels\\Duha.SIMS.ServiceModels.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "DocumentFormat.OpenXml": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Runtime.win-x86",
+              "version": "[6.0.32, 6.0.32]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Runtime.win-x86",
+              "version": "[6.0.32, 6.0.32]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Runtime.win-x86",
+              "version": "[6.0.32, 6.0.32]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303\\RuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "win-x86": {
+          "#import": []
+        }
+      }
+    },
+    "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj",
+        "projectName": "Duha.SIMS.Config",
+        "projectPath": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj",
+        "packagesPath": "C:\\Users\\acs\\.nuget\\packages\\",
+        "outputPath": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.Config\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\acs\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Runtime.win-x86",
+              "version": "[6.0.32, 6.0.32]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Runtime.win-x86",
+              "version": "[6.0.32, 6.0.32]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Runtime.win-x86",
+              "version": "[6.0.32, 6.0.32]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303\\RuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "win-x86": {
+          "#import": []
+        }
+      }
+    },
+    "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.DAL\\Duha.SIMS.DAL.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.DAL\\Duha.SIMS.DAL.csproj",
+        "projectName": "Duha.SIMS.DAL",
+        "projectPath": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.DAL\\Duha.SIMS.DAL.csproj",
+        "packagesPath": "C:\\Users\\acs\\.nuget\\packages\\",
+        "outputPath": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.DAL\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\acs\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.DomainModels\\Duha.SIMS.DomainModels.csproj": {
+                "projectPath": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.DomainModels\\Duha.SIMS.DomainModels.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Runtime.win-x86",
+              "version": "[6.0.32, 6.0.32]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Runtime.win-x86",
+              "version": "[6.0.32, 6.0.32]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Runtime.win-x86",
+              "version": "[6.0.32, 6.0.32]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303\\RuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "win-x86": {
+          "#import": []
+        }
+      }
+    },
+    "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.DomainModels\\Duha.SIMS.DomainModels.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.DomainModels\\Duha.SIMS.DomainModels.csproj",
+        "projectName": "Duha.SIMS.DomainModels",
+        "projectPath": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.DomainModels\\Duha.SIMS.DomainModels.csproj",
+        "packagesPath": "C:\\Users\\acs\\.nuget\\packages\\",
+        "outputPath": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.DomainModels\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\acs\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Runtime.win-x86",
+              "version": "[6.0.32, 6.0.32]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Runtime.win-x86",
+              "version": "[6.0.32, 6.0.32]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Runtime.win-x86",
+              "version": "[6.0.32, 6.0.32]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303\\RuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "win-x86": {
+          "#import": []
+        }
+      }
+    },
+    "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.ServiceModels\\Duha.SIMS.ServiceModels.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.ServiceModels\\Duha.SIMS.ServiceModels.csproj",
+        "projectName": "Duha.SIMS.ServiceModels",
+        "projectPath": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.ServiceModels\\Duha.SIMS.ServiceModels.csproj",
+        "packagesPath": "C:\\Users\\acs\\.nuget\\packages\\",
+        "outputPath": "D:\\Duha-Softwares\\SIMS\\SIMS\\Duha.SIMS.ServiceModels\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\acs\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Runtime.win-x86",
+              "version": "[6.0.32, 6.0.32]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Runtime.win-x86",
+              "version": "[6.0.32, 6.0.32]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Runtime.win-x86",
+              "version": "[6.0.32, 6.0.32]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303\\RuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "win-x86": {
+          "#import": []
+        }
+      }
+    }
+  }
+}

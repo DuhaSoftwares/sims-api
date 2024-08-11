@@ -1,0 +1,41 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\SIMS\\Duha.SIMS.API\\wwwroot\\content\\companies\\logos\\company.jpg",
+      "PackagePath": "staticwebassets\\content\\companies\\logos\\company.jpg"
+    },
+    {
+      "Id": "D:\\SIMS\\Duha.SIMS.API\\wwwroot\\content\\loginusers\\profile\\default_original.png",
+      "PackagePath": "staticwebassets\\content\\loginusers\\profile\\default_original.png"
+    },
+    {
+      "Id": "D:\\SIMS\\Duha.SIMS.API\\wwwroot\\content\\loginusers\\profile\\profile.jpg",
+      "PackagePath": "staticwebassets\\content\\loginusers\\profile\\profile.jpg"
+    },
+    {
+      "Id": "D:\\SIMS\\Duha.SIMS.API\\wwwroot\\content\\token\\token.txt",
+      "PackagePath": "staticwebassets\\content\\token\\token.txt"
+    },
+    {
+      "Id": "D:\\SIMS\\Duha.SIMS.API\\wwwroot\\health.html",
+      "PackagePath": "staticwebassets\\health.html"
+    },
+    {
+      "Id": "obj\\Release\\net6.0\\staticwebassets\\msbuild.Duha.SIMS.API.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Release\\net6.0\\staticwebassets\\msbuild.build.Duha.SIMS.API.props",
+      "PackagePath": "build\\Duha.SIMS.API.props"
+    },
+    {
+      "Id": "obj\\Release\\net6.0\\staticwebassets\\msbuild.buildMultiTargeting.Duha.SIMS.API.props",
+      "PackagePath": "buildMultiTargeting\\Duha.SIMS.API.props"
+    },
+    {
+      "Id": "obj\\Release\\net6.0\\staticwebassets\\msbuild.buildTransitive.Duha.SIMS.API.props",
+      "PackagePath": "buildTransitive\\Duha.SIMS.API.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

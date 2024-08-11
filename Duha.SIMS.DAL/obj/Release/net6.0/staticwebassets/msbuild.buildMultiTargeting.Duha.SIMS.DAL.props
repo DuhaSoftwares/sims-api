@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Duha.SIMS.DAL.props" />
+</Project>

@@ -1,0 +1,98 @@
+D:\My Projects\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\appsettings.Development.json
+D:\My Projects\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\appsettings.json
+D:\My Projects\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\Duha.SIMS.Config.exe
+D:\My Projects\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\Duha.SIMS.Config.deps.json
+D:\My Projects\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\Duha.SIMS.Config.runtimeconfig.json
+D:\My Projects\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\Duha.SIMS.Config.dll
+D:\My Projects\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\Duha.SIMS.Config.pdb
+D:\My Projects\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.GeneratedMSBuildEditorConfig.editorconfig
+D:\My Projects\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.AssemblyInfoInputs.cache
+D:\My Projects\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.AssemblyInfo.cs
+D:\My Projects\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.csproj.CoreCompileInputs.cache
+D:\My Projects\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.MvcApplicationPartsAssemblyInfo.cache
+D:\My Projects\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets.build.json
+D:\My Projects\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets.development.json
+D:\My Projects\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets\msbuild.Duha.SIMS.Config.Microsoft.AspNetCore.StaticWebAssets.props
+D:\My Projects\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets\msbuild.build.Duha.SIMS.Config.props
+D:\My Projects\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.Duha.SIMS.Config.props
+D:\My Projects\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.Duha.SIMS.Config.props
+D:\My Projects\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets.pack.json
+D:\My Projects\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\scopedcss\bundle\Duha.SIMS.Config.styles.css
+D:\My Projects\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.dll
+D:\My Projects\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\refint\Duha.SIMS.Config.dll
+D:\My Projects\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.pdb
+D:\My Projects\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.genruntimeconfig.cache
+D:\My Projects\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\ref\Duha.SIMS.Config.dll
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\appsettings.Development.json
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\appsettings.json
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\Duha.SIMS.Config.exe
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\Duha.SIMS.Config.deps.json
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\Duha.SIMS.Config.runtimeconfig.json
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\Duha.SIMS.Config.dll
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\Duha.SIMS.Config.pdb
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.GeneratedMSBuildEditorConfig.editorconfig
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.AssemblyInfoInputs.cache
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.AssemblyInfo.cs
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.csproj.CoreCompileInputs.cache
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.MvcApplicationPartsAssemblyInfo.cache
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets.build.json
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets.development.json
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets\msbuild.Duha.SIMS.Config.Microsoft.AspNetCore.StaticWebAssets.props
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets\msbuild.build.Duha.SIMS.Config.props
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.Duha.SIMS.Config.props
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.Duha.SIMS.Config.props
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets.pack.json
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\scopedcss\bundle\Duha.SIMS.Config.styles.css
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.dll
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\refint\Duha.SIMS.Config.dll
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.pdb
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.genruntimeconfig.cache
+D:\My Projects\Others\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\ref\Duha.SIMS.Config.dll
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\appsettings.Development.json
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\appsettings.json
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\Duha.SIMS.Config.exe
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\Duha.SIMS.Config.deps.json
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\Duha.SIMS.Config.runtimeconfig.json
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\Duha.SIMS.Config.dll
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\Duha.SIMS.Config.pdb
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.GeneratedMSBuildEditorConfig.editorconfig
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.AssemblyInfoInputs.cache
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.AssemblyInfo.cs
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.csproj.CoreCompileInputs.cache
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.MvcApplicationPartsAssemblyInfo.cache
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets.build.json
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets.development.json
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets\msbuild.Duha.SIMS.Config.Microsoft.AspNetCore.StaticWebAssets.props
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets\msbuild.build.Duha.SIMS.Config.props
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.Duha.SIMS.Config.props
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.Duha.SIMS.Config.props
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets.pack.json
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\scopedcss\bundle\Duha.SIMS.Config.styles.css
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.dll
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\refint\Duha.SIMS.Config.dll
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.pdb
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.genruntimeconfig.cache
+D:\Duha-Softwares\SIMS\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\ref\Duha.SIMS.Config.dll
+D:\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\Duha.SIMS.Config.exe
+D:\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\Duha.SIMS.Config.deps.json
+D:\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\Duha.SIMS.Config.runtimeconfig.json
+D:\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\Duha.SIMS.Config.dll
+D:\SIMS\Duha.SIMS.Config\bin\Debug\net6.0\Duha.SIMS.Config.pdb
+D:\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.GeneratedMSBuildEditorConfig.editorconfig
+D:\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.AssemblyInfoInputs.cache
+D:\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.AssemblyInfo.cs
+D:\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.csproj.CoreCompileInputs.cache
+D:\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.MvcApplicationPartsAssemblyInfo.cache
+D:\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets.build.json
+D:\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets.development.json
+D:\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets\msbuild.Duha.SIMS.Config.Microsoft.AspNetCore.StaticWebAssets.props
+D:\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets\msbuild.build.Duha.SIMS.Config.props
+D:\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.Duha.SIMS.Config.props
+D:\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.Duha.SIMS.Config.props
+D:\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\staticwebassets.pack.json
+D:\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\scopedcss\bundle\Duha.SIMS.Config.styles.css
+D:\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.dll
+D:\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\refint\Duha.SIMS.Config.dll
+D:\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.pdb
+D:\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\Duha.SIMS.Config.genruntimeconfig.cache
+D:\SIMS\Duha.SIMS.Config\obj\Debug\net6.0\ref\Duha.SIMS.Config.dll
