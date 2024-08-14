@@ -1,5 +1,6 @@
 using Duha.SIMS.API.Security;
 using Duha.SIMS.BAL.AppUser;
+using Duha.SIMS.BAL.Client;
 using Duha.SIMS.BAL.Interface;
 using Duha.SIMS.BAL.Security;
 using Duha.SIMS.BAL.Token;
@@ -14,15 +15,6 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Retrieve the connection string from the configuration
-/*var connectionString = builder.Configuration.GetConnectionString("ApiDbConnectionString");
-builder.Services.AddSingleton<APIConfiguration>(provider =>
-{
-    var configuration = provider.GetRequiredService<IConfiguration>();
-    var apiConfiguration = new APIConfiguration();
-    configuration.Bind("APIConfiguration", apiConfiguration); // Assumes your settings are in a section called "APIConfiguration"
-    return apiConfiguration;
-});*/
 builder.Services.Configure<APIConfiguration>(builder.Configuration.GetSection("APIConfiguration"));
 
 // Retrieve APIConfiguration from the configuration
@@ -31,20 +23,6 @@ var apiConfiguration = builder.Configuration.GetSection("APIConfiguration").Get<
 
 var connectionString = apiConfiguration.ApiDbConnectionString;
 
-// Bind the API configuration section to a strongly-typed object
-/*builder.Services.AddSingleton<APIConfiguration>(provider =>
-{
-    var configuration = provider.GetRequiredService<IConfiguration>();
-    var apiConfiguration = new APIConfiguration();
-    configuration.Bind("APIConfiguration", apiConfiguration);
-    return apiConfiguration;
-});
-*/
-
-// Add DbContext for Entity Framework Core
-/*builder.Services.AddDbContext<ApiDbContext>(options =>
-    options.UseSqlServer(connectionString));*/
-    //options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=SimsDB;Trusted_Connection=True;MultipleActiveResultSets=true"));
 builder.Services.AddDbContext<ApiDbContext>(options =>
     options.UseSqlServer(connectionString, 
         sqlOptions => sqlOptions.MigrationsAssembly("Duha.SIMS.API")));
@@ -56,6 +34,7 @@ builder.Services.AddScoped<ILoginUserDetail, LoginUserDetail>();
 builder.Services.AddScoped<ClientUserProcess>();
 builder.Services.AddScoped<ApplicationUserProcess>();
 builder.Services.AddScoped<TokenProcess>();
+builder.Services.AddScoped<ClientCompanyDetailsProcess>();
 
 // Add Identity services
 builder.Services.AddIdentity<AuthenticUserSM, IdentityRole>()
