@@ -1,3 +1,4 @@
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Duha.SIMS.API.Security;
 using Duha.SIMS.BAL.AppUser;
 using Duha.SIMS.BAL.Client;
@@ -10,19 +11,47 @@ using Duha.SIMS.ServiceModels.AppUsers.AutheticUser;
 using Duha.SIMS.ServiceModels.LoggedInIdentity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<APIConfiguration>(builder.Configuration.GetSection("APIConfiguration"));
-
-// Retrieve APIConfiguration from the configuration
+// Retrieve the connection string from the configuration
+/*var connectionString = builder.Configuration.GetConnectionString("ApiDbConnectionString");
+builder.Services.AddSingleton<APIConfiguration>(provider =>
+{
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    var apiConfiguration = new APIConfiguration();
+    configuration.Bind("APIConfiguration", apiConfiguration); // Assumes your settings are in a section called "APIConfiguration"
+    return apiConfiguration;
+});*/
 var apiConfiguration = builder.Configuration.GetSection("APIConfiguration").Get<APIConfiguration>();
-
-
+builder.Services.Configure<APIConfiguration>(builder.Configuration.GetSection("APIConfiguration"));
+builder.Services.AddSingleton(resolver =>
+    resolver.GetRequiredService<IOptions<APIConfiguration>>().Value);
 var connectionString = apiConfiguration.ApiDbConnectionString;
+// Retrieve APIConfiguration from the configuration
 
+
+// Register the APIConfiguration service
+
+
+// Bind the API configuration section to a strongly-typed object
+/*builder.Services.AddSingleton<APIConfiguration>(provider =>
+{
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    var apiConfiguration = new APIConfiguration();
+    configuration.Bind("APIConfiguration", apiConfiguration);
+    return apiConfiguration;
+});
+*/
+
+// Add DbContext for Entity Framework Core
+/*builder.Services.AddDbContext<ApiDbContext>(options =>
+    options.UseSqlServer(connectionString));*/
+    //options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=SimsDB;Trusted_Connection=True;MultipleActiveResultSets=true"));
 builder.Services.AddDbContext<ApiDbContext>(options =>
     options.UseSqlServer(connectionString, 
         sqlOptions => sqlOptions.MigrationsAssembly("Duha.SIMS.API")));
@@ -33,8 +62,8 @@ builder.Services.AddScoped<ILoginUserDetail, LoginUserDetail>();
 // Register ClientUserProcess
 builder.Services.AddScoped<ClientUserProcess>();
 builder.Services.AddScoped<ApplicationUserProcess>();
-builder.Services.AddScoped<TokenProcess>();
 builder.Services.AddScoped<ClientCompanyDetailsProcess>();
+builder.Services.AddScoped<TokenProcess>();
 
 // Add Identity services
 builder.Services.AddIdentity<AuthenticUserSM, IdentityRole>()

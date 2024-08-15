@@ -59,22 +59,40 @@ namespace Duha.SIMS.API.Controllers.Client
             return Ok(ModelConverter.FormNewSuccessResponse(singleSM));
         }
 
-        [HttpPost()]
+        #region Add Company
+        [HttpPost("mine")]
+        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "CompanyAdmin,SystemAdmin")]
         [AllowAnonymous]
-        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "CompanyAdmin, SystemAdmin")]
-        public async Task<ActionResult<ApiResponse<ClientCompanyDetailSM>>> Post([FromBody] ApiRequest<ClientCompanyDetailSM> apiRequest)
+        public async Task<ActionResult<ApiResponse<ClientCompanyDetailSM>>> AddCompanyDetails([FromBody] ApiRequest<ClientCompanyDetailSM> apiRequest)
         {
             #region Check Request
+            string userRole = null;
+            int userId = 0;
+
+            if (!User.Identity.IsAuthenticated)
+            {
+                return NotFound(ModelConverter.FormNewErrorResponse("Unauthorized User...Plz check your Credentials"));
+            }
+            else
+            {
+                userRole = User.GetUserRoleTypeFromCurrentUserClaims();
+                userId = User.GetUserRecordIdFromCurrentUserClaims();
+
+                if (string.IsNullOrEmpty(userRole) || userId == 0)
+                {
+                    return NotFound(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_IdNotInClaims));
+                }
+            }
 
             var innerReq = apiRequest?.ReqData;
             if (innerReq == null)
             {
-                return BadRequest(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_ReqDataNotFormed, ApiErrorTypeSM.InvalidInputData_NoLog));
+                return BadRequest(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_PassedDataNotSaved, ApiErrorTypeSM.NoRecord_NoLog));
             }
-            var userId = User.GetUserRecordIdFromCurrentUserClaims();
+
             #endregion Check Request
 
-            var addedSM = await _clientCompanyDetailsProcess.CreateNewCompany(userId,innerReq);
+            var addedSM = await _clientCompanyDetailsProcess.AddUserCompany(innerReq, userId, userRole);
             if (addedSM != null)
             {
                 return CreatedAtAction(nameof(GetById), new
@@ -87,6 +105,8 @@ namespace Duha.SIMS.API.Controllers.Client
                 return BadRequest(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_PassedDataNotSaved, ApiErrorTypeSM.NoRecord_NoLog));
             }
         }
+        #endregion Add Company
+
 
         [HttpPut("my")]
         [AllowAnonymous]

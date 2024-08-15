@@ -3,13 +3,10 @@ using Duha.SIMS.BAL.AppUser;
 using Duha.SIMS.BAL.Exceptions;
 using Duha.SIMS.BAL.Interface;
 using Duha.SIMS.DAL.Contexts;
-using Duha.SIMS.DomainModels.AppUsers;
 using Duha.SIMS.DomainModels.Client;
 using Duha.SIMS.DomainModels.Enums;
-using Duha.SIMS.ServiceModels.AppUsers;
 using Duha.SIMS.ServiceModels.Client;
 using Duha.SIMS.ServiceModels.CommonResponse;
-using Duha.SIMS.ServiceModels.Enums;
 using Duha.SIMS.ServiceModels.LoggedInIdentity;
 using Microsoft.EntityFrameworkCore;
 
@@ -252,58 +249,69 @@ namespace Duha.SIMS.BAL.Client
 
         #endregion Update Profile Picture
 
-        #region Create New  Company
+        #region Add User Company
         /// <summary>
-        /// Method Used for SignUp New Cliet User
+        /// Creates a new User Company 
         /// </summary>
-        /// <param name="signUpSM">SignUp Object to register a new Client User</param>
-        /// <returns>If successful, returns ClientUserSM Otherwise returns null</returns>
-        /// <exception cref="SIMSException"></exception>
-
-        public async Task<ClientCompanyDetailSM?> CreateNewCompany(int userId, ClientCompanyDetailSM objSM)
+        /// <param name="objSM">UserCompanyDetailSM object to create a new company</param>
+        /// <param name="userRole">Role of a user </param>
+        /// <returns>
+        /// If Successful, Returns new created UserCompanyDetailSM, Otherwise returns null
+        /// </returns>
+        /// <exception cref="Farm2iException"></exception>
+        public async Task<ClientCompanyDetailSM> AddUserCompany(ClientCompanyDetailSM objSM, int userId, string userRole)
         {
-            if (objSM == null)
+            using (var transaction = await _apiDbContext.Database.BeginTransactionAsync())
             {
-                throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, $"Please provide details for Creating new Company");
+                string? companyLogoPath = null;
+                var companyDM = _mapper.Map<ClientCompanyDetailDM>(objSM);
+                companyDM.CreatedBy = _loginUserDetail.LoginId;
+                companyDM.CreatedOnUTC = DateTime.UtcNow;
+                if (!string.IsNullOrEmpty(objSM.CompanyLogoPath))
+                {
+                    companyLogoPath = await SaveFromBase64(objSM.CompanyLogoPath);
+                    companyDM.CompanyLogoPath = companyLogoPath;
+                }
+                if (companyDM.ClientCompanyAddressId == 0 || companyDM.ClientCompanyAddressId == default)
+                {
+                    companyDM.ClientCompanyAddressId = null;
+                }
+                var companyCode = GenerateCompanyCode();
+                companyDM.CompanyCode = companyCode;
+
+                await _apiDbContext.ClientCompany.AddAsync(companyDM);
+
+                if (await _apiDbContext.SaveChangesAsync() > 0)
+                {
+                    if (userRole == RoleTypeDM.CompanyAdmin.ToString())
+                    {
+                        var user = await _apiDbContext.ClientUsers.FirstOrDefaultAsync(s => s.Id == userId);
+
+                        if (user != null && user.ClientCompanyDetailId != null)
+                        {
+                            throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, $"User is already registered with company, cant add a new company");
+                        }
+                        else
+                        {
+                            user.ClientCompanyDetailId = companyDM.Id;
+                            await _apiDbContext.SaveChangesAsync();
+                        }
+ 
+                    }
+
+
+                    transaction.Commit();
+                    return _mapper.Map<ClientCompanyDetailSM>(companyDM);
+                }
+                else
+                {
+                    transaction.Rollback();
+                    return null;
+                }
             }
-
-            var objDM = _mapper.Map<ClientCompanyDetailDM>(objSM);
-
-            // Validate EmailId and LoginId
-            var existingWithCompanyCode = await _apiDbContext.ClientCompany.FirstOrDefaultAsync(x => x.CompanyCode == objSM.CompanyCode);
-            if (existingWithCompanyCode != null)
-            {
-                throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, $"Company with CompanyCode {objSM.CompanyCode} Already Exist...Try Another Company Code");
-            }
-
-            var existingWithCompanyEmail = await _apiDbContext.ClientCompany.FirstOrDefaultAsync(x => x.ContactEmail == objSM.ContactEmail);
-            if (existingWithCompanyCode != null || string.IsNullOrEmpty(objSM.ContactEmail))
-            {
-                throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, $"Company with Provided Email Already Exist...Try Another Company Email");
-            }
-
-            // Set ClientCompanyDetailId to null if not provided or if it doesn't exist in the database
-            if (objSM.ClientCompanyAddressId == null || objSM.ClientCompanyAddressId == default)
-            {
-                objDM.ClientCompanyAddressId = null;
-            }
-            objDM.CreatedBy = _loginUserDetail.LoginId;
-            objDM.CreatedOnUTC = DateTime.UtcNow;
-
-            // Add client user to the database
-            await _apiDbContext.ClientCompany.AddAsync(objDM);
-
-            // If save changes is successful, return the saved client user
-            if (await _apiDbContext.SaveChangesAsync() > 0)
-            {
-                var createdUser = await GetCompanyById(objDM.Id);
-                return createdUser;
-            }
-            return null;
         }
 
-
-        #endregion 
+        #endregion Add User Company
 
         #region Delete
 
@@ -333,6 +341,33 @@ namespace Duha.SIMS.BAL.Client
 
 
         #endregion Delete
+
+        #region Generate Company Code
+
+        /// <summary>
+        /// Method used for generating CompanyCode
+        /// </summary>
+        /// <returns>
+        /// Returns newly generated CompanyCode (string)
+        /// </returns>
+        public string GenerateCompanyCode()
+        {
+            // Get the maximum company code from the database
+            string maxCompanyCode = _apiDbContext.ClientCompany
+                .Select(u => u.CompanyCode)
+                .OrderByDescending(c => c)
+                .FirstOrDefault();
+            if (maxCompanyCode == null)
+            {
+                maxCompanyCode = "100";
+            }
+
+            // Increment the maximum company code by 1
+            int newCompanyCode = int.Parse(maxCompanyCode) + 1;
+            return newCompanyCode.ToString().PadLeft(maxCompanyCode.Length, '0');
+        }
+
+        #endregion Generate Company Code
 
         #region Private Functions
         /// <summary>
