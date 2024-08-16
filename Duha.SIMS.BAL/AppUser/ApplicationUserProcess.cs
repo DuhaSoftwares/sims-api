@@ -96,7 +96,7 @@ namespace Duha.SIMS.BAL.AppUser
         /// <returns>
         /// If Successful, returns Updated ApplicationUserSM Otherwise return null
         /// </returns>
-        public async Task<ApplicationUserSM> UpdateApplicationUserDetails(int userId, ApplicationUserSM objSM)
+        public async Task<ApplicationUserSM> UpdateApplicationUserDetails(int userId, ApplicationUserSM objSM, string userRole)
         {
             if (userId == null)
             {
@@ -112,6 +112,10 @@ namespace Duha.SIMS.BAL.AppUser
             var objDM = await _apiDbContext.ApplicationUsers
             .Where(x => x.Id == userId)
                 .FirstOrDefaultAsync();
+            if (!objDM.RoleType.ToString().Equals(userRole))
+            {
+                throw new SIMSException(DomainModels.Base.ExceptionTypeDM.NotFoundException, "Unauthorized to Update the user");
+            }
 
             if (!string.IsNullOrEmpty(objSM.LoginId))
             {
@@ -341,12 +345,16 @@ namespace Duha.SIMS.BAL.AppUser
         /// <param name="id"></param>
         /// <returns></returns>
 
-        public async Task<DeleteResponseRoot> DeleteApplicationUserById(int id)
+        public async Task<DeleteResponseRoot> DeleteApplicationUserById(int id, string userRole)
         {
-            var ApplicationToDelete = await _apiDbContext.ApplicationUsers // Load related `ApplicationCompanyDetail`
+            var applicationToDelete = await _apiDbContext.ApplicationUsers // Load related `ApplicationCompanyDetail`
                 .FirstOrDefaultAsync(f => f.Id == id);
-                // Remove the Application user
-                _apiDbContext.ApplicationUsers.Remove(ApplicationToDelete);
+            if (!applicationToDelete.RoleType.ToString().Equals(userRole))
+            {
+                throw new SIMSException(DomainModels.Base.ExceptionTypeDM.NotFoundException, "Unauthorized to Delete the user");
+            }
+            // Remove the Application user
+            _apiDbContext.ApplicationUsers.Remove(applicationToDelete);
 
                 // Save changes
                 if (await _apiDbContext.SaveChangesAsync() > 0)

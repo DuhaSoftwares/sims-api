@@ -37,7 +37,7 @@ namespace Duha.SIMS.API.Controllers.Client
 
 
         [HttpGet("{id}")]
-        //[Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "ClientAdmin, SuperAdmin")]
+        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "ClientAdmin, SuperAdmin")]
         public async Task<ActionResult<ApiResponse<ClientCompanyDetailSM>>> GetById(int id)
         {
             var singleSM = await _clientCompanyDetailsProcess.GetCompanyById(id);
@@ -51,8 +51,28 @@ namespace Duha.SIMS.API.Controllers.Client
             }
         }
 
+        [HttpGet("my")]
+        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "CompanyAdmin")]
+        public async Task<ActionResult<ApiResponse<ClientCompanyDetailSM>>> GetMineById()
+        {
+            var companyCode = User.GetCompanyCodeFromCurrentUserClaims();
+            if (string.IsNullOrEmpty(companyCode))
+            {
+                return NotFound(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_IdNotFound, ApiErrorTypeSM.NoRecord_NoLog));
+            }
+            var singleSM = await _clientCompanyDetailsProcess.GetCompanyByCompanyCode(companyCode);
+            if (singleSM != null)
+            {
+                return ModelConverter.FormNewSuccessResponse(singleSM);
+            }
+            else
+            {
+                return NotFound(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_IdNotFound, ApiErrorTypeSM.NoRecord_NoLog));
+            }
+        }
+
         [HttpGet()]
-        //[Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "ClientAdmin, SuperAdmin")]
+        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "SystemAdmin, SuperAdmin")]
         public async Task<ActionResult<ApiResponse<IEnumerable<ClientCompanyDetailSM>>>> GetAll()
         {
             var singleSM = await _clientCompanyDetailsProcess.GetAllCompanyDetails();
@@ -61,8 +81,8 @@ namespace Duha.SIMS.API.Controllers.Client
 
         #region Add Company
         [HttpPost("mine")]
-        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "CompanyAdmin,SystemAdmin")]
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "CompanyAdmin")]
+       
         public async Task<ActionResult<ApiResponse<ClientCompanyDetailSM>>> AddCompanyDetails([FromBody] ApiRequest<ClientCompanyDetailSM> apiRequest)
         {
             #region Check Request
@@ -110,14 +130,14 @@ namespace Duha.SIMS.API.Controllers.Client
 
         [HttpPut("my")]
         [AllowAnonymous]
-        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "CompanyAdmin,SystemAdmin")]
-        public async Task<ActionResult<ApiResponse<ClientCompanyDetailSM>>> UpdateCompany(int id, [FromBody] ApiRequest<ClientCompanyDetailSM> apiRequest)
+        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "CompanyAdmin")]
+        public async Task<ActionResult<ApiResponse<ClientCompanyDetailSM>>> UpdateCompany([FromBody] ApiRequest<ClientCompanyDetailSM> apiRequest)
         {
             #region Check Request
             var innerReq = apiRequest?.ReqData;
             if (!User.Identity.IsAuthenticated)
             {
-                return NotFound(ModelConverter.FormNewErrorResponse("Unauthorized Farmer...Plz check your Credentials"));
+                return NotFound(ModelConverter.FormNewErrorResponse("Unauthorized User...Plz check your Credentials"));
             }
             else
             {
@@ -135,7 +155,7 @@ namespace Duha.SIMS.API.Controllers.Client
 
                 else
                 {
-                    var response = await _clientCompanyDetailsProcess.UpdateClientUserDetails(id, innerReq);
+                    var response = await _clientCompanyDetailsProcess.UpdateClientUserDetails(companyCode, innerReq);
                     return Ok(ModelConverter.FormNewSuccessResponse(response));
                 }
             }
@@ -146,17 +166,17 @@ namespace Duha.SIMS.API.Controllers.Client
         #region Delete Endpoints
 
         [HttpDelete("{id}")]
-        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "CompanyAdmin,SuperAdmin")]
+        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "CompanyAdmin,CompanyAdmin,SuperAdmin")]
         [AllowAnonymous]
         public async Task<ActionResult<ApiResponse<DeleteResponseRoot>>> Delete(int id)
         {
             /*if (!User.Identity.IsAuthenticated)
             {
                 return NotFound(ModelConverter.FormNewErrorResponse("Unauthorized User...Plz check your Credentials"));
-            }*/
+            }
             var userRole = User.GetUserRoleTypeFromCurrentUserClaims();
             var userId = User.GetUserRecordIdFromCurrentUserClaims();
-            var companyCode = User.GetCompanyCodeFromCurrentUserClaims();
+            var companyCode = User.GetCompanyCodeFromCurrentUserClaims();*/
 
             var resp = await _clientCompanyDetailsProcess.DeleteClientUserById(id);
             if (resp != null && resp.DeleteResult)

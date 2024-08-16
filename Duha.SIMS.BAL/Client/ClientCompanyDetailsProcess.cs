@@ -84,6 +84,28 @@ namespace Duha.SIMS.BAL.Client
             }
         }
 
+
+        public async Task<ClientCompanyDetailSM> GetCompanyByCompanyCode(string companycode)
+        {
+            var dm = await _apiDbContext.ClientCompany.Where(c => c.CompanyCode == companycode).FirstOrDefaultAsync();
+            string profilePicture = null;
+            if (dm != null)
+            {
+                var sm = _mapper.Map<ClientCompanyDetailSM>(dm);
+                if (!string.IsNullOrEmpty(sm.CompanyLogoPath))
+                {
+                    profilePicture = await ConvertToBase64(sm.CompanyLogoPath);
+                    sm.CompanyLogoPath = profilePicture;
+                }
+                return sm;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+
         #endregion Get
 
         #region Update Client User (Mine)
@@ -96,11 +118,12 @@ namespace Duha.SIMS.BAL.Client
         /// <returns>
         /// If Successful, returns Updated ClientCompanyDetailSM Otherwise return null
         /// </returns>
-        public async Task<ClientCompanyDetailSM> UpdateClientUserDetails(int id, ClientCompanyDetailSM objSM)
+        public async Task<ClientCompanyDetailSM> UpdateClientUserDetails(string companyCode, ClientCompanyDetailSM objSM)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(companyCode))
             {
                 throw new SIMSException(DomainModels.Base.ExceptionTypeDM.NotFoundException, "Please Provide Value to Id");
+                //throw new SIMSException(ServiceModels.Enums.ApiErrorTypeSM.InvalidInputData_Log, "Please Provide Value to companyCode");
             }
 
             if (objSM == null)
@@ -110,7 +133,7 @@ namespace Duha.SIMS.BAL.Client
             }
             var imageFullPath = "";
             var objDM = await _apiDbContext.ClientCompany
-            .Where(x => x.Id == id)
+            .Where(x => x.CompanyCode == companyCode)
                 .FirstOrDefaultAsync();
             if (objDM != null)
             {
@@ -161,7 +184,7 @@ namespace Duha.SIMS.BAL.Client
 
                 if (await _apiDbContext.SaveChangesAsync() > 0)
                 {
-                    var updatedClientUser = await GetCompanyById(id);
+                    var updatedClientUser = await GetCompanyById(objDM.Id);
                     return updatedClientUser;
                 }
                 throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, $"Something went wrong while Updating Company Details");
@@ -289,7 +312,7 @@ namespace Duha.SIMS.BAL.Client
 
                         if (user != null && user.ClientCompanyDetailId != null)
                         {
-                            throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, $"User is already registered with company, cant add a new company");
+                            throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, $"User is already registered with company, can't add a new company");
                         }
                         else
                         {
