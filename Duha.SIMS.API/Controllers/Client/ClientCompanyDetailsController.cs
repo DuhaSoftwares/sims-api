@@ -60,10 +60,10 @@ namespace Duha.SIMS.API.Controllers.Client
             {
                 return NotFound(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_IdNotFound, ApiErrorTypeSM.NoRecord_NoLog));
             }
-            var singleSM = await _clientCompanyDetailsProcess.GetCompanyByCompanyCode(companyCode);
-            if (singleSM != null)
+            var listSM = await _clientCompanyDetailsProcess.GetCompanyByCompanyCode(companyCode);
+            if (listSM != null)
             {
-                return ModelConverter.FormNewSuccessResponse(singleSM);
+                return ModelConverter.FormNewSuccessResponse(listSM);
             }
             else
             {

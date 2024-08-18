@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Duha.SIMS.BAL.AppUser;
+using Duha.SIMS.BAL.Base;
 using Duha.SIMS.BAL.Exceptions;
 using Duha.SIMS.BAL.Interface;
 using Duha.SIMS.DAL.Contexts;
@@ -12,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Duha.SIMS.BAL.Client
 {
-    public partial class ClientCompanyDetailsProcess : LoginUserProcess<ClientCompanyDetailSM>
+    public partial class ClientCompanyDetailsProcess : SIMSBalOdataBase<ClientCompanyDetailSM>
     {
         #region Properties
         private readonly ILoginUserDetail _loginUserDetail;
