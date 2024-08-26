@@ -2,6 +2,7 @@
 using Duha.SIMS.DomainModels.AppUsers;
 using Duha.SIMS.DomainModels.Client;
 using Duha.SIMS.DomainModels.Warehouse;
+using Duha.SIMS.DomainModels.Product;
 using Microsoft.EntityFrameworkCore;
 
 namespace Duha.SIMS.DAL.Contexts
@@ -20,6 +21,9 @@ namespace Duha.SIMS.DAL.Contexts
         public DbSet<ClientCompanyDetailDM> ClientCompany { get; set; }
         public DbSet<ClientCompanyAddressDM> ClientCompanyAddress { get; set; }
         public DbSet<WarehouseDM> Warehouses { get; set; }
+        public DbSet<BrandDM> Brands { get; set; }
+        public DbSet<ProductCategoryDM> ProductCategories { get; set; }
+        public DbSet<ProductDM> Products { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
