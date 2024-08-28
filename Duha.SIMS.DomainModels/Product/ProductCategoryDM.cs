@@ -14,7 +14,6 @@ namespace Duha.SIMS.DomainModels.Product
         [MaxLength(int.MaxValue)]
         public string? ImagePath { get; set; }
 
-        public string? ImageExtension { get; set; }
         public string? CategoryIcon { get; set; }
 
         public LevelTypeDM Level { get; set; }

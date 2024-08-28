@@ -36,6 +36,7 @@ builder.Services.AddScoped<ILoginUserDetail, LoginUserDetail>();
 builder.Services.AddScoped<ClientUserProcess>();
 builder.Services.AddScoped<ApplicationUserProcess>();
 builder.Services.AddScoped<ClientCompanyDetailsProcess>();
+builder.Services.AddScoped<ProductCategoryProcess>();
 builder.Services.AddScoped<TokenProcess>();
 builder.Services.AddScoped<WarehouseProcess>();
 builder.Services.AddScoped<BrandProcess>();
