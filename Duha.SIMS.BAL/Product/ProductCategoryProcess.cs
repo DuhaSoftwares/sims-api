@@ -32,9 +32,7 @@ namespace Duha.SIMS.BAL.Product
             var query = entitySet.Select(entity => new ProductCategorySM
             {
                 Name = entity.Name,
-                Description = entity.Description,
                 ImagePath = ConvertImagePathToBase64(entity.ImagePath),
-                CategoryIcon = entity.CategoryIcon,
                 Level = (LevelTypeSM)entity.Level,
                 LevelId = entity.LevelId,
                 Id = entity.Id,

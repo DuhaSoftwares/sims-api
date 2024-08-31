@@ -40,7 +40,6 @@ namespace Duha.SIMS.BAL.Product
             var query = entitySet.Select(entity => new BrandSM
             {
                 Name = entity.Name,
-                Description = entity.Description,
                 ImagePath = ConvertImagePathToBase64(entity.ImagePath),
                 Id = entity.Id,
                 CreatedBy = entity.CreatedBy,
