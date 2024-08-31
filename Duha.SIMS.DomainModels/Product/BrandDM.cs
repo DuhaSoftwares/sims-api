@@ -7,8 +7,7 @@ namespace Duha.SIMS.DomainModels.Product
     {
         [StringLength(200)]
         public string Name { get; set; }
-        [MaxLength(Int32.MaxValue)]
-        public string ImagePath { get; set; }
+        public string? ImagePath { get; set; }
         public virtual HashSet<ProductDM> Products { get; set; }
     }
 }

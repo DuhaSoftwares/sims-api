@@ -42,8 +42,16 @@ namespace Duha.SIMS.API.Controllers.Product
         public async Task<ActionResult<ApiResponse<List<BrandSM>>>> GetAll()
         {
             var listSM = await _brandProcess.GetAllBrands();
+
+            // Check if the list is empty and return a meaningful response
+            if (listSM == null || listSM.Count == 0)
+            {
+                return Ok(ModelConverter.FormNewErrorResponse("No brands found."));
+            }
+
             return Ok(ModelConverter.FormNewSuccessResponse(listSM));
         }
+
         #endregion Get All
 
         #region Get Single

@@ -43,6 +43,7 @@ namespace Duha.SIMS.API.Controllers.Product
             var listSM = await _productCategoryProcess.GetAllLevel1Categories();
             if (listSM != null)
             {
+                
                 return Ok(ModelConverter.FormNewSuccessResponse(listSM));
             }
             else

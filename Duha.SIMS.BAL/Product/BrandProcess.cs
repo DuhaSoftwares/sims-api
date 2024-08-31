@@ -75,17 +75,19 @@ namespace Duha.SIMS.BAL.Product
         /// <returns>
         /// If Successful, Returns List of BrandSM otherwise return null
         /// </returns>
-        /// <exception cref="ShopWaveException"></exception>
-        public async Task<List<BrandSM>?> GetAllBrands()
+        public async Task<List<BrandSM>> GetAllBrands()
         {
             var itemsFromDb = await _apiDbContext.Brands.ToListAsync();
-            if (itemsFromDb.Count == 0)
+
+            // Return an empty list instead of null if there are no items
+            if (itemsFromDb == null || itemsFromDb.Count == 0)
             {
                 return null;
             }
-            return _mapper.Map<List<BrandSM>>(itemsFromDb);                
-            
+
+            return _mapper.Map<List<BrandSM>>(itemsFromDb);
         }
+
         #endregion Get All
 
         #region Get By Id
@@ -99,24 +101,27 @@ namespace Duha.SIMS.BAL.Product
         /// <exception cref="ShopWaveException"></exception>
         public async Task<BrandSM?> GetbrandsById(int Id)
         {
-
             var singleItemFromDb = await _apiDbContext.Brands.FindAsync(Id);
 
             if (singleItemFromDb == null)
             {
                 return null;
             }
+
             string base64Image = null;
-            if (string.IsNullOrEmpty(singleItemFromDb.ImagePath))
+
+            // Only convert to base64 if ImagePath is not null or empty
+            if (!string.IsNullOrEmpty(singleItemFromDb.ImagePath))
             {
-                base64Image = null;
+                base64Image = await ConvertToBase64(singleItemFromDb.ImagePath);
+                singleItemFromDb.ImagePath = base64Image;
             }
-            base64Image = await ConvertToBase64(singleItemFromDb.ImagePath);
-            singleItemFromDb.ImagePath = base64Image;
-            return _mapper.Map<BrandSM>(singleItemFromDb);  
+
+            return _mapper.Map<BrandSM>(singleItemFromDb);
         }
 
-       
+
+
         #endregion Get By Id
 
         #region Add
@@ -127,50 +132,33 @@ namespace Duha.SIMS.BAL.Product
         /// <returns>
         /// If successful, returns the added BrandSM; otherwise, returns null.
         /// </returns>
-        public async Task<BrandSM?> Addbrands(BrandSM BrandSM)
+        public async Task<BrandSM?> Addbrands(BrandSM objSM)
         {
             string? brandImageRelativePath = null;
-            if (BrandSM == null)
+            if (objSM == null)
                 return null;
-            try
+            var dm = _mapper.Map<BrandDM>(objSM);
+            dm.CreatedBy = _loginUserDetail.LoginId;
+            dm.CreatedOnUTC = DateTime.UtcNow;
+            if (!string.IsNullOrEmpty(objSM.ImagePath))
             {
-                // Map BrandSM to BrandDM and set creator information
-                var BrandDM = _mapper.Map<BrandDM>(BrandSM);
-                BrandDM.CreatedBy = _loginUserDetail.LoginId;
-                BrandDM.CreatedOnUTC = DateTime.UtcNow;
-
-                // Save the image and get its full path
-                brandImageRelativePath = await SaveFromBase64(BrandSM.ImagePath);
-
-                if (brandImageRelativePath != null)
-                {
-                    BrandDM.ImagePath = brandImageRelativePath;
-
-                    // Add product category to the database
-                    await _apiDbContext.Brands.AddAsync(BrandDM);
-
-                    // If save changes is successful, return the saved product category
-                    if (await _apiDbContext.SaveChangesAsync() > 0)
-                    {
-                        return _mapper.Map<BrandSM>(BrandDM);
-                    }
-
-                    // If save changes is not successful, return null;
-                    return null;
-                }
+                brandImageRelativePath = await SaveFromBase64(objSM.ImagePath);
             }
-            catch (Exception ex)
+
+            dm.ImagePath = brandImageRelativePath;
+            await _apiDbContext.Brands.AddAsync(dm);
+            if (await _apiDbContext.SaveChangesAsync() > 0)
             {
-                // If an exception occurs, delete the image file (if it was saved)
-                if (brandImageRelativePath != null)
-                {
-                    string fullImagePath = Path.GetFullPath(brandImageRelativePath);
-                    if (File.Exists(fullImagePath))
-                        File.Delete(fullImagePath);
-                }
-                throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog,"Something went wrong while saving the changes");
+                return _mapper.Map<BrandSM>(dm);
             }
-            return null;
+            if (brandImageRelativePath != null)
+            {
+                string fullImagePath = Path.GetFullPath(brandImageRelativePath);
+                if (File.Exists(fullImagePath))
+                    File.Delete(fullImagePath);
+            }
+            throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, "Something went wrong while saving the changes");
+            
         }
         #endregion Add
 
