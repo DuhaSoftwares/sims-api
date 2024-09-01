@@ -72,32 +72,22 @@ namespace Duha.SIMS.BAL.Product
         /// <exception cref="SIMSException"></exception>
         public async Task<List<ProductCategorySM>?> GetAllLevel1Categories()
         {
-            try
-            {
-                // Retrieve all product categories from the database
-                var itemsFromDb = await _apiDbContext.ProductCategories.
-                    Where(c => c.Level == LevelTypeDM.Level1 && c.Name != "Demo Category")
-                    .ToListAsync();
+            // Retrieve all product categories from the database
+            
+            var itemsFromDb = await _apiDbContext.ProductCategories
+                .Where(c => c.Level == LevelTypeDM.Level1 && c.Name != "Demo Category")
+                .ToListAsync();
 
-                // If no product categories are found, return null
-                if (itemsFromDb == null || itemsFromDb.Count == 0)
-                {
-                    throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, "Level1 Categories Not Found or Level1 Categories does not Exist...");
-                }
-                return _mapper.Map<List<ProductCategorySM>>(itemsFromDb);
-            }
-            catch (SIMSException ex)
+            // If no product categories are found, throw an exception
+            if (itemsFromDb == null || itemsFromDb.Count == 0)
             {
-                // Handle SIMSException
-                throw;
+                throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, "Level1 Categories Not Found or Level1 Categories do not exist.");
             }
-            catch (Exception ex)
-            {
-                // Log the exception and rethrow
-                //ILogger(ex, "An error occurred in GetAllLevel1Categories");
-                throw new Exception("An unexpected error occurred. Please contact support.");
-            }
+
+            // Map and return the product categories
+            return _mapper.Map<List<ProductCategorySM>>(itemsFromDb);
         }
+
         #endregion Get All L1 Categories
 
         #region Get All L2 Categories
@@ -160,45 +150,36 @@ namespace Duha.SIMS.BAL.Product
         /// <exception cref="SIMSException"></exception>
         public async Task<List<ProductCategorySM>?> GetAllCategoriesBasedOnLevelType(LevelTypeSM levelType)
         {
-            try
+            List<ProductCategorySM> categories = new List<ProductCategorySM>();
+
+            if (levelType == LevelTypeSM.Level1)
             {
-                List<ProductCategorySM> categories = new List<ProductCategorySM>();
-                if (levelType == LevelTypeSM.Level1)
-                {
-                    var level1Categories = await _apiDbContext.ProductCategories.
-                    Where(c => c.Level == LevelTypeDM.Level1 && c.Name != "Demo Category")
-                    .ToListAsync();
-                    categories = _mapper.Map<List<ProductCategorySM>>(level1Categories);
-                }
-                else if (levelType == LevelTypeSM.Level2)
-                {
-                    var level2Categories = await _apiDbContext.ProductCategories.
-                    Where(c => c.Level == LevelTypeDM.Level2 && c.Name != "Demo Category")
+                var level1Categories = await _apiDbContext.ProductCategories
+                    .Where(c => c.Level == LevelTypeDM.Level1 && c.Name != "Demo Category")
                     .ToListAsync();
 
-                    categories = _mapper.Map<List<ProductCategorySM>>(level2Categories);
-                }
-                else if (levelType == LevelTypeSM.Level3)
-                {
-                    var level3Categories = await _apiDbContext.ProductCategories.
-                   Where(c => c.Level == LevelTypeDM.Level3 && c.Name != "Demo Category")
-                   .ToListAsync();
-                    categories = _mapper.Map<List<ProductCategorySM>>(level3Categories);
-                }
-                return categories;
+                categories = _mapper.Map<List<ProductCategorySM>>(level1Categories);
             }
-            catch (SIMSException ex)
+            else if (levelType == LevelTypeSM.Level2)
             {
-                // Handle SIMSException
-                throw;
+                var level2Categories = await _apiDbContext.ProductCategories
+                    .Where(c => c.Level == LevelTypeDM.Level2 && c.Name != "Demo Category")
+                    .ToListAsync();
+
+                categories = _mapper.Map<List<ProductCategorySM>>(level2Categories);
             }
-            catch (Exception ex)
+            else if (levelType == LevelTypeSM.Level3)
             {
-                // Log the exception and rethrow
-                //ILogger(ex, "An error occurred in GetAllLevel1Categories");
-                throw new SIMSException(ApiErrorTypeSM.Fatal_Log,"An unexpected error occurred. Please contact support.");
+                var level3Categories = await _apiDbContext.ProductCategories
+                    .Where(c => c.Level == LevelTypeDM.Level3 && c.Name != "Demo Category")
+                    .ToListAsync();
+
+                categories = _mapper.Map<List<ProductCategorySM>>(level3Categories);
             }
+
+            return categories;
         }
+
         #endregion Get All Categories Based on LevelType
 
         #region Get By Id
@@ -214,29 +195,21 @@ namespace Duha.SIMS.BAL.Product
             // Retrieve the product category from the database by its Id
             var singleItemFromDb = await _apiDbContext.ProductCategories.FindAsync(Id);
 
-            // If no blog is found with the specified Id, return null
+            // If no product category is found with the specified Id, return null
             if (singleItemFromDb == null)
                 return null;
 
-            try
+            // Convert the image to base64 only if ImagePath is not null or empty
+            if (!string.IsNullOrEmpty(singleItemFromDb.ImagePath))
             {
-                // Convert the image to base64
                 var base64Image = await ConvertToBase64(singleItemFromDb.ImagePath);
-
-                // If conversion is successful, update the image and return the mapped product category
-                //if (base64Image != null)
-                {
-                    singleItemFromDb.ImagePath = base64Image;
-                    return _mapper.Map<ProductCategorySM>(singleItemFromDb);
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions and throw SIMSException with appropriate details
-                throw new SIMSException(ApiErrorTypeSM.Fatal_Log, "Something went wrong in fetching the product category");
+                singleItemFromDb.ImagePath = base64Image;
             }
 
+            // Return the mapped product category
+            return _mapper.Map<ProductCategorySM>(singleItemFromDb);
         }
+
         #endregion Get By Id
 
         #region Add
@@ -308,112 +281,91 @@ namespace Duha.SIMS.BAL.Product
         /// <exception cref="SIMSException"></exception>
         public async Task<ProductCategorySM?> AddCategoryWithLevelChecks(ProductCategorySM productCategorySM)
         {
+            // Validate productCategorySM and its properties
+            if (productCategorySM == null || productCategorySM.Level == null || productCategorySM.Level <= 0)
+            {
+                throw new SIMSException(ApiErrorTypeSM.Fatal_Log, "Kindly provide necessary details to add a new category");
+            }
+
+            // Validate Level1 category (LevelId must be null)
+            if (productCategorySM.Level == LevelTypeSM.Level1 && (productCategorySM.LevelId != null && productCategorySM.LevelId != 0))
+            {
+                throw new SIMSException(ApiErrorTypeSM.Fatal_Log, "LevelId must be null or 0 for Level1");
+            }
+
+            // Validate Level2 category (LevelId must exist and be a Level1 category)
+            if (productCategorySM.Level == LevelTypeSM.Level2)
+            {
+                if (!productCategorySM.LevelId.HasValue)
+                {
+                    throw new SIMSException(ApiErrorTypeSM.Fatal_Log, "LevelId must be provided for Level2");
+                }
+
+                var existingCategory = await _apiDbContext.ProductCategories.FirstOrDefaultAsync(pc => pc.Id == productCategorySM.LevelId);
+
+                if (existingCategory == null || existingCategory.Level != LevelTypeDM.Level1)
+                {
+                    throw new SIMSException(ApiErrorTypeSM.Fatal_Log, "Invalid LevelId for Level2. Level1 category expected.");
+                }
+            }
+
+            // Validate Level3 category (LevelId must exist and be a Level2 category)
+            if (productCategorySM.Level == LevelTypeSM.Level3)
+            {
+                if (!productCategorySM.LevelId.HasValue)
+                {
+                    throw new SIMSException(ApiErrorTypeSM.Fatal_Log, "LevelId must be provided for Level3");
+                }
+
+                var existingCategory = await _apiDbContext.ProductCategories.FirstOrDefaultAsync(pc => pc.Id == productCategorySM.LevelId);
+
+                if (existingCategory == null || existingCategory.Level != LevelTypeDM.Level2)
+                {
+                    throw new SIMSException(ApiErrorTypeSM.Fatal_Log, "Invalid LevelId for Level3. Level2 category expected.");
+                }
+            }
+
+            // Map the productCategorySM to productCategoryDM and set creator details
+            var productCategoryDM = _mapper.Map<ProductCategoryDM>(productCategorySM);
+            productCategoryDM.CreatedBy = _loginUserDetail.LoginId;
+            productCategoryDM.CreatedOnUTC = DateTime.UtcNow;
+
             string? productCatImageRelativePath = null;
 
-            // Check if productCategorySM is null, if so, return null
-            if (productCategorySM == null || productCategorySM.Level == null || productCategorySM.Level <= 0)
-                throw new SIMSException(ApiErrorTypeSM.Fatal_Log, "Kindly Provide necessary details to Add New Category");
-
-            try
+            // Save the image and update ImagePath if provided
+            if (!string.IsNullOrEmpty(productCategorySM.ImagePath))
             {
-                // Check if Level is Level1 and ensure LevelId is null
-                if (productCategorySM.Level == LevelTypeSM.Level1 && productCategorySM.LevelId.HasValue)
-                {
-                    //throw new ArgumentException("LevelId must be null for Level1");
-                    throw new SIMSException(ApiErrorTypeSM.Fatal_Log, "LevelId must be null for Level1");
-                }
-
-                // Check if Level is Level2 and ensure LevelId is valid
-                if (productCategorySM.Level == LevelTypeSM.Level2)
-                {
-                    if (!productCategorySM.LevelId.HasValue)
-                    {
-                        //throw new ArgumentException("LevelId must be provided for Level2");
-                        throw new SIMSException(ApiErrorTypeSM.Fatal_Log, "LevelId must be provided for Level2");
-                    }
-
-                    // Check if the provided LevelId exists in the database
-                    var existingCategory = await _apiDbContext.ProductCategories
-                        .FirstOrDefaultAsync(pc => pc.Id == productCategorySM.LevelId);
-
-                    if (existingCategory == null)
-                    {
-                        //throw new ArgumentException("Invalid LevelId for Level2");
-                        throw new SIMSException(ApiErrorTypeSM.Fatal_Log, "Invalid LevelId for Level2");
-                    }
-                    // Check if the level of the existing category is Level1
-                    if (existingCategory.Level != LevelTypeDM.Level1)
-                    {
-                        //throw new ArgumentException("Invalid LevelId for Level2. Level1 category expected.");
-                        throw new SIMSException(ApiErrorTypeSM.Fatal_Log, "Invalid LevelId for Level2. Level1 category expected.");
-                    }
-                }
-
-                // Check if Level is Level3 and ensure LevelId is valid
-                if (productCategorySM.Level == LevelTypeSM.Level3)
-                {
-                    if (!productCategorySM.LevelId.HasValue)
-                    {
-                        //throw new ArgumentException("LevelId must be provided for Level3");
-                        throw new SIMSException(ApiErrorTypeSM.Fatal_Log, "LevelId must be provided for Level3");
-                    }
-
-                    // Check if the provided LevelId exists in the database
-                    var existingCategory = await _apiDbContext.ProductCategories
-                        .FirstOrDefaultAsync(pc => pc.Id == productCategorySM.LevelId);
-
-                    if (existingCategory == null)
-                    {
-                        //throw new ArgumentException("Invalid LevelId for Level3");
-                        throw new SIMSException(ApiErrorTypeSM.Fatal_Log, "Invalid LevelId for Level3");
-                    }
-
-                    // Check if the level of the existing category is Level2
-                    if (existingCategory.Level != LevelTypeDM.Level2)
-                    {
-                        //throw new ArgumentException("Invalid LevelId for Level3. Level2 category expected.");
-                        throw new SIMSException(ApiErrorTypeSM.Fatal_Log, "Invalid LevelId for Level3. Level2 category expected.");
-                    }
-                }
-
-                // Map ProductCategorySM to ProductCategoryDM and set creator information
-                var productCategoryDM = _mapper.Map<ProductCategoryDM>(productCategorySM);
-                productCategoryDM.CreatedBy = _loginUserDetail.LoginId;
-                productCategoryDM.CreatedOnUTC = DateTime.UtcNow;
-                // Save the image and get its full path
-
-                if (!string.IsNullOrEmpty(productCategorySM.ImagePath))
-                {
-                    // Save the image and get its full path
-                    productCatImageRelativePath = await SaveFromBase64(productCategorySM.ImagePath);
-                    productCategoryDM.ImagePath = productCatImageRelativePath;
-                }
-
-                // Add product category to the database
-                await _apiDbContext.ProductCategories.AddAsync(productCategoryDM);
-
-                // If save changes is successful, return the saved product category
-                if (await _apiDbContext.SaveChangesAsync() > 0)
-                {
-                    return _mapper.Map<ProductCategorySM>(productCategoryDM);
-                }
-
-                // If save changes is not successful, return null;
-                return null;
-
+                productCatImageRelativePath = await SaveFromBase64(productCategorySM.ImagePath);
+                productCategoryDM.ImagePath = productCatImageRelativePath;
             }
-            catch (Exception ex)
+
+            // Add product category to the database
+            await _apiDbContext.ProductCategories.AddAsync(productCategoryDM);
+
+            // If save changes is successful, return the saved product category
+            if (await _apiDbContext.SaveChangesAsync() > 0)
             {
-                // If an exception occurs, delete the image file (if it was saved)
-                if (productCatImageRelativePath != null)
-                {
-                    string fullImagePath = Path.GetFullPath(productCatImageRelativePath);
-                    if (File.Exists(fullImagePath))
-                        File.Delete(fullImagePath);
-                }
-                throw new SIMSException(ApiErrorTypeSM.NoRecord_NoLog, @"Something went wrong while adding new Category");
+                return _mapper.Map<ProductCategorySM>(productCategoryDM);
+            }
+
+            // If the save fails, delete the image if it was saved
+            if (productCatImageRelativePath != null)
+            {
+                DeleteImageFile(productCatImageRelativePath);
+            }
+
+            return null;
+        }
+
+        private void DeleteImageFile(string imagePath)
+        {
+            string fullImagePath = Path.GetFullPath(imagePath);
+            if (File.Exists(fullImagePath))
+            {
+                File.Delete(fullImagePath);
             }
         }
+
 
 
         #endregion Add Category With Level Checks

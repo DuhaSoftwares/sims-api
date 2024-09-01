@@ -16,7 +16,7 @@ namespace Duha.SIMS.DomainModels.Product
         public LevelTypeDM Level { get; set; }
 
         [ForeignKey("LevelId")]
-        public long? LevelId { get; set; }
+        public int? LevelId { get; set; }
         public virtual HashSet<ProductDM> Products { get; set; }
     }
 }
