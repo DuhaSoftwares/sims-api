@@ -75,17 +75,29 @@ namespace Duha.SIMS.BAL.Product
         /// <returns>
         /// If Successful, Returns List of BrandSM otherwise return null
         /// </returns>
-        public async Task<List<BrandSM>> GetAllBrands()
+        public async Task<List<BrandSM>> GetAllBrands(int skip, int top)
         {
-            var itemsFromDb = await _apiDbContext.Brands.ToListAsync();
-
+            var itemsFromDb = await _apiDbContext.Brands
+                .Skip(skip).Take(top)
+                .ToListAsync();
+            var response = new List<BrandSM>();
             // Return an empty list instead of null if there are no items
             if (itemsFromDb == null || itemsFromDb.Count == 0)
             {
                 return null;
             }
+            foreach (var item in itemsFromDb) 
+            { 
+                var sm = await GetbrandsById(item.Id);
+                response.Add(sm);
+            }
+            return response;
+        }
 
-            return _mapper.Map<List<BrandSM>>(itemsFromDb);
+        public async Task<int> GetAllBrandsCount()
+        {
+            var count =  _apiDbContext.Brands.AsNoTracking().Count();
+            return count;
         }
 
         #endregion Get All

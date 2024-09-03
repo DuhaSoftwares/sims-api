@@ -38,18 +38,23 @@ namespace Duha.SIMS.API.Controllers.Product
         #endregion Odata
 
         #region Get All
-        [HttpGet]
-        public async Task<ActionResult<ApiResponse<List<BrandSM>>>> GetAll()
+        [HttpGet()]
+        public async Task<ActionResult<ApiResponse<List<BrandSM>>>> GetAll([FromQuery] int skip, [FromQuery] int top)
         {
-            var listSM = await _brandProcess.GetAllBrands();
-
-            // Check if the list is empty and return a meaningful response
-            if (listSM == null || listSM.Count == 0)
-            {
-                return Ok(ModelConverter.FormNewErrorResponse("No brands found."));
-            }
+            var listSM = await _brandProcess.GetAllBrands(skip,top);
 
             return Ok(ModelConverter.FormNewSuccessResponse(listSM));
+        }
+
+        [HttpGet("count")]
+        public async Task<ActionResult<ApiResponse<IntResponseRoot>>> GetCount()
+        {
+            var countRes = await _brandProcess.GetAllBrandsCount();
+
+            // Check if the list is empty and return a meaningful response
+            
+
+            return Ok(ModelConverter.FormNewSuccessResponse(new IntResponseRoot(countRes,"Total brands ")));
         }
 
         #endregion Get All
