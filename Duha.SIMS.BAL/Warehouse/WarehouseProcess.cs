@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using Duha.SIMS.BAL.Base;
 using Duha.SIMS.BAL.Exceptions;
 using Duha.SIMS.DAL.Contexts;
@@ -50,16 +51,32 @@ namespace Duha.SIMS.BAL.Warehouse
         /// <returns>
         /// If Successful, returns List of WarehouseSM
         /// </returns>
-        public async Task<List<WarehouseSM>> GetAllMyWarehouses(string companyCode)
+        public async Task<List<WarehouseSM>> GetAllMyWarehouses(string companyCode, int skip, int top)
         {
             var company = await _apiDbContext.ClientCompany.Where(x=>x.CompanyCode == companyCode).FirstOrDefaultAsync();
             if (company == null)
             {
                 throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, $"Company Details Not Found...Add Company First");
             }
-            var dm = await _apiDbContext.Warehouses.AsNoTracking().Where(x=>x.ClientCompanyDetailId == company.Id).ToListAsync();
+            var dm = await _apiDbContext.Warehouses.AsNoTracking().Where(x=>x.ClientCompanyDetailId == company.Id)
+                .Skip(skip).Take(top)
+                .ToListAsync();
             var sm = _mapper.Map<List<WarehouseSM>>(dm);
             return sm;
+        }
+
+
+        public async Task<int> GetAllMyWarehouseCount(string companyCode)
+        {
+            var company = await _apiDbContext.ClientCompany.Where(x => x.CompanyCode == companyCode).FirstOrDefaultAsync();
+            if (company == null)
+            {
+                throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, $"Company Details Not Found...Add Company First");
+            }
+            var dm = await _apiDbContext.Warehouses.AsNoTracking().Where(x => x.ClientCompanyDetailId == company.Id)           
+                .ToListAsync();
+            var count = dm.Count();
+            return count;
         }
 
         /// <summary>

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Duha.SIMS.BAL.Token.Base;
+using System.Diagnostics.Metrics;
 
 namespace Duha.SIMS.API.Controllers.Warehouse
 {
@@ -55,7 +56,7 @@ namespace Duha.SIMS.API.Controllers.Warehouse
 
         [HttpGet("my")]
         [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "CompanyAdmin")]
-        public async Task<ActionResult<ApiResponse<IEnumerable<WarehouseSM>>>> GetAllMyWarehouses()
+        public async Task<ActionResult<ApiResponse<IEnumerable<WarehouseSM>>>> GetAllMyWarehouses([FromQuery]int skip, [FromQuery]int top)
         {
             var companyCode = "";
             if (!User.Identity.IsAuthenticated)
@@ -71,8 +72,30 @@ namespace Duha.SIMS.API.Controllers.Warehouse
                     return NotFound(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_IdNotInClaims));
                 }
             }
-            var listSM = await _warehouseProcess.GetAllMyWarehouses(companyCode);
+            var listSM = await _warehouseProcess.GetAllMyWarehouses(companyCode, skip,top);
             return Ok(ModelConverter.FormNewSuccessResponse(listSM));
+        }
+
+        [HttpGet("count")]
+        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "CompanyAdmin")]
+        public async Task<ActionResult<ApiResponse<IntResponseRoot>>> GetAllMyWarehousesCount()
+        {
+            var companyCode = "";
+            if (!User.Identity.IsAuthenticated)
+            {
+                return NotFound(ModelConverter.FormNewErrorResponse("Unauthorized User...Plz check your Credentials"));
+            }
+            else
+            {
+                companyCode = User.GetCompanyCodeFromCurrentUserClaims();
+
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    return NotFound(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_IdNotInClaims));
+                }
+            }
+            var count = await _warehouseProcess.GetAllMyWarehouseCount(companyCode);
+            return Ok(ModelConverter.FormNewSuccessResponse(new IntResponseRoot(count, "My Total Warehouses ")));
         }
 
         #region Add Company

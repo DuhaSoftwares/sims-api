@@ -87,6 +87,23 @@ namespace Duha.SIMS.BAL.Product
             // Map and return the product categories
             return _mapper.Map<List<ProductCategorySM>>(itemsFromDb);
         }
+        public async Task<List<ProductCategorySM>?> GetAllCategories()
+        {
+            // Retrieve all product categories from the database
+
+            var itemsFromDb = await _apiDbContext.ProductCategories
+                
+                .ToListAsync();
+
+            // If no product categories are found, throw an exception
+            if (itemsFromDb == null || itemsFromDb.Count == 0)
+            {
+                throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, "Level1 Categories Not Found or Level1 Categories do not exist.");
+            }
+
+            // Map and return the product categories
+            return _mapper.Map<List<ProductCategorySM>>(itemsFromDb);
+        }
 
         #endregion Get All L1 Categories
 
