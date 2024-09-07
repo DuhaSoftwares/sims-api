@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="AppUsers\AuthenticUser\**" />
+    <Compile Remove="v1\**" />
+    <Content Remove="AppUsers\AuthenticUser\**" />
+    <Content Remove="v1\**" />
+    <EmbeddedResource Remove="AppUsers\AuthenticUser\**" />
+    <EmbeddedResource Remove="v1\**" />
+    <None Remove="AppUsers\AuthenticUser\**" />
+    <None Remove="v1\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
+  </ItemGroup>
+
+</Project>

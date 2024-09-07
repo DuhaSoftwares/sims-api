@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34601.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Duha.SIMS.API", "Duha.SIMS.API.csproj", "{C6B86FB8-A1F2-4AF9-ABC3-CD73C2AE64C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Duha.SIMS.BAL", "..\Duha.SIMS.BAL\Duha.SIMS.BAL.csproj", "{E40E490B-EAC8-4EEF-8F5A-CE6C8BF00D07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Duha.SIMS.DAL", "..\Duha.SIMS.DAL\Duha.SIMS.DAL.csproj", "{842797EA-AF2A-4B9B-A6A8-1A97E8EE71EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Duha.SIMS.DomainModels", "..\Duha.SIMS.DomainModels\Duha.SIMS.DomainModels.csproj", "{704272F7-554F-4492-845B-5C00EEA9C08E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Duha.SIMS.ServiceModels", "..\Duha.SIMS.ServiceModels\Duha.SIMS.ServiceModels.csproj", "{F06EE777-10F9-4161-AC24-0E2462A7FCB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Duha.SIMS.Config", "..\Duha.SIMS.Config\Duha.SIMS.Config.csproj", "{20D188C7-9DAD-4202-A1EA-7522BAA56103}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C6B86FB8-A1F2-4AF9-ABC3-CD73C2AE64C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6B86FB8-A1F2-4AF9-ABC3-CD73C2AE64C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6B86FB8-A1F2-4AF9-ABC3-CD73C2AE64C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6B86FB8-A1F2-4AF9-ABC3-CD73C2AE64C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E40E490B-EAC8-4EEF-8F5A-CE6C8BF00D07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E40E490B-EAC8-4EEF-8F5A-CE6C8BF00D07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E40E490B-EAC8-4EEF-8F5A-CE6C8BF00D07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E40E490B-EAC8-4EEF-8F5A-CE6C8BF00D07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{842797EA-AF2A-4B9B-A6A8-1A97E8EE71EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{842797EA-AF2A-4B9B-A6A8-1A97E8EE71EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{842797EA-AF2A-4B9B-A6A8-1A97E8EE71EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{842797EA-AF2A-4B9B-A6A8-1A97E8EE71EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{704272F7-554F-4492-845B-5C00EEA9C08E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{704272F7-554F-4492-845B-5C00EEA9C08E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{704272F7-554F-4492-845B-5C00EEA9C08E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{704272F7-554F-4492-845B-5C00EEA9C08E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F06EE777-10F9-4161-AC24-0E2462A7FCB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F06EE777-10F9-4161-AC24-0E2462A7FCB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F06EE777-10F9-4161-AC24-0E2462A7FCB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F06EE777-10F9-4161-AC24-0E2462A7FCB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20D188C7-9DAD-4202-A1EA-7522BAA56103}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20D188C7-9DAD-4202-A1EA-7522BAA56103}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20D188C7-9DAD-4202-A1EA-7522BAA56103}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20D188C7-9DAD-4202-A1EA-7522BAA56103}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {20596156-39F7-44A3-AAB4-88B251D7ABAC}
+	EndGlobalSection
+EndGlobal
