@@ -27,7 +27,11 @@ namespace Duha.SIMS.API.AutoMapperBindings
             CreateMap<ProductDM, ProductSM>().ReverseMap();
             CreateMap<ProductCategoryDM, ProductCategorySM>().ReverseMap();
             CreateMap<GenderDM, GenderSM>().ReverseMap();
+<<<<<<< HEAD
             CreateMap<CategoryStatusDM, CategoryStatusSM>().ReverseMap();
+=======
+            CreateMap<LevelTypeDM, LevelTypeSM>().ReverseMap();
+>>>>>>> d7e1872a1de90f935ce092d442553b14f49297e8
             CreateMap<StorageTypeDM, StorageTypeSM>().ReverseMap();
             CreateMap<RoleTypeDM, RoleTypeSM>().ReverseMap();
         }

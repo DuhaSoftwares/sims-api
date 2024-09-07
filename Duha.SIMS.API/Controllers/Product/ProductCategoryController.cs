@@ -1,7 +1,10 @@
 ﻿using Duha.SIMS.API.Controllers.Root;
 using Duha.SIMS.BAL.Product;
 using Duha.SIMS.ServiceModels.Base;
+<<<<<<< HEAD
 using Duha.SIMS.ServiceModels.CommonResponse;
+=======
+>>>>>>> d7e1872a1de90f935ce092d442553b14f49297e8
 using Duha.SIMS.ServiceModels.Enums;
 using Duha.SIMS.ServiceModels.Product;
 using Microsoft.AspNetCore.Mvc;
@@ -38,10 +41,17 @@ namespace Duha.SIMS.API.Controllers.Product
         #endregion Odata
 
         #region Get All
+<<<<<<< HEAD
         [HttpGet()]
         public async Task<ActionResult<ApiResponse<IEnumerable<ProductCategorySM>>>> GetAllLevel1Categories([FromQuery]int skip, [FromQuery] int top)
         {
             var listSM = await _productCategoryProcess.GetAllProductCategories(skip,top);
+=======
+        [HttpGet("[action]")]
+        public async Task<ActionResult<ApiResponse<IEnumerable<ProductCategorySM>>>> GetAllLevel1Categories()
+        {
+            var listSM = await _productCategoryProcess.GetAllLevel1Categories();
+>>>>>>> d7e1872a1de90f935ce092d442553b14f49297e8
             if (listSM != null)
             {
                 
@@ -52,6 +62,23 @@ namespace Duha.SIMS.API.Controllers.Product
                 return NotFound(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_IdNotFound, ApiErrorTypeSM.NoRecord_NoLog));
             }
         }
+<<<<<<< HEAD
+=======
+        [HttpGet("[action]/{levelType}")]
+        public async Task<ActionResult<ApiResponse<IEnumerable<ProductCategorySM>>>> GetAllCategoriesBasedOnLevelType(LevelTypeSM levelType)
+        {
+            var listSM = await _productCategoryProcess.GetAllCategoriesBasedOnLevelType(levelType);
+            return Ok(ModelConverter.FormNewSuccessResponse(listSM));
+            /* if (listSM != null)
+             {
+                 return Ok(ModelConverter.FormNewSuccessResponse(listSM));
+             }
+             else
+             {
+                 return NotFound(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_IdNotFound, ApiErrorTypeSM.NoRecord_NoLog));
+             }*/
+        }
+>>>>>>> d7e1872a1de90f935ce092d442553b14f49297e8
         
         #endregion Get All
 
@@ -73,8 +100,13 @@ namespace Duha.SIMS.API.Controllers.Product
         #endregion Get Single
 
         #region Add Category with level Check
+<<<<<<< HEAD
         [HttpPost()]
         public async Task<ActionResult<ApiResponse<ProductCategorySM>>> AddCategory([FromBody] ApiRequest<ProductCategorySM> apiRequest)
+=======
+        [HttpPost("[action]")]
+        public async Task<ActionResult<ApiResponse<ProductCategorySM>>> AddCategoryWithLevelChecks([FromBody] ApiRequest<ProductCategorySM> apiRequest)
+>>>>>>> d7e1872a1de90f935ce092d442553b14f49297e8
         {
             #region Check Request
 
@@ -86,7 +118,11 @@ namespace Duha.SIMS.API.Controllers.Product
 
             #endregion Check Request
 
+<<<<<<< HEAD
             var addedSM = await _productCategoryProcess.AddProductCategory(innerReq);
+=======
+            var addedSM = await _productCategoryProcess.AddCategoryWithLevelChecks(innerReq);
+>>>>>>> d7e1872a1de90f935ce092d442553b14f49297e8
             if (addedSM != null)
             {
                 return CreatedAtAction(nameof(GetById), new
@@ -103,7 +139,11 @@ namespace Duha.SIMS.API.Controllers.Product
 
         #region Update Category
 
+<<<<<<< HEAD
         [HttpPut("{id}")]
+=======
+        [HttpPut("[action]/{id}")]
+>>>>>>> d7e1872a1de90f935ce092d442553b14f49297e8
         public async Task<ActionResult<ApiResponse<ProductCategorySM>>> UpdateProductCategory(int id, [FromBody] ApiRequest<ProductCategorySM> apiRequest)
         {
             #region Check Request
@@ -136,11 +176,18 @@ namespace Duha.SIMS.API.Controllers.Product
 
         #region Delete Category With Updation Its Associations
 
+<<<<<<< HEAD
         #region Delete
         [HttpDelete("{id}")]
         public async Task<ActionResult<ApiResponse<DeleteResponseRoot>>> Delete(int id)
         {
             var resp = await _productCategoryProcess.DeleteProductCategoryById(id);
+=======
+        /*[HttpDelete("[action]/{categoryId}")]
+        public async Task<ActionResult<ApiResponse<DeleteResponseRoot>>> RemoveCategoryById(int categoryId)
+        {
+            var resp = await _productCategoryProcess.DeleteProductCategory(categoryId);
+>>>>>>> d7e1872a1de90f935ce092d442553b14f49297e8
             if (resp != null && resp.DeleteResult)
             {
                 return Ok(ModelConverter.FormNewSuccessResponse(resp));
@@ -149,10 +196,17 @@ namespace Duha.SIMS.API.Controllers.Product
             {
                 return NotFound(ModelConverter.FormNewErrorResponse(resp?.DeleteMessage, ApiErrorTypeSM.NoRecord_NoLog));
             }
+<<<<<<< HEAD
         }
         #endregion Delete
         #endregion Delete Category With Updation Its Associations
 
 
+=======
+        }*/
+        #endregion Delete Category With Updation Its Associations
+
+        
+>>>>>>> d7e1872a1de90f935ce092d442553b14f49297e8
     }
 }
