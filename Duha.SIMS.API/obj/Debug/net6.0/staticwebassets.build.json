@@ -1,13 +1,13 @@
 {
   "Version": 1,
-  "Hash": "y1EFTl7AfIXRjObZcZVc/9H15YAV+2Ip6Z7JriyZ6Pw=",
+  "Hash": "cNc72t7u7oW6gaiVvaUbNplHouVjwFry2uvQSzM4XYU=",
   "Source": "Duha.SIMS.API",
   "BasePath": "_content/Duha.SIMS.API",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [
     {
-      "Identity": "D:\\SIMS\\Duha.SIMS.BAL\\Duha.SIMS.BAL.csproj",
+      "Identity": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.BAL\\Duha.SIMS.BAL.csproj",
       "Version": 2,
       "Source": "Duha.SIMS.BAL",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
@@ -18,7 +18,7 @@
       "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
     },
     {
-      "Identity": "D:\\SIMS\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj",
+      "Identity": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj",
       "Version": 2,
       "Source": "Duha.SIMS.Config",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
@@ -29,7 +29,7 @@
       "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
     },
     {
-      "Identity": "D:\\SIMS\\Duha.SIMS.DAL\\Duha.SIMS.DAL.csproj",
+      "Identity": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.DAL\\Duha.SIMS.DAL.csproj",
       "Version": 2,
       "Source": "Duha.SIMS.DAL",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
@@ -40,7 +40,7 @@
       "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
     },
     {
-      "Identity": "D:\\SIMS\\Duha.SIMS.DomainModels\\Duha.SIMS.DomainModels.csproj",
+      "Identity": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.DomainModels\\Duha.SIMS.DomainModels.csproj",
       "Version": 2,
       "Source": "Duha.SIMS.DomainModels",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
@@ -51,7 +51,7 @@
       "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
     },
     {
-      "Identity": "D:\\SIMS\\Duha.SIMS.ServiceModels\\Duha.SIMS.ServiceModels.csproj",
+      "Identity": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.ServiceModels\\Duha.SIMS.ServiceModels.csproj",
       "Version": 2,
       "Source": "Duha.SIMS.ServiceModels",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
@@ -66,17 +66,17 @@
     {
       "Name": "Duha.SIMS.API\\wwwroot",
       "Source": "Duha.SIMS.API",
-      "ContentRoot": "D:\\SIMS\\Duha.SIMS.API\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.API\\wwwroot\\",
       "BasePath": "_content/Duha.SIMS.API",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "D:\\SIMS\\Duha.SIMS.API\\wwwroot\\content\\companies\\logos\\company.jpg",
+      "Identity": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.API\\wwwroot\\content\\companies\\logos\\company.jpg",
       "SourceId": "Duha.SIMS.API",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\SIMS\\Duha.SIMS.API\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.API\\wwwroot\\",
       "BasePath": "_content/Duha.SIMS.API",
       "RelativePath": "content/companies/logos/company.jpg",
       "AssetKind": "All",
@@ -92,10 +92,10 @@
       "OriginalItemSpec": "wwwroot\\content\\companies\\logos\\company.jpg"
     },
     {
-      "Identity": "D:\\SIMS\\Duha.SIMS.API\\wwwroot\\content\\loginusers\\profile\\default_original.png",
+      "Identity": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.API\\wwwroot\\content\\loginusers\\profile\\default_original.png",
       "SourceId": "Duha.SIMS.API",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\SIMS\\Duha.SIMS.API\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.API\\wwwroot\\",
       "BasePath": "_content/Duha.SIMS.API",
       "RelativePath": "content/loginusers/profile/default_original.png",
       "AssetKind": "All",
@@ -111,10 +111,10 @@
       "OriginalItemSpec": "wwwroot\\content\\loginusers\\profile\\default_original.png"
     },
     {
-      "Identity": "D:\\SIMS\\Duha.SIMS.API\\wwwroot\\content\\loginusers\\profile\\profile.jpg",
+      "Identity": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.API\\wwwroot\\content\\loginusers\\profile\\profile.jpg",
       "SourceId": "Duha.SIMS.API",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\SIMS\\Duha.SIMS.API\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.API\\wwwroot\\",
       "BasePath": "_content/Duha.SIMS.API",
       "RelativePath": "content/loginusers/profile/profile.jpg",
       "AssetKind": "All",
@@ -130,10 +130,10 @@
       "OriginalItemSpec": "wwwroot\\content\\loginusers\\profile\\profile.jpg"
     },
     {
-      "Identity": "D:\\SIMS\\Duha.SIMS.API\\wwwroot\\content\\token\\token.txt",
+      "Identity": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.API\\wwwroot\\content\\token\\token.txt",
       "SourceId": "Duha.SIMS.API",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\SIMS\\Duha.SIMS.API\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.API\\wwwroot\\",
       "BasePath": "_content/Duha.SIMS.API",
       "RelativePath": "content/token/token.txt",
       "AssetKind": "All",
@@ -149,10 +149,10 @@
       "OriginalItemSpec": "wwwroot\\content\\token\\token.txt"
     },
     {
-      "Identity": "D:\\SIMS\\Duha.SIMS.API\\wwwroot\\health.html",
+      "Identity": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.API\\wwwroot\\health.html",
       "SourceId": "Duha.SIMS.API",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\SIMS\\Duha.SIMS.API\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.API\\wwwroot\\",
       "BasePath": "_content/Duha.SIMS.API",
       "RelativePath": "health.html",
       "AssetKind": "All",

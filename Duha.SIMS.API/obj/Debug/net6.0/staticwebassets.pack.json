@@ -1,23 +1,23 @@
 {
   "Files": [
     {
-      "Id": "D:\\SIMS\\Duha.SIMS.API\\wwwroot\\content\\companies\\logos\\company.jpg",
+      "Id": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.API\\wwwroot\\content\\companies\\logos\\company.jpg",
       "PackagePath": "staticwebassets\\content\\companies\\logos\\company.jpg"
     },
     {
-      "Id": "D:\\SIMS\\Duha.SIMS.API\\wwwroot\\content\\loginusers\\profile\\default_original.png",
+      "Id": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.API\\wwwroot\\content\\loginusers\\profile\\default_original.png",
       "PackagePath": "staticwebassets\\content\\loginusers\\profile\\default_original.png"
     },
     {
-      "Id": "D:\\SIMS\\Duha.SIMS.API\\wwwroot\\content\\loginusers\\profile\\profile.jpg",
+      "Id": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.API\\wwwroot\\content\\loginusers\\profile\\profile.jpg",
       "PackagePath": "staticwebassets\\content\\loginusers\\profile\\profile.jpg"
     },
     {
-      "Id": "D:\\SIMS\\Duha.SIMS.API\\wwwroot\\content\\token\\token.txt",
+      "Id": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.API\\wwwroot\\content\\token\\token.txt",
       "PackagePath": "staticwebassets\\content\\token\\token.txt"
     },
     {
-      "Id": "D:\\SIMS\\Duha.SIMS.API\\wwwroot\\health.html",
+      "Id": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.API\\wwwroot\\health.html",
       "PackagePath": "staticwebassets\\health.html"
     },
     {

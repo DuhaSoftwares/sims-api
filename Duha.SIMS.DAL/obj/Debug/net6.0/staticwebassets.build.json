@@ -1,13 +1,13 @@
 {
   "Version": 1,
-  "Hash": "O0fb1u1e33L4AATbVDKlDK3sIZMCTdOAwPqwj3sq8tY=",
+  "Hash": "uI3WyI99xSdWXMtTuvtaFwutNRzLw+zfuDKZkz/aq2A=",
   "Source": "Duha.SIMS.DAL",
   "BasePath": "_content/Duha.SIMS.DAL",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [
     {
-      "Identity": "D:\\SIMS\\Duha.SIMS.DomainModels\\Duha.SIMS.DomainModels.csproj",
+      "Identity": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.DomainModels\\Duha.SIMS.DomainModels.csproj",
       "Version": 2,
       "Source": "Duha.SIMS.DomainModels",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",

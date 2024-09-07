@@ -49,7 +49,7 @@ namespace Duha.SIMS.API.Controllers.Token
             (LoginUserSM userSM, int compId) = await _tokenProcess.ValidateLoginAndGenerateToken(innerReq);
             if (userSM == null)
             {
-                return NotFound(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_UserNotFound,
+                return NotFound(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_WrongCredentials,
                     ApiErrorTypeSM.InvalidInputData_Log));
             }
             else if (userSM.LoginStatus == LoginStatusSM.Disabled)

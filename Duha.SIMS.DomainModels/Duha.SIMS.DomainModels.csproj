@@ -7,8 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="AppUsers\AuthenticUser\" />
-    <Folder Include="v1\" />
+    <Compile Remove="AppUsers\AuthenticUser\**" />
+    <Compile Remove="v1\**" />
+    <Content Remove="AppUsers\AuthenticUser\**" />
+    <Content Remove="v1\**" />
+    <EmbeddedResource Remove="AppUsers\AuthenticUser\**" />
+    <EmbeddedResource Remove="v1\**" />
+    <None Remove="AppUsers\AuthenticUser\**" />
+    <None Remove="v1\**" />
   </ItemGroup>
 
   <ItemGroup>

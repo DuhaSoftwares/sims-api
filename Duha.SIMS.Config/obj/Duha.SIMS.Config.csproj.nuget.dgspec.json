@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\SIMS\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj": {}
+    "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj": {}
   },
   "projects": {
-    "D:\\SIMS\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj": {
+    "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\SIMS\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj",
+        "projectUniqueName": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj",
         "projectName": "Duha.SIMS.Config",
-        "projectPath": "D:\\SIMS\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj",
-        "packagesPath": "C:\\Users\\acs\\.nuget\\packages\\",
-        "outputPath": "D:\\SIMS\\Duha.SIMS.Config\\obj\\",
+        "projectPath": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj",
+        "packagesPath": "C:\\Users\\dev10\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.Config\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\acs\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\dev10\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,7 +22,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -35,11 +34,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -64,7 +58,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.102\\RuntimeIdentifierGraph.json"
         }
       }
     }

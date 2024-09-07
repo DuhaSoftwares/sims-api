@@ -2,25 +2,27 @@ using Duha.SIMS.API.Security;
 using Duha.SIMS.BAL.AppUser;
 using Duha.SIMS.BAL.Client;
 using Duha.SIMS.BAL.Interface;
+using Duha.SIMS.BAL.Product;
 using Duha.SIMS.BAL.Security;
 using Duha.SIMS.BAL.Token;
+using Duha.SIMS.BAL.Warehouse;
 using Duha.SIMS.Config;
 using Duha.SIMS.DAL.Contexts;
 using Duha.SIMS.ServiceModels.AppUsers.AutheticUser;
 using Duha.SIMS.ServiceModels.LoggedInIdentity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<APIConfiguration>(builder.Configuration.GetSection("APIConfiguration"));
 
-// Retrieve APIConfiguration from the configuration
 var apiConfiguration = builder.Configuration.GetSection("APIConfiguration").Get<APIConfiguration>();
-
-
+builder.Services.Configure<APIConfiguration>(builder.Configuration.GetSection("APIConfiguration"));
+builder.Services.AddSingleton(resolver =>
+    resolver.GetRequiredService<IOptions<APIConfiguration>>().Value);
 var connectionString = apiConfiguration.ApiDbConnectionString;
 
 builder.Services.AddDbContext<ApiDbContext>(options =>
@@ -33,8 +35,11 @@ builder.Services.AddScoped<ILoginUserDetail, LoginUserDetail>();
 // Register ClientUserProcess
 builder.Services.AddScoped<ClientUserProcess>();
 builder.Services.AddScoped<ApplicationUserProcess>();
-builder.Services.AddScoped<TokenProcess>();
 builder.Services.AddScoped<ClientCompanyDetailsProcess>();
+builder.Services.AddScoped<ProductCategoryProcess>();
+builder.Services.AddScoped<TokenProcess>();
+builder.Services.AddScoped<WarehouseProcess>();
+builder.Services.AddScoped<BrandProcess>();
 
 // Add Identity services
 builder.Services.AddIdentity<AuthenticUserSM, IdentityRole>()

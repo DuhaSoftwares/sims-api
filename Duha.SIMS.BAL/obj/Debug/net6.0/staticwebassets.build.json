@@ -1,13 +1,13 @@
 {
   "Version": 1,
-  "Hash": "yY5Gw/emSeDCqGVaiyrWxTR4WJQd2MxD8RlDz+Tl9N4=",
+  "Hash": "B7SdAGvTq7kYA/Y8SnuUEuXIZlfl/nx4C8km4dAvPo0=",
   "Source": "Duha.SIMS.BAL",
   "BasePath": "_content/Duha.SIMS.BAL",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [
     {
-      "Identity": "D:\\SIMS\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj",
+      "Identity": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj",
       "Version": 2,
       "Source": "Duha.SIMS.Config",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
@@ -18,7 +18,7 @@
       "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
     },
     {
-      "Identity": "D:\\SIMS\\Duha.SIMS.DAL\\Duha.SIMS.DAL.csproj",
+      "Identity": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.DAL\\Duha.SIMS.DAL.csproj",
       "Version": 2,
       "Source": "Duha.SIMS.DAL",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
@@ -29,7 +29,7 @@
       "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
     },
     {
-      "Identity": "D:\\SIMS\\Duha.SIMS.DomainModels\\Duha.SIMS.DomainModels.csproj",
+      "Identity": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.DomainModels\\Duha.SIMS.DomainModels.csproj",
       "Version": 2,
       "Source": "Duha.SIMS.DomainModels",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
@@ -40,7 +40,7 @@
       "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
     },
     {
-      "Identity": "D:\\SIMS\\Duha.SIMS.ServiceModels\\Duha.SIMS.ServiceModels.csproj",
+      "Identity": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.ServiceModels\\Duha.SIMS.ServiceModels.csproj",
       "Version": 2,
       "Source": "Duha.SIMS.ServiceModels",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",

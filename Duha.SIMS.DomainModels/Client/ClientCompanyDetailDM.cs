@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Duha.SIMS.DomainModels.Warehouse;
 
 namespace Duha.SIMS.DomainModels.Client
 {
@@ -44,8 +45,8 @@ namespace Duha.SIMS.DomainModels.Client
         public int? ClientCompanyAddressId { get; set; }
         public virtual ClientCompanyAddressDM? ClientCompanyAddress { get; set; }
 
-
         public virtual HashSet<ClientUserDM> ClientEmployeeUsers { get; set; }
+        public virtual HashSet<WarehouseDM> Warehouses { get; set; }
 
 
     }

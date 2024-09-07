@@ -2192,19 +2192,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\acs\\.nuget\\packages\\": {}
+    "C:\\Users\\dev10\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\SIMS\\Duha.SIMS.BAL\\Duha.SIMS.BAL.csproj",
+      "projectUniqueName": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.BAL\\Duha.SIMS.BAL.csproj",
       "projectName": "Duha.SIMS.BAL",
-      "projectPath": "D:\\SIMS\\Duha.SIMS.BAL\\Duha.SIMS.BAL.csproj",
-      "packagesPath": "C:\\Users\\acs\\.nuget\\packages\\",
-      "outputPath": "D:\\SIMS\\Duha.SIMS.BAL\\obj\\",
+      "projectPath": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.BAL\\Duha.SIMS.BAL.csproj",
+      "packagesPath": "C:\\Users\\dev10\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.BAL\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\acs\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\dev10\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -2212,21 +2212,20 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "D:\\SIMS\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj": {
-              "projectPath": "D:\\SIMS\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj"
+            "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj": {
+              "projectPath": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.Config\\Duha.SIMS.Config.csproj"
             },
-            "D:\\SIMS\\Duha.SIMS.DAL\\Duha.SIMS.DAL.csproj": {
-              "projectPath": "D:\\SIMS\\Duha.SIMS.DAL\\Duha.SIMS.DAL.csproj"
+            "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.DAL\\Duha.SIMS.DAL.csproj": {
+              "projectPath": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.DAL\\Duha.SIMS.DAL.csproj"
             },
-            "D:\\SIMS\\Duha.SIMS.ServiceModels\\Duha.SIMS.ServiceModels.csproj": {
-              "projectPath": "D:\\SIMS\\Duha.SIMS.ServiceModels\\Duha.SIMS.ServiceModels.csproj"
+            "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.ServiceModels\\Duha.SIMS.ServiceModels.csproj": {
+              "projectPath": "C:\\Users\\dev10\\Downloads\\sims-api-main\\sims-api-main\\Duha.SIMS.ServiceModels\\Duha.SIMS.ServiceModels.csproj"
             }
           }
         }
@@ -2235,11 +2234,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -2274,7 +2268,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   }

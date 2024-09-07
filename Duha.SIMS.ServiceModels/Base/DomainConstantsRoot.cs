@@ -115,6 +115,8 @@
             public const string Display_UserPasswordResetRequired = "User Password Reset Required";
 
             public const string Display_UserNotVerified = "User Not Verified";
+
+            public const string Display_WrongCredentials = "Invalid Credentials";
         }
     }
 }

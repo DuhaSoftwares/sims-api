@@ -27,7 +27,7 @@ namespace Duha.SIMS.API.Controllers.AppUsers
         [HttpGet]
         [Route("odata")]
         [ApiExplorerSettings(IgnoreApi = true)]
-        //[Authorize(AuthenticationSchemes = RenoBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "ApplicationAdmin, SuperAdmin")]
+        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = " SuperAdmin,SystemAdmin")]
         public async Task<ActionResult<ApiResponse<IEnumerable<ApplicationUserSM>>>> GetAsOdata(ODataQueryOptions<ApplicationUserSM> oDataOptions)
         {
             
@@ -39,7 +39,7 @@ namespace Duha.SIMS.API.Controllers.AppUsers
 
 
         [HttpGet("{id}")]
-        //[Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "ApplicationAdmin, SuperAdmin")]
+        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = " SuperAdmin,SystemAdmin")]
         public async Task<ActionResult<ApiResponse<ApplicationUserSM>>> GetById(int id)
         {
             var singleSM = await _applicationUserProcess.GetApplicationUserById(id);
@@ -54,7 +54,7 @@ namespace Duha.SIMS.API.Controllers.AppUsers
         }
 
         [HttpGet()]
-        //[Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "ApplicationAdmin, SuperAdmin")]
+        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = " SuperAdmin,SystemAdmin")]
         public async Task<ActionResult<ApiResponse<IEnumerable<ApplicationUserSM>>>> GetAll()
         {
             var singleSM = await _applicationUserProcess.GetAllApplicationUsers();
@@ -62,7 +62,7 @@ namespace Duha.SIMS.API.Controllers.AppUsers
         }
 
         [HttpPost("signUp")]
-        //[AllowAnonymous]
+        [AllowAnonymous]
         public async Task<ActionResult<ApiResponse<ApplicationUserSM>>> Post([FromBody] ApiRequest<ApplicationUserSM> apiRequest)
         {
             #region Check Request
@@ -90,18 +90,19 @@ namespace Duha.SIMS.API.Controllers.AppUsers
         }
 
         [HttpPut()]
-        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "CompanyAdmin")]
-        public async Task<ActionResult<ApiResponse<ApplicationUserSM>>> UpdateApplicationUser(int id, [FromBody] ApiRequest<ApplicationUserSM> apiRequest)
+        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "SuperAdmin,SystemAdmin")]
+        public async Task<ActionResult<ApiResponse<ApplicationUserSM>>> UpdateApplicationUser([FromBody] ApiRequest<ApplicationUserSM> apiRequest)
         {
             #region Check Request
             var innerReq = apiRequest?.ReqData;
             if (!User.Identity.IsAuthenticated)
             {
-                return NotFound(ModelConverter.FormNewErrorResponse("Unauthorized Farmer...Plz check your Credentials"));
+                return NotFound(ModelConverter.FormNewErrorResponse("Unauthorized Admin...Plz check your Credentials"));
             }
             else
             {
                 var userId = User.GetUserRecordIdFromCurrentUserClaims();
+                var userRole = User.GetUserRoleTypeFromCurrentUserClaims();
                 if (userId <= 0 )
                 {
                     return BadRequest(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_IdInvalid, ApiErrorTypeSM.InvalidInputData_NoLog));
@@ -114,7 +115,7 @@ namespace Duha.SIMS.API.Controllers.AppUsers
 
                 else
                 {
-                    var response = await _applicationUserProcess.UpdateApplicationUserDetails(userId, innerReq);
+                    var response = await _applicationUserProcess.UpdateApplicationUserDetails(userId, innerReq, userRole);
                     return Ok(ModelConverter.FormNewSuccessResponse(response));
                 }
             }
@@ -125,8 +126,8 @@ namespace Duha.SIMS.API.Controllers.AppUsers
         #region Delete Endpoints
 
          [HttpDelete("{id}")]
-        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "CompanyAdmin,SuperAdmin")]
-        public async Task<ActionResult<ApiResponse<DeleteResponseRoot>>> Delete(int id)
+        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "SystemAdmin,SuperAdmin")]
+        public async Task<ActionResult<ApiResponse<DeleteResponseRoot>>> Delete()
         {
             if (!User.Identity.IsAuthenticated)
             {
@@ -136,7 +137,7 @@ namespace Duha.SIMS.API.Controllers.AppUsers
             var userId = User.GetUserRecordIdFromCurrentUserClaims();
             var companyCode = User.GetCompanyCodeFromCurrentUserClaims();
 
-            var resp = await _applicationUserProcess.DeleteApplicationUserById(userId);
+            var resp = await _applicationUserProcess.DeleteApplicationUserById(userId, userRole);
             if (resp != null && resp.DeleteResult)
             {
                 return Ok(ModelConverter.FormNewSuccessResponse(resp));

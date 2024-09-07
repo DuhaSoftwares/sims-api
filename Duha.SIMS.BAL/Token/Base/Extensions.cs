@@ -1,4 +1,5 @@
 ﻿using Duha.SIMS.BAL.Base;
+using Duha.SIMS.ServiceModels.LoggedInIdentity;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Primitives;
 using System.Linq;
@@ -365,5 +366,6 @@ namespace Duha.SIMS.BAL.Token.Base
                 SerializationMessage = (serializationMessage ?? ("  Success ** (body " + (addBody ? "NOT-" : "") + "SKIPPED)."))
             };
         }
+        
     }
 }

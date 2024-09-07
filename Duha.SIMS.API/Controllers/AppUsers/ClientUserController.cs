@@ -27,7 +27,7 @@ namespace Duha.SIMS.API.Controllers.AppUsers
         [HttpGet]
         [Route("odata")]
         [ApiExplorerSettings(IgnoreApi = true)]
-        //[Authorize(AuthenticationSchemes = RenoBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "ClientAdmin, SuperAdmin")]
+        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "SystemAdmin, SuperAdmin")]
         public async Task<ActionResult<ApiResponse<IEnumerable<ClientUserSM>>>> GetAsOdata(ODataQueryOptions<ClientUserSM> oDataOptions)
         {
             
@@ -39,7 +39,7 @@ namespace Duha.SIMS.API.Controllers.AppUsers
 
 
         [HttpGet("{id}")]
-        //[Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "ClientAdmin, SuperAdmin")]
+        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "ClientAdmin, SuperAdmin")]
         public async Task<ActionResult<ApiResponse<ClientUserSM>>> GetById(int id)
         {
             var singleSM = await _clientUserProcess.GetClientUserById(id);
@@ -53,8 +53,25 @@ namespace Duha.SIMS.API.Controllers.AppUsers
             }
         }
 
+
+        [HttpGet("mine")]
+        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "CompanyAdmin")]
+        public async Task<ActionResult<ApiResponse<ClientUserSM>>> GetMineById()
+        {
+            var id = User.GetUserRecordIdFromCurrentUserClaims();
+            var singleSM = await _clientUserProcess.GetClientUserById(id);
+            if (singleSM != null)
+            {
+                return ModelConverter.FormNewSuccessResponse(singleSM);
+            }
+            else
+            {
+                return NotFound(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_IdNotFound, ApiErrorTypeSM.NoRecord_NoLog));
+            }
+        }
+
         [HttpGet()]
-        //[Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "ClientAdmin, SuperAdmin")]
+        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "SystemAdmin, SuperAdmin")]
         public async Task<ActionResult<ApiResponse<IEnumerable<ClientUserSM>>>> GetAll()
         {
             var singleSM = await _clientUserProcess.GetAllClientUsers();
@@ -91,13 +108,13 @@ namespace Duha.SIMS.API.Controllers.AppUsers
 
         [HttpPut()]
         [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "CompanyAdmin")]
-        public async Task<ActionResult<ApiResponse<ClientUserSM>>> UpdateClientUser(int id, [FromBody] ApiRequest<ClientUserSM> apiRequest)
+        public async Task<ActionResult<ApiResponse<ClientUserSM>>> UpdateClientUser([FromBody] ApiRequest<ClientUserSM> apiRequest)
         {
             #region Check Request
             var innerReq = apiRequest?.ReqData;
             if (!User.Identity.IsAuthenticated)
             {
-                return NotFound(ModelConverter.FormNewErrorResponse("Unauthorized Farmer...Plz check your Credentials"));
+                return NotFound(ModelConverter.FormNewErrorResponse("Unauthorized User...Plz check your Credentials"));
             }
             else
             {
@@ -123,18 +140,15 @@ namespace Duha.SIMS.API.Controllers.AppUsers
         }
 
         #region Delete Endpoints
-
-         [HttpDelete("{id}")]
-        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "CompanyAdmin,SuperAdmin")]
-        public async Task<ActionResult<ApiResponse<DeleteResponseRoot>>> Delete(int id)
+        [HttpDelete()]
+        [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "CompanyAdmin")]
+        public async Task<ActionResult<ApiResponse<DeleteResponseRoot>>> Delete()
         {
             if (!User.Identity.IsAuthenticated)
             {
                 return NotFound(ModelConverter.FormNewErrorResponse("Unauthorized User...Plz check your Credentials"));
             }
-            var userRole = User.GetUserRoleTypeFromCurrentUserClaims();
             var userId = User.GetUserRecordIdFromCurrentUserClaims();
-            var companyCode = User.GetCompanyCodeFromCurrentUserClaims();
 
             var resp = await _clientUserProcess.DeleteClientUserById(userId);
             if (resp != null && resp.DeleteResult)
