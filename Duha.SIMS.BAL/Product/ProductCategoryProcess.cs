@@ -35,7 +35,6 @@ namespace Duha.SIMS.BAL.Product
                 Name = entity.Name,
                 Description = entity.Description,
                 Id = entity.Id,
-                Status = (CategoryStatusSM)entity.Status,
                 CreatedBy = entity.CreatedBy,
                 LastModifiedBy = entity.LastModifiedBy,
                 CreatedOnUTC = entity.CreatedOnUTC,

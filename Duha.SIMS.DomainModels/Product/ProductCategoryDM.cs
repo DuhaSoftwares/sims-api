@@ -12,9 +12,7 @@ namespace Duha.SIMS.DomainModels.Product
 
         [MaxLength(int.MaxValue)]
         public string? Description { get; set; }
-
-        public CategoryStatusDM Status { get; set; }
-
+         
         public virtual HashSet<ProductDM> Products { get; set; }
     }
 }
