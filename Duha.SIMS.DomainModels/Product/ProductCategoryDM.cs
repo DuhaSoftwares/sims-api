@@ -9,9 +9,9 @@ namespace Duha.SIMS.DomainModels.Product
     {
         [StringLength(200)]
         public string Name { get; set; }
+        public int? LevelId { get; set; }
 
-        [MaxLength(int.MaxValue)]
-        public string? Description { get; set; }
+        public CategoryLevelDM Level {  get; set; }
          
         public virtual HashSet<ProductDM> Products { get; set; }
     }

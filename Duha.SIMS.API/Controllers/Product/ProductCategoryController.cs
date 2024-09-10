@@ -1,5 +1,8 @@
 ﻿using Duha.SIMS.API.Controllers.Root;
+using Duha.SIMS.API.Security;
 using Duha.SIMS.BAL.Product;
+using Duha.SIMS.BAL.Token.Base;
+using Duha.SIMS.BAL.Warehouse;
 using Duha.SIMS.ServiceModels.Base;
 using Duha.SIMS.ServiceModels.CommonResponse;
 using Duha.SIMS.ServiceModels.Enums;
@@ -39,7 +42,7 @@ namespace Duha.SIMS.API.Controllers.Product
 
         #region Get All
         [HttpGet()]
-        public async Task<ActionResult<ApiResponse<IEnumerable<ProductCategorySM>>>> GetAllLevel1Categories([FromQuery]int skip, [FromQuery] int top)
+        public async Task<ActionResult<ApiResponse<IEnumerable<CategoriesSM>>>> GetAllLevel1Categories([FromQuery]int skip, [FromQuery] int top)
         {
             var listSM = await _productCategoryProcess.GetAllProductCategories(skip,top);
             if (listSM != null)
@@ -57,10 +60,24 @@ namespace Duha.SIMS.API.Controllers.Product
 
         #region Get Single
 
+        [HttpGet("extended/{id}")]
+        public async Task<ActionResult<ApiResponse<CategoriesSM>>> GetByIdExtended(int id)
+        {
+            var singleSM = await _productCategoryProcess.GetProductCategoryByIdAsync(id);
+            if (singleSM != null)
+            {
+                return ModelConverter.FormNewSuccessResponse(singleSM);
+            }
+            else
+            {
+                return NotFound(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_IdNotFound, ApiErrorTypeSM.NoRecord_NoLog));
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<ApiResponse<ProductCategorySM>>> GetById(int id)
         {
-            var singleSM = await _productCategoryProcess.GetProductCategoryById(id);
+            var singleSM = await _productCategoryProcess.GetById(id);
             if (singleSM != null)
             {
                 return ModelConverter.FormNewSuccessResponse(singleSM);
@@ -86,7 +103,7 @@ namespace Duha.SIMS.API.Controllers.Product
 
             #endregion Check Request
 
-            var addedSM = await _productCategoryProcess.AddProductCategory(innerReq);
+            var addedSM = await _productCategoryProcess.AddCategoryAsync(innerReq);
             if (addedSM != null)
             {
                 return CreatedAtAction(nameof(GetById), new
@@ -152,7 +169,16 @@ namespace Duha.SIMS.API.Controllers.Product
         }
         #endregion Delete
         #endregion Delete Category With Updation Its Associations
+        #region Count
+        
 
-
+        [HttpGet("count")]
+        public async Task<ActionResult<ApiResponse<IntResponseRoot>>> GetAllLevel1CategoriesCount()
+        {
+            
+            var count = await _productCategoryProcess.GetAllProductCategoriesCount();
+            return Ok(ModelConverter.FormNewSuccessResponse(new IntResponseRoot(count, "My Total Level1 categories ")));
+        }
+        #endregion Count
     }
 }
