@@ -40,6 +40,7 @@ builder.Services.AddScoped<ProductCategoryProcess>();
 builder.Services.AddScoped<TokenProcess>();
 builder.Services.AddScoped<WarehouseProcess>();
 builder.Services.AddScoped<BrandProcess>();
+builder.Services.AddScoped<UnitsProcess>();
 
 // Add Identity services
 builder.Services.AddIdentity<AuthenticUserSM, IdentityRole>()

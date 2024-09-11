@@ -23,6 +23,7 @@ namespace Duha.SIMS.DAL.Contexts
         public DbSet<WarehouseDM> Warehouses { get; set; }
         public DbSet<BrandDM> Brands { get; set; }
         public DbSet<ProductCategoryDM> ProductCategories { get; set; }
+        public DbSet<UnitsDM> Units { get; set; }
         public DbSet<ProductDM> Products { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
