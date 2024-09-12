@@ -6,6 +6,7 @@ using Duha.SIMS.ServiceModels.Enums;
 using Duha.SIMS.ServiceModels.Product;
 using System.Web.Http.OData.Query;
 using Microsoft.AspNetCore.Mvc;
+using Duha.SIMS.DomainModels.Product;
 
 namespace Duha.SIMS.API.Controllers.Product
 {

@@ -1,28 +1,21 @@
 ﻿using Duha.SIMS.ServiceModels.Base;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace Duha.SIMS.ServiceModels.Product
 {
     public class ProductSM : SIMSServiceModelBase<int>
     {
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string? Code { get; set; }
+        public int? CategoryId { get; set; }
+        public int BrandId { get; set; }
+        public int UnitId { get; set; }        
+        public string Variant { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
-        public string ImagePath { get; set; }
-        public string ProductColor { get; set; }
-        public DateTime LastViewed { get; set; }
-        public int ViewCount { get; set; }
-        public decimal Discount { get; set; }
-        /*public string ManufacturerPartNumber { get; set; }
-        public string EAN { get; set; }
-        public string UPC { get; set; }*/
-        public int? ProductCategoryId { get; set; }
-        public int? BrandId { get; set; }
-        public int ProductId { get; set; }
-        public int? SellerId { get; set; }
-        public decimal? DiscountPrice { get; set; }
-        //public int ProductGroupId { get; set; }
-        public double? AverageRating { get; set; }
-        public int? TotalRating { get; set; }
+        public string? Image { get; set; }
+        public bool Status { get; set; }
     }
 }

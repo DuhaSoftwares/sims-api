@@ -8,6 +8,7 @@ using Duha.SIMS.ServiceModels.CommonResponse;
 using Duha.SIMS.ServiceModels.Enums;
 using Duha.SIMS.ServiceModels.LoggedInIdentity;
 using Duha.SIMS.ServiceModels.Product;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Duha.SIMS.BAL.Product
@@ -107,7 +108,15 @@ namespace Duha.SIMS.BAL.Product
             return categoriesList;
         }
 
-
+        public async Task<List<ProductCategorySM>> GetByLevel(CategoryLevelSM level)
+        {
+            var list = await _apiDbContext.ProductCategories.Where(x=>x.Level == (CategoryLevelDM)level).ToListAsync();
+            if(list.Count == 0)
+            {
+                return null;
+            }
+            return _mapper.Map<List<ProductCategorySM>>(list);
+        }
 
         public async Task<int> GetAllProductCategoriesCount()
         {

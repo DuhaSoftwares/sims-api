@@ -1,30 +1,27 @@
 ﻿using Duha.SIMS.API.Controllers.Root;
-using Duha.SIMS.API.Security;
 using Duha.SIMS.BAL.Product;
-using Duha.SIMS.BAL.Token.Base;
-using Duha.SIMS.BAL.Warehouse;
 using Duha.SIMS.ServiceModels.Base;
 using Duha.SIMS.ServiceModels.CommonResponse;
 using Duha.SIMS.ServiceModels.Enums;
 using Duha.SIMS.ServiceModels.Product;
-using Microsoft.AspNetCore.Mvc;
 using System.Web.Http.OData.Query;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Duha.SIMS.API.Controllers.Product
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductCategoryController : ApiControllerWithOdataRoot<ProductCategorySM>
+    public class ProductController : ApiControllerWithOdataRoot<ProductSM>
     {
         #region Properties
-        private readonly ProductCategoryProcess _productCategoryProcess;
+        private readonly ProductProcess _productProcess;
         #endregion Properties
 
         #region Constructor
-        public ProductCategoryController(ProductCategoryProcess productCategoryProcess)
-            : base(productCategoryProcess)
+        public ProductController(ProductProcess ProductProcess)
+            : base(ProductProcess)
         {
-            _productCategoryProcess = productCategoryProcess;
+            _productProcess = ProductProcess;
         }
         #endregion Constructor
 
@@ -32,7 +29,7 @@ namespace Duha.SIMS.API.Controllers.Product
         [HttpGet]
         [Route("odata")]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task<ActionResult<ApiResponse<IEnumerable<ProductCategorySM>>>> GetAsOdata(ODataQueryOptions<ProductCategorySM> oDataOptions)
+        public async Task<ActionResult<ApiResponse<IEnumerable<ProductSM>>>> GetAsOdata(ODataQueryOptions<ProductSM> oDataOptions)
         {
             //TODO: validate inputs here probably 
             var retList = await GetAsEntitiesOdata(oDataOptions);
@@ -42,50 +39,33 @@ namespace Duha.SIMS.API.Controllers.Product
 
         #region Get All
         [HttpGet()]
-        public async Task<ActionResult<ApiResponse<IEnumerable<CategoriesSM>>>> GetAllLevel1Categories([FromQuery]int skip, [FromQuery] int top)
+        public async Task<ActionResult<ApiResponse<List<ProductSM>>>> GetAll([FromQuery] int skip, [FromQuery] int top)
         {
-            var listSM = await _productCategoryProcess.GetAllProductCategories(skip,top);
-            if (listSM != null)
-            {
-                
-                return Ok(ModelConverter.FormNewSuccessResponse(listSM));
-            }
-            else
-            {
-                return NotFound(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_IdNotFound, ApiErrorTypeSM.NoRecord_NoLog));
-            }
-        }
-        
-        #endregion Get All
-
-        #region Get Single
-
-        [HttpGet("extended/{id}")]
-        public async Task<ActionResult<ApiResponse<CategoriesSM>>> GetByIdExtended(int id)
-        {
-            var singleSM = await _productCategoryProcess.GetProductCategoryByIdAsync(id);
-            if (singleSM != null)
-            {
-                return ModelConverter.FormNewSuccessResponse(singleSM);
-            }
-            else
-            {
-                return NotFound(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_IdNotFound, ApiErrorTypeSM.NoRecord_NoLog));
-            }
-        }
-
-        [HttpGet("Level")]
-        public async Task<ActionResult<ApiResponse<List<ProductCategorySM>>>> GetByLevel([FromQuery] CategoryLevelSM level)
-        {
-            var listSM = await _productCategoryProcess.GetByLevel(level);
+            var listSM = await _productProcess.GetAllProducts(skip,top);
 
             return Ok(ModelConverter.FormNewSuccessResponse(listSM));
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ApiResponse<ProductCategorySM>>> GetById(int id)
+
+        [HttpGet("count")]
+        public async Task<ActionResult<ApiResponse<IntResponseRoot>>> GetCount()
         {
-            var singleSM = await _productCategoryProcess.GetById(id);
+            var countRes = await _productProcess.GetAllProductsCount();
+
+            // Check if the list is empty and return a meaningful response
+            
+
+            return Ok(ModelConverter.FormNewSuccessResponse(new IntResponseRoot(countRes,"Total Products ")));
+        }
+
+        #endregion Get All
+
+        #region Get Single
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ApiResponse<ProductSM>>> GetById(int id)
+        {
+            var singleSM = await _productProcess.GetProductsById(id);
             if (singleSM != null)
             {
                 return ModelConverter.FormNewSuccessResponse(singleSM);
@@ -97,9 +77,10 @@ namespace Duha.SIMS.API.Controllers.Product
         }
         #endregion Get Single
 
-        #region Add Category with level Check
-        [HttpPost()]
-        public async Task<ActionResult<ApiResponse<ProductCategorySM>>> AddCategory([FromBody] ApiRequest<ProductCategorySM> apiRequest)
+        #region Add
+
+        [HttpPost]
+        public async Task<ActionResult<ApiResponse<ProductSM>>> Post([FromBody] ApiRequest<ProductSM> apiRequest)
         {
             #region Check Request
 
@@ -111,7 +92,7 @@ namespace Duha.SIMS.API.Controllers.Product
 
             #endregion Check Request
 
-            var addedSM = await _productCategoryProcess.AddCategoryAsync(innerReq);
+            var addedSM = await _productProcess.AddProduct(innerReq);
             if (addedSM != null)
             {
                 return CreatedAtAction(nameof(GetById), new
@@ -124,12 +105,11 @@ namespace Duha.SIMS.API.Controllers.Product
                 return BadRequest(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_PassedDataNotSaved, ApiErrorTypeSM.NoRecord_NoLog));
             }
         }
-        #endregion Add Category with level Check
+        #endregion Add
 
-        #region Update Category
-
+        #region Put
         [HttpPut("{id}")]
-        public async Task<ActionResult<ApiResponse<ProductCategorySM>>> UpdateProductCategory(int id, [FromBody] ApiRequest<ProductCategorySM> apiRequest)
+        public async Task<ActionResult<ApiResponse<ProductSM>>> Put(int id, [FromBody] ApiRequest<ProductSM> apiRequest)
         {
             #region Check Request
 
@@ -146,7 +126,7 @@ namespace Duha.SIMS.API.Controllers.Product
 
             #endregion Check Request
 
-            var resp = await _productCategoryProcess.UpdateProductCategory(id, innerReq);
+            var resp = await _productProcess.UpdateProducts(id, innerReq);
             if (resp != null)
             {
                 return Ok(ModelConverter.FormNewSuccessResponse(resp));
@@ -156,16 +136,13 @@ namespace Duha.SIMS.API.Controllers.Product
                 return NotFound(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_PassedDataNotSaved, ApiErrorTypeSM.NoRecord_NoLog));
             }
         }
-
-        #endregion Update Category
-
-        #region Delete Category With Updation Its Associations
+        #endregion Put
 
         #region Delete
         [HttpDelete("{id}")]
         public async Task<ActionResult<ApiResponse<DeleteResponseRoot>>> Delete(int id)
         {
-            var resp = await _productCategoryProcess.DeleteProductCategoryById(id);
+            var resp = await _productProcess.DeleteProductsById(id);
             if (resp != null && resp.DeleteResult)
             {
                 return Ok(ModelConverter.FormNewSuccessResponse(resp));
@@ -176,18 +153,5 @@ namespace Duha.SIMS.API.Controllers.Product
             }
         }
         #endregion Delete
-        #endregion Delete Category With Updation Its Associations
-
-        #region Count
-        
-
-        [HttpGet("count")]
-        public async Task<ActionResult<ApiResponse<IntResponseRoot>>> GetAllLevel1CategoriesCount()
-        {
-            
-            var count = await _productCategoryProcess.GetAllProductCategoriesCount();
-            return Ok(ModelConverter.FormNewSuccessResponse(new IntResponseRoot(count, "My Total Level1 categories ")));
-        }
-        #endregion Count
     }
 }
