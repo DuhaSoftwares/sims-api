@@ -59,6 +59,7 @@ namespace Duha.SIMS.BAL.Warehouse
                 throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, $"Company Details Not Found...Add Company First");
             }
             var dm = await _apiDbContext.Warehouses.AsNoTracking().Where(x=>x.ClientCompanyDetailId == company.Id)
+                .OrderByDescending(c => c.CreatedOnUTC)
                 .Skip(skip).Take(top)
                 .ToListAsync();
             var sm = _mapper.Map<List<WarehouseSM>>(dm);

@@ -61,6 +61,7 @@ namespace Duha.SIMS.BAL.Product
             // Fetch all level 1 categories (categories with LevelId == null or 0)
             var level1Categories = await _apiDbContext.ProductCategories
                 .Where(c => c.LevelId == null || c.LevelId == 0)
+                .OrderByDescending(c => c.CreatedOnUTC)
                 .Skip(skip)
                 .Take(top)
                 .ToListAsync();
@@ -72,7 +73,8 @@ namespace Duha.SIMS.BAL.Product
             {
                 // Fetch level 2 categories associated with the current level 1 category
                 var level2Categories = await _apiDbContext.ProductCategories
-                    .Where(c => c.LevelId == level1Category.Id)
+                    .OrderByDescending(c => c.CreatedOnUTC)
+                    .Where(c => c.LevelId == level1Category.Id && c.Level == CategoryLevelDM.Level2)
                     .ToListAsync();
 
                 var associatedLevels = new List<Level2CategoriesSM>();
@@ -82,7 +84,8 @@ namespace Duha.SIMS.BAL.Product
                 {
                     // Fetch level 3 categories associated with the current level 2 category
                     var level3Categories = await _apiDbContext.ProductCategories
-                        .Where(c => c.LevelId == level2Category.Id)
+                        .OrderByDescending(c => c.CreatedOnUTC)
+                        .Where(c => c.LevelId == level2Category.Id && c.Level == CategoryLevelDM.Level3)
                         .ToListAsync();
 
                     // Map level 2 category along with its level 3 categories
@@ -110,7 +113,9 @@ namespace Duha.SIMS.BAL.Product
 
         public async Task<List<ProductCategorySM>> GetByLevel(CategoryLevelSM level)
         {
-            var list = await _apiDbContext.ProductCategories.Where(x=>x.Level == (CategoryLevelDM)level).ToListAsync();
+            var list = await _apiDbContext.ProductCategories.Where(x=>x.Level == (CategoryLevelDM)level)
+                .OrderByDescending(c => c.CreatedOnUTC)
+                .ToListAsync();
             if(list.Count == 0)
             {
                 return null;
@@ -149,6 +154,7 @@ namespace Duha.SIMS.BAL.Product
             // Fetch associated Level 2 categories
             var level2Categories = await _apiDbContext.ProductCategories
                 .Where(c => c.LevelId == level1Category.Id)
+                .OrderByDescending(c => c.CreatedOnUTC)
                 .ToListAsync();
 
             var associatedLevels = new List<Level2CategoriesSM>();
@@ -158,6 +164,7 @@ namespace Duha.SIMS.BAL.Product
             {
                 var level3Categories = await _apiDbContext.ProductCategories
                     .Where(c => c.LevelId == level2Category.Id)
+                    .OrderByDescending(c => c.CreatedOnUTC)
                     .ToListAsync();
 
                 var level2CategoryModel = new Level2CategoriesSM
@@ -225,6 +232,7 @@ namespace Duha.SIMS.BAL.Product
             {
                 // Level 2 category should have a valid LevelId referencing a Level 1 category
                 var parentLevel1Category = await _apiDbContext.ProductCategories
+                    .OrderByDescending(c => c.CreatedOnUTC)
                     .FirstOrDefaultAsync(c => c.Id == newCategory.LevelId && c.Level == CategoryLevelDM.Level1);
 
                 if (parentLevel1Category == null)
@@ -236,6 +244,7 @@ namespace Duha.SIMS.BAL.Product
             {
                 // Level 3 category should have a valid LevelId referencing a Level 2 category
                 var parentLevel2Category = await _apiDbContext.ProductCategories
+                    .OrderByDescending(c => c.CreatedOnUTC)
                     .FirstOrDefaultAsync(c => c.Id == newCategory.LevelId && c.Level == CategoryLevelDM.Level2);
 
                 if (parentLevel2Category == null)

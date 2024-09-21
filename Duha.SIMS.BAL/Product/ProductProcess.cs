@@ -86,6 +86,7 @@ namespace Duha.SIMS.BAL.Product
         public async Task<List<ProductSM>> GetAllProducts(int skip, int top)
         {
             var itemsFromDb = await _apiDbContext.Products
+                .OrderByDescending(c => c.CreatedOnUTC)
                 .Skip(skip).Take(top)
                 .ToListAsync();
             var response = new List<ProductSM>();

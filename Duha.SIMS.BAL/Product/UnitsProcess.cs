@@ -65,6 +65,7 @@ namespace Duha.SIMS.BAL.Product
         public async Task<List<UnitsSM>> GetAllUnits(int skip, int top)
         {
             var itemsFromDb = await _apiDbContext.Units
+                .OrderByDescending(c => c.CreatedOnUTC)
                 .Skip(skip).Take(top)
                 .ToListAsync();
             var response = new List<UnitsSM>();
