@@ -259,7 +259,8 @@ namespace Duha.SIMS.BAL.Product
 
             // Map the service model to the entity model
             var categoryEntity = _mapper.Map<ProductCategoryDM>(newCategory);
-
+            categoryEntity.CreatedBy = _loginUserDetail.LoginId;
+            categoryEntity.CreatedOnUTC = DateTime.UtcNow;
             // Add the new category to the database
             await _apiDbContext.ProductCategories.AddAsync(categoryEntity);
             if(await _apiDbContext.SaveChangesAsync() > 0)

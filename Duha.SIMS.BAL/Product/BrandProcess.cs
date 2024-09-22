@@ -77,6 +77,7 @@ namespace Duha.SIMS.BAL.Product
         /// </returns>
         public async Task<List<BrandSM>> GetAllBrands(int skip, int top)
         {
+            var loginId = _loginUserDetail.LoginId;
             var itemsFromDb = await _apiDbContext.Brands
                 .OrderByDescending(c => c.CreatedOnUTC)
                 .Skip(skip).Take(top)

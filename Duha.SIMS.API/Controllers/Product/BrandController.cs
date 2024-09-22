@@ -7,6 +7,9 @@ using Duha.SIMS.ServiceModels.Product;
 using System.Web.Http.OData.Query;
 using Microsoft.AspNetCore.Mvc;
 using Duha.SIMS.DomainModels.Product;
+using Microsoft.AspNetCore.Authorization;
+using Duha.SIMS.API.Security;
+using Duha.SIMS.BAL.Token.Base;
 
 namespace Duha.SIMS.API.Controllers.Product
 {
@@ -40,8 +43,10 @@ namespace Duha.SIMS.API.Controllers.Product
 
         #region Get All
         [HttpGet()]
+        //[Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "CompanyAdmin,ClientAdmin, SuperAdmin")]
         public async Task<ActionResult<ApiResponse<List<BrandSM>>>> GetAll([FromQuery] int skip, [FromQuery] int top)
         {
+            var userId = User.GetUserRecordIdFromCurrentUserClaims();
             var listSM = await _brandProcess.GetAllBrands(skip,top);
 
             return Ok(ModelConverter.FormNewSuccessResponse(listSM));

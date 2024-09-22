@@ -254,9 +254,9 @@ namespace Duha.SIMS.BAL.Client
                 await _apiDbContext.SaveChangesAsync();
 
                 // Todo: Delete the previous image from the folder
-                /* if (File.Exists(imageFullPath))
-                     File.Delete(imageFullPath);
- */
+                if (File.Exists(imageFullPath))
+                    File.Delete(imageFullPath);
+
                 return "Company Logo Updated";
             }
             catch (SIMSException ex)
