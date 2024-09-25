@@ -73,43 +73,26 @@ namespace Duha.SIMS.BAL.Product
             {
                 // Fetch level 2 categories associated with the current level 1 category
                 var level2Categories = await _apiDbContext.ProductCategories
-                    .OrderByDescending(c => c.CreatedOnUTC)
                     .Where(c => c.LevelId == level1Category.Id && c.Level == CategoryLevelDM.Level2)
+                    .OrderByDescending(c => c.CreatedOnUTC)
                     .ToListAsync();
 
-                var associatedLevels = new List<Level2CategoriesSM>();
-
-                // Iterate over each level 2 category to find level 3 categories
-                foreach (var level2Category in level2Categories)
+                // Map to ProductCategorySM for Level 1 and Level 2
+                var categorySM = new CategoriesSM
                 {
-                    // Fetch level 3 categories associated with the current level 2 category
-                    var level3Categories = await _apiDbContext.ProductCategories
-                        .OrderByDescending(c => c.CreatedOnUTC)
-                        .Where(c => c.LevelId == level2Category.Id && c.Level == CategoryLevelDM.Level3)
-                        .ToListAsync();
-
-                    // Map level 2 category along with its level 3 categories
-                    var level2CategoryModel = new Level2CategoriesSM
-                    {
-                        Level2Category = _mapper.Map<ProductCategorySM>(level2Category),
-                        Level3Categories = _mapper.Map<List<ProductCategorySM>>(level3Categories)
-                    };
-
-                    associatedLevels.Add(level2CategoryModel);
-                }
-
-                // Map level 1 category along with its associated levels (level 2 and level 3)
-                var categoryModel = new CategoriesSM
-                {
+                    // Map level 1 category
                     Level1Category = _mapper.Map<ProductCategorySM>(level1Category),
-                    AssociatedLevels = associatedLevels
+
+                    // Map level 2 categories
+                    Level2Categories = _mapper.Map<List<ProductCategorySM>>(level2Categories)
                 };
 
-                categoriesList.Add(categoryModel);
+                categoriesList.Add(categorySM);
             }
 
             return categoriesList;
         }
+
 
         public async Task<List<ProductCategorySM>> GetByLevel(CategoryLevelSM level)
         {
@@ -157,30 +140,11 @@ namespace Duha.SIMS.BAL.Product
                 .OrderByDescending(c => c.CreatedOnUTC)
                 .ToListAsync();
 
-            var associatedLevels = new List<Level2CategoriesSM>();
-
-            // Fetch Level 3 categories for each Level 2 category
-            foreach (var level2Category in level2Categories)
-            {
-                var level3Categories = await _apiDbContext.ProductCategories
-                    .Where(c => c.LevelId == level2Category.Id)
-                    .OrderByDescending(c => c.CreatedOnUTC)
-                    .ToListAsync();
-
-                var level2CategoryModel = new Level2CategoriesSM
-                {
-                    Level2Category = _mapper.Map<ProductCategorySM>(level2Category),
-                    Level3Categories = _mapper.Map<List<ProductCategorySM>>(level3Categories)
-                };
-
-                associatedLevels.Add(level2CategoryModel);
-            }
-
             // Map the Level 1 category along with its associated levels (Level 2 and Level 3)
             var categoryModel = new CategoriesSM
             {
                 Level1Category = _mapper.Map<ProductCategorySM>(level1Category),
-                AssociatedLevels = associatedLevels
+                Level2Categories = _mapper.Map<List<ProductCategorySM>>(level2Categories)
             };
 
             return categoryModel;
@@ -237,40 +201,33 @@ namespace Duha.SIMS.BAL.Product
 
                 if (parentLevel1Category == null)
                 {
-                    throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog,"Invalid LevelId for Level 2 category. No matching Level 1 category found.");
-                }
-            }
-            else if (newCategory.Level == CategoryLevelSM.Level3)
-            {
-                // Level 3 category should have a valid LevelId referencing a Level 2 category
-                var parentLevel2Category = await _apiDbContext.ProductCategories
-                    .OrderByDescending(c => c.CreatedOnUTC)
-                    .FirstOrDefaultAsync(c => c.Id == newCategory.LevelId && c.Level == CategoryLevelDM.Level2);
-
-                if (parentLevel2Category == null)
-                {
-                    throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog,"Invalid LevelId for Level 3 category. No matching Level 2 category found.");
+                    throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, "Invalid LevelId for Level 2 category. No matching Level 1 category found.");
                 }
             }
             else
             {
-                throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog,"Invalid Level. Allowed values: 1, 2, or 3.");
+                // If the level is not 1 or 2, throw an exception
+                throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, "Invalid Level. Allowed values: 1 or 2.");
             }
 
             // Map the service model to the entity model
             var categoryEntity = _mapper.Map<ProductCategoryDM>(newCategory);
             categoryEntity.CreatedBy = _loginUserDetail.LoginId;
             categoryEntity.CreatedOnUTC = DateTime.UtcNow;
+
             // Add the new category to the database
             await _apiDbContext.ProductCategories.AddAsync(categoryEntity);
-            if(await _apiDbContext.SaveChangesAsync() > 0)
+
+            if (await _apiDbContext.SaveChangesAsync() > 0)
             {
+                // Return the newly created category
                 var response = await GetById(categoryEntity.Id);
                 return response;
             }
 
-            throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, "Something went wrong while adding new category");
+            throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, "Something went wrong while adding the new category.");
         }
+
 
         #endregion Add
 
@@ -338,7 +295,7 @@ namespace Duha.SIMS.BAL.Product
                 return new DeleteResponseRoot(false, "ProductCategory not found");
             }
 
-            // If it's a Level 1 category, delete associated Level 2 and Level 3 categories
+            // If it's a Level 1 category, delete associated Level 2 categories
             if (categoryToDelete.Level == CategoryLevelDM.Level1)
             {
                 // Fetch associated Level 2 categories
@@ -346,49 +303,29 @@ namespace Duha.SIMS.BAL.Product
                     .Where(c => c.LevelId == categoryToDelete.Id)
                     .ToListAsync();
 
-                foreach (var level2Category in level2Categories)
-                {
-                    // Fetch associated Level 3 categories for each Level 2 category
-                    var level3Categories = await _apiDbContext.ProductCategories
-                        .Where(c => c.LevelId == level2Category.Id)
-                        .ToListAsync();
-
-                    // Remove associated Level 3 categories
-                    _apiDbContext.ProductCategories.RemoveRange(level3Categories);
-
-                    // Remove Level 2 category
-                    _apiDbContext.ProductCategories.Remove(level2Category);
-                }
+                // Remove Level 2 categories
+                _apiDbContext.ProductCategories.RemoveRange(level2Categories);
 
                 // Remove Level 1 category
                 _apiDbContext.ProductCategories.Remove(categoryToDelete);
             }
-            // If it's a Level 2 category, delete associated Level 3 categories
+            // If it's a Level 2 category, delete only that category
             else if (categoryToDelete.Level == CategoryLevelDM.Level2)
             {
-                // Fetch associated Level 3 categories
-                var level3Categories = await _apiDbContext.ProductCategories
-                    .Where(c => c.LevelId == categoryToDelete.Id)
-                    .ToListAsync();
-
-                // Remove associated Level 3 categories
-                _apiDbContext.ProductCategories.RemoveRange(level3Categories);
-
                 // Remove Level 2 category
                 _apiDbContext.ProductCategories.Remove(categoryToDelete);
             }
-            // If it's a Level 3 category, delete only that category
             else
             {
-                // Remove the Level 3 category
-                _apiDbContext.ProductCategories.Remove(categoryToDelete);
+                return new DeleteResponseRoot(false, "Invalid category level.");
             }
 
             // Save changes to the database
             await _apiDbContext.SaveChangesAsync();
 
-            return new DeleteResponseRoot(true, $"ProductCategory and its associated Categories deleted successfully!");
+            return new DeleteResponseRoot(true, "ProductCategory and its associated categories deleted successfully!");
         }
+
 
         #endregion Delete
     }
