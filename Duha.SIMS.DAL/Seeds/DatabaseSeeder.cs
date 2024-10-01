@@ -2,6 +2,8 @@
 using Duha.SIMS.DomainModels.AppUsers;
 using Duha.SIMS.DomainModels.Client;
 using Duha.SIMS.DomainModels.Enums;
+using Duha.SIMS.DomainModels.Product;
+using Duha.SIMS.DomainModels.Warehouse;
 using Microsoft.EntityFrameworkCore;
 
 namespace Duha.SIMS.DAL.Seeds
@@ -25,6 +27,12 @@ namespace Duha.SIMS.DAL.Seeds
                 SeedDummySystemAdminUsers(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
                 SeedDummyClientAdminUsers(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
                 SeedDummyClientAdminAddress(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
+                SeedBrands(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
+                SeedUnits(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
+                SeedWarehouses(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
+                SeedProductCategories(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
+                SeedVariants(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
+                SeedCategoryVariants(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
                 return true;
             }
             return false;
@@ -33,8 +41,6 @@ namespace Duha.SIMS.DAL.Seeds
 
 
         #region Data To Entities
-
-
 
         #region Dummy Data
 
@@ -225,6 +231,7 @@ namespace Duha.SIMS.DAL.Seeds
 
 
         #endregion Users
+
         #region Client User Address
 
         private void SeedDummyClientAdminAddress(ApiDbContext apiDb, string defaultCreatedBy, string defaultUpdatedBy, Func<string, string> encryptorFunc)
@@ -251,13 +258,111 @@ namespace Duha.SIMS.DAL.Seeds
 
         #region Application Specific Tables
 
+        #region seed Brands
+
+        private void SeedBrands(ApiDbContext apiDb, string defaultCreatedBy, string defaultUpdatedBy, Func<string, string> encryptorFunc)
+        {
+            var brands = new List<BrandDM>()
+            {
+                new() {  Name = "Nike", ImagePath = "wwwroot/content/brands/nike.png", CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "Puma", ImagePath = "wwwroot/content/brands/puma.png", CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow}
+            };           
+
+            apiDb.Brands.AddRange(brands);
+            apiDb.SaveChanges();
+        }
+
+        #endregion seed Brands
+
+        #region Seed Units
+
+        private void SeedUnits(ApiDbContext apiDb, string defaultCreatedBy, string defaultUpdatedBy, Func<string, string> encryptorFunc)
+        {
+            var units = new List<UnitsDM>()
+            {
+                new() {  Name = "Kilogram", Symbol = "Kg", CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "Gram", Symbol = "g", CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "Litre", Symbol = "l", CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "Milli Litre", Symbol = "ml", CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+
+            };
+
+            apiDb.Units.AddRange(units);
+            apiDb.SaveChanges();
+        }
+
+        #endregion Seed Units
+
+        #region Seed Warehouses
+
+        private void SeedWarehouses(ApiDbContext apiDb, string defaultCreatedBy, string defaultUpdatedBy, Func<string, string> encryptorFunc)
+        {
+            var warehouses = new List<WarehouseDM>()
+            {
+                new() {  Name = "Warehouse 1", Description = "Demo Description", Capacity = 1000, ClientCompanyDetailId = 1, IsActive = true, Location = "Kashmir", ContactNumber = "1234567890", StorageType = StorageTypeDM.AUTOMATED, EmailId = "warehouse1@email.com", CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "Warehouse 2", Description = "Demo Description", Capacity = 2000, ClientCompanyDetailId = 2, IsActive = true, Location = "Jammu", ContactNumber = "1234567890", StorageType = StorageTypeDM.AUTOMATED, EmailId = "warehouse2@email.com", CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                
+            };
+
+            apiDb.Warehouses.AddRange(warehouses);
+            apiDb.SaveChanges();
+        }
+
+        #endregion Seed Warehouses
+
+        #region Product Categories
+
+        private void SeedProductCategories(ApiDbContext apiDb, string defaultCreatedBy, string defaultUpdatedBy, Func<string, string> encryptorFunc)
+        {
+            var categories = new List<ProductCategoryDM>()
+            {
+                new() {  Name = "Electronics", Level = CategoryLevelDM.Level1, LevelId = null, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "Clothing", Level = CategoryLevelDM.Level1, LevelId = null, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "Furniture", Level = CategoryLevelDM.Level1, LevelId = null, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+
+            };
+
+            apiDb.ProductCategories.AddRange(categories);
+            apiDb.SaveChanges();
+        }
+
+        #endregion Product Categories
+
+        #region Seed Variants and category variants
+
+        private void SeedVariants(ApiDbContext apiDb, string defaultCreatedBy, string defaultUpdatedBy, Func<string, string> encryptorFunc)
+        {
+            var variants = new List<VariantDM>()
+            {
+                new() {  Name = "RAM", VariantLevel =  VariantLevelDM.Level1, VariantId = null, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "ROM", VariantLevel =  VariantLevelDM.Level1, VariantId = null, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "Camera Pixels", VariantLevel =  VariantLevelDM.Level1, VariantId = null, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+
+            };
+
+            apiDb.Variants.AddRange(variants);
+            apiDb.SaveChanges();
+        }
+
+        private void SeedCategoryVariants(ApiDbContext apiDb, string defaultCreatedBy, string defaultUpdatedBy, Func<string, string> encryptorFunc)
+        {
+            var catVariants = new List<CategoryVariantDM>()
+            {
+                new() {  ProductCategoryId = 1, VariantId = 1, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  ProductCategoryId = 1, VariantId = 2, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  ProductCategoryId = 1, VariantId = 3, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+
+            };
+
+            apiDb.CategoryVariants.AddRange(catVariants);
+            apiDb.SaveChanges();
+        }
+
+        #endregion Seed Variants
+
         #endregion Application Specific Tables
 
         #endregion Data To Entities
-
-
-
-
 
     }
 }

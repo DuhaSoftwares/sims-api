@@ -25,9 +25,11 @@ builder.Services.AddSingleton(resolver =>
     resolver.GetRequiredService<IOptions<APIConfiguration>>().Value);
 var connectionString = apiConfiguration.ApiDbConnectionString;
 
-builder.Services.AddDbContext<ApiDbContext>(options =>
+/*builder.Services.AddDbContext<ApiDbContext>(options =>
     options.UseSqlServer(connectionString, 
-        sqlOptions => sqlOptions.MigrationsAssembly("Duha.SIMS.API")));
+        sqlOptions => sqlOptions.MigrationsAssembly("Duha.SIMS.API")));*/
+builder.Services.AddDbContext<ApiDbContext>(options =>
+    options.UseSqlServer(connectionString));
 builder.Services.AddScoped<IPasswordEncryptHelper, PasswordEncryptHelper>();
 
 builder.Services.AddAutoMapper(typeof(Program)); // Use AutoMapper.Extensions.Microsoft.DependencyInjection
@@ -42,6 +44,7 @@ builder.Services.AddScoped<WarehouseProcess>();
 builder.Services.AddScoped<BrandProcess>();
 builder.Services.AddScoped<UnitsProcess>();
 builder.Services.AddScoped<ProductProcess>();
+builder.Services.AddScoped<VariantProcess>();
 
 // Add Identity services
 builder.Services.AddIdentity<AuthenticUserSM, IdentityRole>()

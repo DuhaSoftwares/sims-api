@@ -14,5 +14,6 @@ namespace Duha.SIMS.DomainModels.Product
         public CategoryLevelDM Level {  get; set; }
          
         public virtual HashSet<ProductDM> Products { get; set; }
+        public virtual HashSet<CategoryVariantDM> CategoryVariants { get; set; }
     }
 }

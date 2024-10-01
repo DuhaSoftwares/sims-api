@@ -12,6 +12,7 @@ namespace Duha.SIMS.DAL.Contexts
         public ApiDbContext(DbContextOptions<ApiDbContext> options)
             : base(options)
         {
+            Database.EnsureCreated();
         }
 
         public DbSet<ApplicationUserDM> ApplicationUsers { get; set; }
@@ -25,6 +26,8 @@ namespace Duha.SIMS.DAL.Contexts
         public DbSet<ProductCategoryDM> ProductCategories { get; set; }
         public DbSet<UnitsDM> Units { get; set; }
         public DbSet<ProductDM> Products { get; set; }
+        public DbSet<VariantDM> Variants { get; set; }
+        public DbSet<CategoryVariantDM> CategoryVariants { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
