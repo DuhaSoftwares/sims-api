@@ -35,6 +35,7 @@ namespace Duha.SIMS.DAL.Seeds
                 SeedVariants(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
                 SeedCategoryVariants(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
                 SeedCustomers(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
+                SeedSuppliers(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
                 return true;
             }
             return false;
@@ -379,6 +380,24 @@ namespace Duha.SIMS.DAL.Seeds
         }
 
         #endregion Customers
+
+        #region Suppliers
+
+        private void SeedSuppliers(ApiDbContext apiDb, string defaultCreatedBy, string defaultUpdatedBy, Func<string, string> encryptorFunc)
+        {
+            var suppliers = new List<SupplierDM>()
+            {
+                new() {  Name = "Supplier 1", EmailId = "supllier1@email.com",Country = "India",City = "Kashmir",       ZipCode = "192101",CompanyName = "Company 1", Address = "Address 1", PhoneNumber = "0987654321", CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "Supplier 2", EmailId = "supllier2@email.com",Country = "USA",  City = "Birmingham",    ZipCode = "35211", CompanyName = "Company 2", Address = "Address 2", PhoneNumber = "1234567890", CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "Supplier 3", EmailId = "supllier3@email.com",Country = "",     City = "",              ZipCode = "",      CompanyName = "Company 3", Address = "Address 3", PhoneNumber = "0987612345", CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow}
+
+            };
+
+            apiDb.Suppliers.AddRange(suppliers);
+            apiDb.SaveChanges();
+        }
+
+        #endregion Suppliers
 
         #endregion Application Specific Tables
 

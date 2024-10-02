@@ -30,6 +30,7 @@ namespace Duha.SIMS.DAL.Contexts
         public DbSet<VariantDM> Variants { get; set; }
         public DbSet<CategoryVariantDM> CategoryVariants { get; set; }
         public DbSet<CustomerDM> Customers { get; set; }
+        public DbSet<SupplierDM> Suppliers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
