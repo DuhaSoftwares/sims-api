@@ -12,7 +12,7 @@ using System.Security.Claims;
 
 namespace Duha.SIMS.API.Controllers.Token
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public partial class TokenController : ApiControllerRoot
     {
         private readonly TokenProcess _tokenProcess;

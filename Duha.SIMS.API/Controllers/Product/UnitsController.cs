@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Duha.SIMS.API.Controllers.Product
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class UnitsController : ApiControllerWithOdataRoot<UnitsSM>
     {

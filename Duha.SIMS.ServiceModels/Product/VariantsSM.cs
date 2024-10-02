@@ -1,6 +1,4 @@
-﻿using Duha.SIMS.ServiceModels.Base;
-
-namespace Duha.SIMS.ServiceModels.Product
+﻿namespace Duha.SIMS.ServiceModels.Product
 {
     public class VariantsSM
     {

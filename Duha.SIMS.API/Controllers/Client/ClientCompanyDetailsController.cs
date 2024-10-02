@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Web.Http.OData.Query;
 namespace Duha.SIMS.API.Controllers.Client
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class ClientCompanyDetailsController : ApiControllerWithOdataRoot<ClientCompanyDetailSM>
     {

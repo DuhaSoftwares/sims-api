@@ -1,20 +1,18 @@
 ﻿using Duha.SIMS.API.Controllers.Root;
 using Duha.SIMS.API.Security;
+using Duha.SIMS.BAL.Token.Base;
 using Duha.SIMS.BAL.Warehouse;
 using Duha.SIMS.ServiceModels.Base;
 using Duha.SIMS.ServiceModels.CommonResponse;
 using Duha.SIMS.ServiceModels.Enums;
 using Duha.SIMS.ServiceModels.Warehouse;
-using System.Web.Http.OData.Query;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using DocumentFormat.OpenXml.Spreadsheet;
-using Duha.SIMS.BAL.Token.Base;
-using System.Diagnostics.Metrics;
+using Microsoft.AspNetCore.Mvc;
+using System.Web.Http.OData.Query;
 
 namespace Duha.SIMS.API.Controllers.Warehouse
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class WarehouseController : ApiControllerWithOdataRoot<WarehouseSM>
     {

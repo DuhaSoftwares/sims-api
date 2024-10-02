@@ -14,7 +14,7 @@ using System.Web.Http.OData.Query;
 
 namespace Duha.SIMS.API.Controllers.AppUsers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class ClientUserController : ApiControllerWithOdataRoot<ClientUserSM>
     {

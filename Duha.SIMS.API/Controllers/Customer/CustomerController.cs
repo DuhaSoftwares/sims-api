@@ -1,27 +1,28 @@
 ﻿using Duha.SIMS.API.Controllers.Root;
-using Duha.SIMS.BAL.Product;
+using Duha.SIMS.BAL.Customer;
+using Duha.SIMS.BAL.Token.Base;
 using Duha.SIMS.ServiceModels.Base;
 using Duha.SIMS.ServiceModels.CommonResponse;
+using Duha.SIMS.ServiceModels.Customer;
 using Duha.SIMS.ServiceModels.Enums;
-using Duha.SIMS.ServiceModels.Product;
-using System.Web.Http.OData.Query;
 using Microsoft.AspNetCore.Mvc;
+using System.Web.Http.OData.Query;
 
-namespace Duha.SIMS.API.Controllers.Product
+namespace Duha.SIMS.API.Controllers.Customer
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class ProductController : ApiControllerWithOdataRoot<ProductSM>
+    public class CustomerController : ApiControllerWithOdataRoot<CustomerSM>
     {
         #region Properties
-        private readonly ProductProcess _productProcess;
+        private readonly CustomerProcess _customerProcess;
         #endregion Properties
 
         #region Constructor
-        public ProductController(ProductProcess ProductProcess)
-            : base(ProductProcess)
+        public CustomerController(CustomerProcess customerProcess)
+            : base(customerProcess)
         {
-            _productProcess = ProductProcess;
+            _customerProcess = customerProcess;
         }
         #endregion Constructor
 
@@ -29,7 +30,7 @@ namespace Duha.SIMS.API.Controllers.Product
         [HttpGet]
         [Route("odata")]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task<ActionResult<ApiResponse<IEnumerable<ProductSM>>>> GetAsOdata(ODataQueryOptions<ProductSM> oDataOptions)
+        public async Task<ActionResult<ApiResponse<IEnumerable<CustomerSM>>>> GetAsOdata(ODataQueryOptions<CustomerSM> oDataOptions)
         {
             //TODO: validate inputs here probably 
             var retList = await GetAsEntitiesOdata(oDataOptions);
@@ -39,23 +40,24 @@ namespace Duha.SIMS.API.Controllers.Product
 
         #region Get All
         [HttpGet()]
-        public async Task<ActionResult<ApiResponse<List<ProductSM>>>> GetAll([FromQuery] int skip, [FromQuery] int top)
+        //[Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "CompanyAdmin,ClientAdmin, SuperAdmin")]
+        public async Task<ActionResult<ApiResponse<List<CustomerSM>>>> GetAll([FromQuery] int skip, [FromQuery] int top)
         {
-            var listSM = await _productProcess.GetAllProducts(skip,top);
+            //var userId = User.GetUserRecordIdFromCurrentUserClaims();
+            var listSM = await _customerProcess.GetAllCustomers(skip, top);
 
             return Ok(ModelConverter.FormNewSuccessResponse(listSM));
         }
 
-
         [HttpGet("count")]
         public async Task<ActionResult<ApiResponse<IntResponseRoot>>> GetCount()
         {
-            var countRes = await _productProcess.GetAllProductsCount();
+            var countRes = await _customerProcess.GetAllCustomersCount();
 
             // Check if the list is empty and return a meaningful response
-            
 
-            return Ok(ModelConverter.FormNewSuccessResponse(new IntResponseRoot(countRes,"Total Products ")));
+
+            return Ok(ModelConverter.FormNewSuccessResponse(new IntResponseRoot(countRes, "Total customers ")));
         }
 
         #endregion Get All
@@ -63,9 +65,9 @@ namespace Duha.SIMS.API.Controllers.Product
         #region Get Single
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ApiResponse<ProductSM>>> GetById(int id)
+        public async Task<ActionResult<ApiResponse<CustomerSM>>> GetById(int id)
         {
-            var singleSM = await _productProcess.GetProductsById(id);
+            var singleSM = await _customerProcess.GetCustomerById(id);
             if (singleSM != null)
             {
                 return ModelConverter.FormNewSuccessResponse(singleSM);
@@ -80,7 +82,7 @@ namespace Duha.SIMS.API.Controllers.Product
         #region Add
 
         [HttpPost]
-        public async Task<ActionResult<ApiResponse<ProductSM>>> Post([FromBody] ApiRequest<ProductSM> apiRequest)
+        public async Task<ActionResult<ApiResponse<CustomerSM>>> Post([FromBody] ApiRequest<CustomerSM> apiRequest)
         {
             #region Check Request
 
@@ -92,7 +94,7 @@ namespace Duha.SIMS.API.Controllers.Product
 
             #endregion Check Request
 
-            var addedSM = await _productProcess.AddProduct(innerReq);
+            var addedSM = await _customerProcess.AddCustomer(innerReq);
             if (addedSM != null)
             {
                 return CreatedAtAction(nameof(GetById), new
@@ -109,7 +111,7 @@ namespace Duha.SIMS.API.Controllers.Product
 
         #region Put
         [HttpPut("{id}")]
-        public async Task<ActionResult<ApiResponse<ProductSM>>> Put(int id, [FromBody] ApiRequest<ProductSM> apiRequest)
+        public async Task<ActionResult<ApiResponse<CustomerSM>>> Put(int id, [FromBody] ApiRequest<CustomerSM> apiRequest)
         {
             #region Check Request
 
@@ -126,7 +128,7 @@ namespace Duha.SIMS.API.Controllers.Product
 
             #endregion Check Request
 
-            var resp = await _productProcess.UpdateProducts(id, innerReq);
+            var resp = await _customerProcess.UpdateCustomer(id, innerReq);
             if (resp != null)
             {
                 return Ok(ModelConverter.FormNewSuccessResponse(resp));
@@ -142,7 +144,7 @@ namespace Duha.SIMS.API.Controllers.Product
         [HttpDelete("{id}")]
         public async Task<ActionResult<ApiResponse<DeleteResponseRoot>>> Delete(int id)
         {
-            var resp = await _productProcess.DeleteProductsById(id);
+            var resp = await _customerProcess.DeleteCustomerById(id);
             if (resp != null && resp.DeleteResult)
             {
                 return Ok(ModelConverter.FormNewSuccessResponse(resp));

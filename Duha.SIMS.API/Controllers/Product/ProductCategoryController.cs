@@ -1,8 +1,5 @@
 ﻿using Duha.SIMS.API.Controllers.Root;
-using Duha.SIMS.API.Security;
 using Duha.SIMS.BAL.Product;
-using Duha.SIMS.BAL.Token.Base;
-using Duha.SIMS.BAL.Warehouse;
 using Duha.SIMS.ServiceModels.Base;
 using Duha.SIMS.ServiceModels.CommonResponse;
 using Duha.SIMS.ServiceModels.Enums;
@@ -12,7 +9,7 @@ using System.Web.Http.OData.Query;
 
 namespace Duha.SIMS.API.Controllers.Product
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class ProductCategoryController : ApiControllerWithOdataRoot<ProductCategorySM>
     {

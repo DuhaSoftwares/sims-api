@@ -7,14 +7,12 @@ using Duha.SIMS.ServiceModels.Base;
 using Duha.SIMS.ServiceModels.CommonResponse;
 using Duha.SIMS.ServiceModels.Enums;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using System.Web.Http.OData.Query;
 
 namespace Duha.SIMS.API.Controllers.AppUsers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class ApplicationUserController : ApiControllerWithOdataRoot<ApplicationUserSM>
     {

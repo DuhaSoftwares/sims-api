@@ -1,6 +1,7 @@
 using Duha.SIMS.API.Security;
 using Duha.SIMS.BAL.AppUser;
 using Duha.SIMS.BAL.Client;
+using Duha.SIMS.BAL.Customer;
 using Duha.SIMS.BAL.Interface;
 using Duha.SIMS.BAL.Product;
 using Duha.SIMS.BAL.Security;
@@ -45,6 +46,7 @@ builder.Services.AddScoped<BrandProcess>();
 builder.Services.AddScoped<UnitsProcess>();
 builder.Services.AddScoped<ProductProcess>();
 builder.Services.AddScoped<VariantProcess>();
+builder.Services.AddScoped<CustomerProcess>();
 
 // Add Identity services
 builder.Services.AddIdentity<AuthenticUserSM, IdentityRole>()

@@ -1,6 +1,7 @@
 ﻿using Duha.SIMS.DAL.Contexts;
 using Duha.SIMS.DomainModels.AppUsers;
 using Duha.SIMS.DomainModels.Client;
+using Duha.SIMS.DomainModels.Customer;
 using Duha.SIMS.DomainModels.Enums;
 using Duha.SIMS.DomainModels.Product;
 using Duha.SIMS.DomainModels.Warehouse;
@@ -33,6 +34,7 @@ namespace Duha.SIMS.DAL.Seeds
                 SeedProductCategories(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
                 SeedVariants(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
                 SeedCategoryVariants(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
+                SeedCustomers(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
                 return true;
             }
             return false;
@@ -359,6 +361,24 @@ namespace Duha.SIMS.DAL.Seeds
         }
 
         #endregion Seed Variants
+
+        #region Customers
+
+        private void SeedCustomers(ApiDbContext apiDb, string defaultCreatedBy, string defaultUpdatedBy, Func<string, string> encryptorFunc)
+        {
+            var customers = new List<CustomerDM>()
+            {
+                new() {  Name = "Customer 1", EmailId = "customer1@email.com",Country = "India",City = "Kashmir",       ZipCode = "192101",CustomerGroup = CustomerGroupDM.Local,   Address = "Address 1", PhoneNumber = "0987654321", CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "Customer 2", EmailId = "customer2@email.com",Country = "USA",  City = "Birmingham",    ZipCode = "35211", CustomerGroup = CustomerGroupDM.Foriegn, Address = "Address 2", PhoneNumber = "1234567890", CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "Customer 3", EmailId = "customer3@email.com",Country = "",     City = "",              ZipCode = "",      CustomerGroup = CustomerGroupDM.WalkIn,  Address = "Address 3", PhoneNumber = "0987612345", CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow}
+
+            };
+
+            apiDb.Customers.AddRange(customers);
+            apiDb.SaveChanges();
+        }
+
+        #endregion Customers
 
         #endregion Application Specific Tables
 

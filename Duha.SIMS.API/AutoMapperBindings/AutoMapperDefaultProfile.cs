@@ -11,6 +11,8 @@ using Duha.SIMS.ServiceModels.Client;
 using Duha.SIMS.ServiceModels.Enums;
 using Duha.SIMS.ServiceModels.Product;
 using Duha.SIMS.ServiceModels.Warehouse;
+using Duha.SIMS.DomainModels.Customer;
+using Duha.SIMS.ServiceModels.Customer;
 
 namespace Duha.SIMS.API.AutoMapperBindings
 {
@@ -29,11 +31,13 @@ namespace Duha.SIMS.API.AutoMapperBindings
             CreateMap<UnitsDM, UnitsSM>().ReverseMap();
             CreateMap<VariantDM, VariantSM>().ReverseMap();
             CreateMap<CategoryVariantDM, CategoryVariantSM>().ReverseMap();
+            CreateMap<CustomerDM, CustomerSM>().ReverseMap();
             CreateMap<GenderDM, GenderSM>().ReverseMap();
             CreateMap<CategoryLevelDM, CategoryLevelSM>().ReverseMap();
             CreateMap<StorageTypeDM, StorageTypeSM>().ReverseMap();
             CreateMap<RoleTypeDM, RoleTypeSM>().ReverseMap();
             CreateMap<VariantLevelDM, VariantLevelSM>().ReverseMap();
+            CreateMap<CustomerGroupDM, CustomerGroupSM>().ReverseMap();
         }
     }
 }

@@ -1,19 +1,16 @@
 ﻿using Duha.SIMS.API.Controllers.Root;
 using Duha.SIMS.BAL.Product;
+using Duha.SIMS.BAL.Token.Base;
 using Duha.SIMS.ServiceModels.Base;
 using Duha.SIMS.ServiceModels.CommonResponse;
 using Duha.SIMS.ServiceModels.Enums;
 using Duha.SIMS.ServiceModels.Product;
-using System.Web.Http.OData.Query;
 using Microsoft.AspNetCore.Mvc;
-using Duha.SIMS.DomainModels.Product;
-using Microsoft.AspNetCore.Authorization;
-using Duha.SIMS.API.Security;
-using Duha.SIMS.BAL.Token.Base;
+using System.Web.Http.OData.Query;
 
 namespace Duha.SIMS.API.Controllers.Product
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class BrandController : ApiControllerWithOdataRoot<BrandSM>
     {
