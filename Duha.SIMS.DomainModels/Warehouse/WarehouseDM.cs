@@ -1,6 +1,7 @@
 ﻿using Duha.SIMS.DomainModels.Base;
 using Duha.SIMS.DomainModels.Client;
 using Duha.SIMS.DomainModels.Enums;
+using Duha.SIMS.DomainModels.Product;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Duha.SIMS.DomainModels.Warehouse
@@ -19,5 +20,7 @@ namespace Duha.SIMS.DomainModels.Warehouse
         [ForeignKey(nameof(ClientCompanyDetail))]
         public int? ClientCompanyDetailId { get; set; }
         public virtual ClientCompanyDetailDM ClientCompanyDetail { get; set; }
+
+        public ICollection<ProductDetailsDM> ProductDetails { get; set; }
     }
 }

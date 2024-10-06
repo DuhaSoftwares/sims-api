@@ -94,6 +94,38 @@ namespace Duha.SIMS.API.Controllers.Product
         }
         #endregion Get Single
 
+        #region Product/Category Variants
+
+        [HttpGet("product/{productId}")]
+        public async Task<ActionResult<ApiResponse<List<VariantsSM>>>> GetProductVariantsById(int productId)
+        {
+            var list = await _variantProcess.GetProductVariantsByProductId(productId);
+            if (list != null)
+            {
+                return ModelConverter.FormNewSuccessResponse(list);
+            }
+            else
+            {
+                return NotFound(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_IdNotFound, ApiErrorTypeSM.NoRecord_NoLog));
+            }
+        }
+
+        [HttpGet("category/{categoryId}")]
+        public async Task<ActionResult<ApiResponse<List<VariantsSM>>>> GetCategoryVariantsById(int categoryId)
+        {
+            var list = await _variantProcess.GetCategoryVariantsByCategoryId(categoryId);
+            if (list != null)
+            {
+                return ModelConverter.FormNewSuccessResponse(list);
+            }
+            else
+            {
+                return NotFound(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_IdNotFound, ApiErrorTypeSM.NoRecord_NoLog));
+            }
+        }
+
+        #endregion Product Variants
+
         #region Add Category with level Check
         [HttpPost()]
         public async Task<ActionResult<ApiResponse<VariantSM>>> AddCategory([FromBody] ApiRequest<VariantSM> apiRequest, [FromQuery] int categoryId)

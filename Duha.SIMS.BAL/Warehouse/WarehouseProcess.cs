@@ -186,6 +186,24 @@ namespace Duha.SIMS.BAL.Warehouse
 
         #endregion Update Warehouse (Mine)
 
+        #region Get Available Quantity to Add
+
+        public async Task<BoolResponseRoot> WhetherProductQuantityBeAdded(int id, int quantity)
+        {
+
+            var dm = await _apiDbContext.Warehouses.FindAsync(id);
+            var totalQuantity = await _apiDbContext.ProductDetails
+                .Where(x => x.WarehouseId == id)
+                .SumAsync(x => x.Quantity);
+            if(dm.Capacity > totalQuantity + quantity)
+            {
+                return new BoolResponseRoot(true, "Product quantity can be added in warehouse");
+            }
+            
+            return new BoolResponseRoot(false, "Product quantity can not be added in warehouse");
+        }
+
+        #endregion Get Available Quantity to Add
 
         #region Create Warehouse
         /// <summary>

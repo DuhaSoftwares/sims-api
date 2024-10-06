@@ -152,6 +152,121 @@ namespace Duha.SIMS.BAL.Product
 
         #endregion Get By Id (Level 1)
 
+        #region Get Product variants
+        /// <summary>
+        /// Fetches variants of a product
+        /// </summary>
+        /// <param name="productId">ProductId</param>
+        /// <returns></returns>
+        /// <exception cref="SIMSException"></exception>
+        public async Task<List<VariantsSM>> GetProductVariantsByProductId(int productId)
+        {
+            // Fetch all product variants for the specified product ID
+            var productVariants = await _apiDbContext.ProductVariants
+                .Where(pv => pv.ProductId == productId)
+                .Include(pv => pv.VariantLevel1) // Include Level 1 Variant Details
+                .Include(pv => pv.VariantLevel2) // Include Level 2 Variant Details
+                .ToListAsync();
+
+            // Group the variants by the Level 1 variant (VariantLevel1Id)
+            var groupedVariants = productVariants.GroupBy(pv => pv.VariantLevel1Id).ToList();
+
+            // Create a list to store the final response
+            var response = new List<VariantsSM>();
+
+            // Iterate through each group and map the results to VariantsSM
+            foreach (var group in groupedVariants)
+            {
+                // Get the Level 1 variant details
+                var level1Variant = group.First().VariantLevel1;
+
+                // Get all Level 2 variants under the same Level 1 variant
+                var level2Variants = group
+                    .Select(pv => pv.VariantLevel2)
+                    .Where(l2 => l2 != null) // Avoid null values
+                    .Select(l2 => new VariantSM
+                    {
+                        Id = l2.Id,
+                        Name = l2.Name,
+                        CreatedBy = l2.CreatedBy,
+                        CreatedOnUTC = l2.CreatedOnUTC,
+                        LastModifiedBy = l2.LastModifiedBy,
+                        LastModifiedOnUTC = l2.LastModifiedOnUTC,
+                    }).ToList();
+
+                // Create the VariantsSM object and add it to the response
+                var variantsSM = new VariantsSM
+                {
+                    Level1Variant = new VariantSM
+                    {
+                        Id = level1Variant.Id,
+                        Name = level1Variant.Name,
+                        CreatedBy = level1Variant.CreatedBy,
+                        CreatedOnUTC = level1Variant.CreatedOnUTC,
+                        LastModifiedBy = level1Variant.LastModifiedBy,
+                        LastModifiedOnUTC = level1Variant.LastModifiedOnUTC,
+                    },
+                    Level2Variants = level2Variants
+                };
+
+                response.Add(variantsSM);
+            }
+
+            return response;
+        }
+
+
+        #endregion Get Product variants
+
+        #region Get Category Variants
+        /// <summary>
+        /// Get variants using categoryId
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        public async Task<List<VariantsSM>> GetCategoryVariantsByCategoryId(int categoryId)
+        {
+            var category = await _apiDbContext.ProductCategories.Where(x => x.Id == categoryId && x.Level == CategoryLevelDM.Level1).FirstOrDefaultAsync();
+            if(category == null)
+            {
+                throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, "Category Not Found or Category is not level 1 category");
+            }
+            // Fetch all product variants for the specified product ID
+            var productVariantIds = await _apiDbContext.CategoryVariants
+                .Where(pv => pv.ProductCategoryId == categoryId)
+                .Select(pv => pv.VariantId)
+                .Distinct()
+                .ToListAsync();
+
+
+            // Create a list to store the final response
+            var response = new List<VariantsSM>();
+
+            // Iterate through each group and map the results to VariantsSM
+            foreach (var id in productVariantIds)
+            {
+                // Get the Level 1 variant details
+                var level1Variant = _mapper.Map<VariantSM>(await _apiDbContext.Variants.FindAsync(id));
+
+                // Get all Level 2 variants under the same Level 1 variant
+                var level2Variants = _mapper.Map<List<VariantSM>>(await _apiDbContext.Variants.Where(x=>x.VariantId == id).ToListAsync());
+
+                // Create the VariantsSM object and add it to the response
+                var variantsSM = new VariantsSM
+                {
+                    Level1Variant = level1Variant,
+                    
+                    Level2Variants = level2Variants
+                };
+
+                response.Add(variantsSM);
+            }
+
+            return response;
+        }
+
+        #endregion Get Category Variants
+
         #region Get by Id
         /// <summary>
         /// Get Variant By Id 

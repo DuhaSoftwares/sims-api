@@ -1,6 +1,5 @@
 ﻿using Duha.SIMS.DomainModels.Base;
 using Duha.SIMS.DomainModels.Enums;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
 public class VariantDM : SIMSDomainModelBase<int>
@@ -9,7 +8,9 @@ public class VariantDM : SIMSDomainModelBase<int>
     public string Name { get; set; }
 
     public VariantLevelDM VariantLevel { get; set; }
-    public int? VariantId { get; set; } 
+    public int? VariantId { get; set; }
 
     public virtual ICollection<CategoryVariantDM> CategoryVariants { get; set; }
+
+    public ICollection<ProductVariantDM> ProductVariants { get; set; }
 }

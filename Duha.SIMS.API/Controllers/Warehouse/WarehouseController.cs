@@ -22,7 +22,7 @@ namespace Duha.SIMS.API.Controllers.Warehouse
         {
             _warehouseProcess = warehouseProcess;
         }
-
+        #region Odata
         [HttpGet]
         [Route("odata")]
         [ApiExplorerSettings(IgnoreApi = true)]
@@ -34,7 +34,9 @@ namespace Duha.SIMS.API.Controllers.Warehouse
 
             return Ok(ModelConverter.FormNewSuccessResponse(retList));
         }
+        #endregion Odata
 
+        #region Get Single
 
 
         [HttpGet("{id}")]
@@ -96,6 +98,24 @@ namespace Duha.SIMS.API.Controllers.Warehouse
             return Ok(ModelConverter.FormNewSuccessResponse(new IntResponseRoot(count, "My Total Warehouses ")));
         }
 
+        #endregion Get Single
+
+
+        [HttpGet("check/warehousequantity/{id}/{quantity}")]
+        //[Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "CompanyAdmin")]
+        public async Task<ActionResult<ApiResponse<BoolResponseRoot>>> CheckWarehouseQuantity(int id, int quantity)
+        {
+            
+            var response = await _warehouseProcess.WhetherProductQuantityBeAdded(id, quantity);
+            return Ok(ModelConverter.FormNewSuccessResponse(response));
+        }
+
+        #region Check
+
+
+
+        #endregion Check
+
         #region Add Company
         [HttpPost("my")]
         [Authorize(AuthenticationSchemes = DuhaBearerTokenAuthHandlerRoot.DefaultSchema, Roles = "CompanyAdmin")]
@@ -144,6 +164,7 @@ namespace Duha.SIMS.API.Controllers.Warehouse
         }
         #endregion Add Company
 
+        #region Update
 
         [HttpPut("my")]
         [AllowAnonymous]
@@ -179,6 +200,9 @@ namespace Duha.SIMS.API.Controllers.Warehouse
 
             #endregion Check Request
         }
+
+        #endregion Update
+
 
         #region Delete Endpoints
 

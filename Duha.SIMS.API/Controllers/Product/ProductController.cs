@@ -39,7 +39,7 @@ namespace Duha.SIMS.API.Controllers.Product
 
         #region Get All
         [HttpGet()]
-        public async Task<ActionResult<ApiResponse<List<ProductSM>>>> GetAll([FromQuery] int skip, [FromQuery] int top)
+        public async Task<ActionResult<ApiResponse<List<ProductSM>>>> GetAll([FromQuery] int skip=0, [FromQuery] int top=10)
         {
             var listSM = await _productProcess.GetAllProducts(skip,top);
 
@@ -60,27 +60,37 @@ namespace Duha.SIMS.API.Controllers.Product
 
         #endregion Get All
 
-        #region Get Single
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ApiResponse<ProductSM>>> GetById(int id)
+        #region Get Single and List
+        [HttpGet("id")]
+        public async Task<ActionResult<ApiResponse<List<ProductSM>>>> GetProductDetails(int id)
         {
-            var singleSM = await _productProcess.GetProductsById(id);
-            if (singleSM != null)
-            {
-                return ModelConverter.FormNewSuccessResponse(singleSM);
-            }
-            else
-            {
-                return NotFound(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_IdNotFound, ApiErrorTypeSM.NoRecord_NoLog));
-            }
+            var listSM = await _productProcess.GetProductDetailsById(id);
+
+            return Ok(ModelConverter.FormNewSuccessResponse(listSM));
         }
+
+        [HttpGet("supplier/id")]
+        public async Task<ActionResult<ApiResponse<List<ProductSM>>>> GetSupplierProductDetails(int id)
+        {
+            var listSM = await _productProcess.GetProductsBySupplierId(id);
+
+            return Ok(ModelConverter.FormNewSuccessResponse(listSM));
+        }
+
+        [HttpGet("productId/productDetailId")]
+        public async Task<ActionResult<ApiResponse<ProductSM>>> GetProductDetail(int productId, int productDetailId)
+        {
+            var listSM = await _productProcess.GetProductDetailsByIdAndProductDetailId(productId, productDetailId);
+
+            return Ok(ModelConverter.FormNewSuccessResponse(listSM));
+        }
+
         #endregion Get Single
 
         #region Add
 
         [HttpPost]
-        public async Task<ActionResult<ApiResponse<ProductSM>>> Post([FromBody] ApiRequest<ProductSM> apiRequest)
+        public async Task<ActionResult<ApiResponse<ProductSM>>> Post([FromBody] ApiRequest<CreateProductSM> apiRequest)
         {
             #region Check Request
 
@@ -95,10 +105,7 @@ namespace Duha.SIMS.API.Controllers.Product
             var addedSM = await _productProcess.AddProduct(innerReq);
             if (addedSM != null)
             {
-                return CreatedAtAction(nameof(GetById), new
-                {
-                    id = addedSM.Id
-                }, ModelConverter.FormNewSuccessResponse(addedSM));
+                return ModelConverter.FormNewSuccessResponse(addedSM);
             }
             else
             {
@@ -108,8 +115,8 @@ namespace Duha.SIMS.API.Controllers.Product
         #endregion Add
 
         #region Put
-        [HttpPut("{id}")]
-        public async Task<ActionResult<ApiResponse<ProductSM>>> Put(int id, [FromBody] ApiRequest<ProductSM> apiRequest)
+        [HttpPut("{id}/{productDetailsId}")]
+        public async Task<ActionResult<ApiResponse<ProductSM>>> Put(int id,int productDetailsId, [FromBody] ApiRequest<ProductSM> apiRequest)
         {
             #region Check Request
 
@@ -126,7 +133,7 @@ namespace Duha.SIMS.API.Controllers.Product
 
             #endregion Check Request
 
-            var resp = await _productProcess.UpdateProducts(id, innerReq);
+            var resp = await _productProcess.UpdateProductByIdAndProductDetailId(id, productDetailsId, innerReq);
             if (resp != null)
             {
                 return Ok(ModelConverter.FormNewSuccessResponse(resp));

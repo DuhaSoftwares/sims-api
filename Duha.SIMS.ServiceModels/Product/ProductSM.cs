@@ -1,7 +1,4 @@
 ﻿using Duha.SIMS.ServiceModels.Base;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System;
 
 namespace Duha.SIMS.ServiceModels.Product
 {
@@ -9,14 +6,14 @@ namespace Duha.SIMS.ServiceModels.Product
     {
         public string Name { get; set; }
         public string? Code { get; set; }
-        public int? CategoryId { get; set; }
-        public int? WarehouseId { get; set; }
+        public int CategoryId { get; set; }
+        public int WarehouseId { get; set; }
+        public int SupplierId { get; set; }
         public int BrandId { get; set; }
-        public int UnitId { get; set; }        
-        public string Variant { get; set; }
+        public int UnitId { get; set; }     
+        public int ProductDetailId { get; set; }     
         public int Quantity { get; set; }
         public decimal Price { get; set; }
-        public string? Image { get; set; }
-        public bool Status { get; set; }
+        public string Image { get; set; }
     }
 }

@@ -24,13 +24,15 @@ namespace Duha.SIMS.DAL.Contexts
         public DbSet<ClientCompanyAddressDM> ClientCompanyAddress { get; set; }
         public DbSet<WarehouseDM> Warehouses { get; set; }
         public DbSet<BrandDM> Brands { get; set; }
+        public DbSet<SupplierDM> Suppliers { get; set; }
         public DbSet<ProductCategoryDM> ProductCategories { get; set; }
         public DbSet<UnitsDM> Units { get; set; }
         public DbSet<ProductDM> Products { get; set; }
+        public DbSet<ProductDetailsDM> ProductDetails { get; set; }
         public DbSet<VariantDM> Variants { get; set; }
         public DbSet<CategoryVariantDM> CategoryVariants { get; set; }
+        public DbSet<ProductVariantDM> ProductVariants { get; set; }
         public DbSet<CustomerDM> Customers { get; set; }
-        public DbSet<SupplierDM> Suppliers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,6 +46,28 @@ namespace Duha.SIMS.DAL.Contexts
             modelBuilder.Entity<ClientUserDM>()
                 .HasIndex(u => u.LoginId)
                 .IsUnique();
+
+            // Configure relationship between ProductVariantDM and ProductDM
+            modelBuilder.Entity<ProductVariantDM>()
+                .HasOne(pv => pv.Product)
+                .WithMany(p => p.ProductVariants) // Assuming ProductDM has a collection of ProductVariants
+                .HasForeignKey(pv => pv.ProductId);
+
+            // Configure VariantLevel1 relationship
+            modelBuilder.Entity<ProductVariantDM>()
+                .HasOne(pv => pv.VariantLevel1)
+                .WithMany() // Assuming VariantDM does not have a collection of ProductVariants for VariantLevel1
+                .HasForeignKey(pv => pv.VariantLevel1Id)
+                .HasPrincipalKey(v => v.Id) // Assuming Id is the primary key in VariantDM
+                .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+
+            // Configure VariantLevel2 relationship
+            modelBuilder.Entity<ProductVariantDM>()
+                .HasOne(pv => pv.VariantLevel2)
+                .WithMany() // Assuming VariantDM does not have a collection of ProductVariants for VariantLevel2
+                .HasForeignKey(pv => pv.VariantLevel2Id)
+                .HasPrincipalKey(v => v.Id) // Assuming Id is the primary key in VariantDM
+                .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
 
             // Seed database with initial data
             DatabaseSeeder<ApiDbContext> seeder = new DatabaseSeeder<ApiDbContext>();

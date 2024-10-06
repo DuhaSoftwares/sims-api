@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Vml.Office;
 using Duha.SIMS.BAL.Base;
 using Duha.SIMS.BAL.Exceptions;
 using Duha.SIMS.DAL.Contexts;
 using Duha.SIMS.DomainModels.Product;
 using Duha.SIMS.ServiceModels.CommonResponse;
-using Duha.SIMS.ServiceModels.Enums;
 using Duha.SIMS.ServiceModels.LoggedInIdentity;
 using Duha.SIMS.ServiceModels.Product;
 using Microsoft.EntityFrameworkCore;
@@ -40,15 +42,9 @@ namespace Duha.SIMS.BAL.Product
             var query = entitySet.Select(entity => new ProductSM
             {
                 Name = entity.Name,
-                Image = ConvertImageToBase64(entity.Image),
-                CategoryId = entity.CategoryId,
+                CategoryId = (int)entity.CategoryId,
                 BrandId = entity.BrandId,
                 UnitId = entity.UnitId,
-                Variant = entity.Variant,
-                Code = entity.Code,
-                Price = entity.Price,
-                Quantity = entity.Quantity,
-                Status = entity.Status,
                 Id = entity.Id,
                 CreatedBy = entity.CreatedBy,
                 LastModifiedBy = entity.LastModifiedBy,
@@ -59,21 +55,6 @@ namespace Duha.SIMS.BAL.Product
             // Return the projected query as IQueryable
             return await Task.FromResult(query);
         }
-
-        static string ConvertImageToBase64(string Image)
-        {
-            if (Image != null)
-            {
-
-
-                // Read the image file and convert it to base64 string
-                byte[] imageBytes = File.ReadAllBytes(Image);
-                string base64String = Convert.ToBase64String(imageBytes);
-                return base64String;
-            }
-            return null;
-        }
-
         #endregion Odata
 
         #region Get All
@@ -97,21 +78,113 @@ namespace Duha.SIMS.BAL.Product
             }
             foreach (var item in itemsFromDb) 
             { 
-                var sm = await GetProductsById(item.Id);
-                response.Add(sm);
+                var sm = await GetProductDetailsById(item.Id);
+                response.AddRange(sm);
             }
             return response;
         }
 
         public async Task<int> GetAllProductsCount()
         {
-            var count =  _apiDbContext.Products.AsNoTracking().Count();
+            var count =  _apiDbContext.ProductDetails.AsNoTracking().Count();
             return count;
         }
 
         #endregion Get All
 
-        #region Get By Id
+        #region Get Product Details By Id
+        /// <summary>
+        /// Get Products By Using ProductId
+        /// </summary>
+        /// <param name="Id">Using Id of Product Fetches the respective Products</param>
+        /// <returns> 
+        /// If Successful, returns List<ProductSM></ProductSM> otherwise returns Null.
+        /// </returns>
+        /// <exception cref="SIMSException"></exception>
+        public async Task<List<ProductSM>> GetProductDetailsById(int Id)
+        {
+            var dm = await _apiDbContext.Products.FindAsync(Id);
+
+            if (dm == null)
+            {
+                return null;
+            }
+
+            var detailsList = await _apiDbContext.ProductDetails.Where(x=>x.ProductId == Id)
+                .OrderByDescending(c => c.CreatedOnUTC)
+                .ToListAsync();
+            var productList = new List<ProductSM>();
+            foreach (var item in detailsList)
+            {
+                var res = new ProductSM()
+                {
+                    Name = dm.Name,
+                    Id = dm.Id,
+                    CategoryId = (int)dm.CategoryId,
+                    BrandId = dm.BrandId,
+                    UnitId = dm.UnitId,
+                    WarehouseId = item.WarehouseId,
+                    SupplierId = item.SupplierId,
+                    Code = item.Code,
+                    Quantity = item.Quantity,
+                    Price = item.Price,
+                    Image = ConvertImagePathToBase64(item.Image),
+                    ProductDetailId = item.Id,
+                    CreatedBy = dm.CreatedBy,
+                    CreatedOnUTC = dm.CreatedOnUTC,
+                    LastModifiedBy = item.LastModifiedBy,
+                    LastModifiedOnUTC = item.LastModifiedOnUTC,
+                };
+                productList.Add(res);
+            }
+            return productList;
+        }
+        #endregion Get Product Details By Id
+
+        #region Get Suppliers products
+        /// <summary>
+        /// Fetches products of a particular supplier
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public async Task<List<ProductSM>> GetProductsBySupplierId(int supplierId)
+        {
+            // Get the list of products and their corresponding details for the given supplierId
+            var supplierProductDetails = await _apiDbContext.ProductDetails
+                .Where(pd => pd.SupplierId == supplierId)
+                .Include(pd => pd.Products)
+                .OrderByDescending(c => c.CreatedOnUTC)
+                .ToListAsync();
+
+            // Map the result to ProductSM
+            var productList = supplierProductDetails.Select(item => new ProductSM
+            {
+                Id = item.Products.Id,
+                Name = item.Products.Name,
+                CategoryId = item.Products.CategoryId,
+                BrandId = item.Products.BrandId,
+                UnitId = item.Products.UnitId,
+                WarehouseId = item.WarehouseId,
+                SupplierId = item.SupplierId,
+                Code = item.Code,
+                Quantity = item.Quantity,
+                Price = item.Price,
+                Image = ConvertImagePathToBase64(item.Image),
+                ProductDetailId = item.Id,
+                CreatedBy = item.Products.CreatedBy,
+                CreatedOnUTC = item.Products.CreatedOnUTC,
+                LastModifiedBy = item.LastModifiedBy,
+                LastModifiedOnUTC = item.LastModifiedOnUTC
+            }).ToList();
+
+            return productList;
+        }
+
+
+        #endregion Get Suppliers products
+
+        #region Get product by ProductId and productDetailid
+
         /// <summary>
         /// Get Product By Using ProductId
         /// </summary>
@@ -119,31 +192,40 @@ namespace Duha.SIMS.BAL.Product
         /// <returns> 
         /// If Successful, returns ProductSM otherwise returns Null.
         /// </returns>
-        /// <exception cref="ShopWaveException"></exception>
-        public async Task<ProductSM?> GetProductsById(int Id)
+        public async Task<ProductSM> GetProductDetailsByIdAndProductDetailId(int productId, int productDetailid)
         {
-            var singleItemFromDb = await _apiDbContext.Products.FindAsync(Id);
+            var dm = await _apiDbContext.Products.FindAsync(productId);
 
-            if (singleItemFromDb == null)
+            if (dm == null)
             {
                 return null;
             }
 
-            string base64Image = null;
-
-            // Only convert to base64 if Image is not null or empty
-            if (!string.IsNullOrEmpty(singleItemFromDb.Image))
+            var productDetail = await _apiDbContext.ProductDetails.Where(x => x.ProductId == productId && x.Id == productDetailid).FirstOrDefaultAsync();
+            
+            var res = new ProductSM()
             {
-                base64Image = await ConvertToBase64(singleItemFromDb.Image);
-                singleItemFromDb.Image = base64Image;
-            }
-
-            return _mapper.Map<ProductSM>(singleItemFromDb);
+                Id = dm.Id,
+                Name = dm.Name,
+                CategoryId = (int)dm.CategoryId,
+                BrandId = dm.BrandId,
+                UnitId = dm.UnitId,
+                WarehouseId = productDetail.WarehouseId,
+                SupplierId = productDetail.SupplierId,
+                Code = productDetail.Code,
+                Quantity = productDetail.Quantity,
+                Price = productDetail.Price,
+                Image = ConvertImagePathToBase64(productDetail.Image),
+                ProductDetailId = productDetail.Id,
+                CreatedBy = dm.CreatedBy,
+                CreatedOnUTC = dm.CreatedOnUTC,
+                LastModifiedBy = productDetail.LastModifiedBy,
+                LastModifiedOnUTC = productDetail.LastModifiedOnUTC,
+            };
+            return res;
         }
 
-
-
-        #endregion Get By Id
+        #endregion Get product by ProductId and productDetailid
 
         #region Add
         /// <summary>
@@ -153,35 +235,143 @@ namespace Duha.SIMS.BAL.Product
         /// <returns>
         /// If successful, returns the added ProductSM; otherwise, returns null.
         /// </returns>
-        public async Task<ProductSM?> AddProduct(ProductSM objSM)
+        public async Task<ProductSM?> AddProduct(CreateProductSM objSM/*ProductSM objSM, ProductVariantDetailsSM variants*/)
         {
-            string? ProductImageRelativePath = null;
-            if (objSM == null)
-                return null;
-            var dm = _mapper.Map<ProductDM>(objSM);
-            dm.CreatedBy = _loginUserDetail.LoginId;
-            dm.CreatedOnUTC = DateTime.UtcNow;
-            if (!string.IsNullOrEmpty(objSM.Image))
+            if (objSM.Product == null)
             {
-                ProductImageRelativePath = await SaveFromBase64(objSM.Image);
+                return null;
             }
 
-            dm.Image = ProductImageRelativePath;
-            await _apiDbContext.Products.AddAsync(dm);
-            if (await _apiDbContext.SaveChangesAsync() > 0)
+            string? productImageRelativePath = null;
+            var existingProduct = await _apiDbContext.Products
+                .Where(x => x.Name == objSM.Product.Name &&
+                            x.CategoryId == objSM.Product.CategoryId &&
+                            x.BrandId == objSM.Product.BrandId &&
+                            x.UnitId == objSM.Product.UnitId)
+                .FirstOrDefaultAsync();
+
+            var productEntity = new ProductDM()
             {
-                return _mapper.Map<ProductSM>(dm);
-            }
-            if (ProductImageRelativePath != null)
+                Name = objSM.Product.Name,
+                CategoryId = objSM.Product.CategoryId,
+                BrandId = objSM.Product.BrandId,
+                UnitId = objSM.Product.UnitId,
+                CreatedBy = objSM.Product.CreatedBy,
+                LastModifiedBy = objSM.Product.LastModifiedBy,
+                CreatedOnUTC = objSM.Product.CreatedOnUTC,
+                LastModifiedOnUTC = objSM.Product.LastModifiedOnUTC
+            };
+
+            using var transaction = await _apiDbContext.Database.BeginTransactionAsync();
+
+            if (existingProduct == null)
             {
-                string fullImage = Path.GetFullPath(ProductImageRelativePath);
-                if (File.Exists(fullImage))
-                    File.Delete(fullImage);
+                await _apiDbContext.Products.AddAsync(productEntity);
+                await _apiDbContext.SaveChangesAsync();
+                if (objSM.ProductVariantDetails.Count > 0)
+                {
+                    var productVariantDetails = new List<ProductVariantDM>();
+                    foreach(var item in objSM.ProductVariantDetails)
+                    {
+                        var dm = new ProductVariantDM()
+                        {
+                            ProductId = productEntity.Id,
+                            VariantLevel1Id = item.VariantLevel1Id,
+                            VariantLevel2Id = item.VariantLevel2Id,
+                            CreatedBy = _loginUserDetail.LoginId,
+                            CreatedOnUTC = DateTime.UtcNow
+                        };
+                        productVariantDetails.Add(dm);
+                    }
+                    await _apiDbContext.ProductVariants.AddRangeAsync(productVariantDetails);
+                    await _apiDbContext.SaveChangesAsync();
+                }
+
+                if (!string.IsNullOrEmpty(objSM.Product.Image))
+                {
+                    productImageRelativePath = await SaveFromBase64(objSM.Product.Image);
+                }
+
+                var productDetails = new ProductDetailsDM()
+                {
+                    Code = objSM.Product.Code,
+                    Price = objSM.Product.Price,
+                    Quantity = objSM.Product.Quantity,
+                    ProductId = productEntity.Id,
+                    SupplierId = objSM.Product.SupplierId,
+                    WarehouseId = objSM.Product.WarehouseId,
+                    CreatedBy = objSM.Product.CreatedBy,
+                    Image = productImageRelativePath,
+                    LastModifiedBy = objSM.Product.LastModifiedBy,
+                    CreatedOnUTC = objSM.Product.CreatedOnUTC,
+                    LastModifiedOnUTC = objSM.Product.LastModifiedOnUTC
+                };
+
+                await _apiDbContext.ProductDetails.AddAsync(productDetails);
+                await _apiDbContext.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                objSM.Product.Id = productEntity.Id;
+                objSM.Product.ProductDetailId = productDetails.Id; // Capture the ID after save
+                objSM.Product.Image = ConvertImagePathToBase64(productDetails.Image);
+                return objSM.Product;
             }
-            throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, "Something went wrong while saving the changes");
-            
+            else
+            {
+                int productDetailId;
+                var existingDetails = await _apiDbContext.ProductDetails
+                    .Where(x => x.SupplierId == objSM.Product.SupplierId &&
+                                x.Price == objSM.Product.Price &&
+                                x.Code == objSM.Product.Code)
+                    .FirstOrDefaultAsync();
+
+                if (existingDetails != null)
+                {
+                    existingDetails.Quantity += objSM.Product.Quantity;
+                    existingDetails.LastModifiedBy = _loginUserDetail.LoginId;
+                    existingDetails.LastModifiedOnUTC = DateTime.UtcNow;
+
+                    _apiDbContext.ProductDetails.Update(existingDetails);
+                    await _apiDbContext.SaveChangesAsync(); // Save changes before getting ID
+
+                    productDetailId = existingDetails.Id; // Assign after save
+                }
+                else
+                {
+                    var newProductDetails = new ProductDetailsDM()
+                    {
+                        Code = objSM.Product.Code,
+                        Price = objSM.Product.Price,
+                        Quantity = objSM.Product.Quantity,
+                        ProductId = existingProduct.Id,
+                        SupplierId = objSM.Product.SupplierId,
+                        WarehouseId = objSM.Product.WarehouseId,
+                        CreatedBy = objSM.Product.CreatedBy,
+                        Image = productImageRelativePath,
+                        LastModifiedBy = objSM.Product.LastModifiedBy,
+                        CreatedOnUTC = objSM.Product.CreatedOnUTC,
+                        LastModifiedOnUTC = objSM.Product.LastModifiedOnUTC
+                    };
+
+                    await _apiDbContext.ProductDetails.AddAsync(newProductDetails);
+                    await _apiDbContext.SaveChangesAsync();
+                    productDetailId = newProductDetails.Id; // Assign after save
+                }
+
+
+                await transaction.CommitAsync();
+
+                objSM.Product.Id = existingProduct.Id;
+                objSM.Product.ProductDetailId = productDetailId; // Set the correct product detail ID
+                objSM.Product.Image = ConvertImagePathToBase64(productImageRelativePath);
+                return objSM.Product;
+            }
         }
+
+
         #endregion Add
+
 
         #region Update
         /// <summary>
@@ -192,48 +382,91 @@ namespace Duha.SIMS.BAL.Product
         /// <returns>
         /// If successful, returns the updated ProductSM; otherwise, returns null.
         /// </returns>
-        public async Task<ProductSM?> UpdateProducts(int objIdToUpdate, ProductSM objSM)
+        public async Task<ProductSM?> UpdateProductByIdAndProductDetailId(int productId, int productDetailId, ProductSM updatedProductSM)
         {
-            if (objSM != null && objIdToUpdate > 0)
+            if (updatedProductSM == null)
             {
-                //retrieve target product category to update from db
-                ProductDM? objDM = await _apiDbContext.Products.FindAsync(objIdToUpdate);
-
-                if (objDM != null)
-                {
-                    // Get product category image full path
-                    var imageFullPath = Path.GetFullPath(objDM.Image);
-
-                    objSM.Id = objIdToUpdate;
-                    _mapper.Map(objSM, objDM);
-
-                    //converts base 64 string to image and stores it inside a folder and returns relative path of the image
-                    var imageRelativePath = await SaveFromBase64(objSM.Image);
-
-                    if (imageRelativePath != null)
-                    {
-                        objDM.Image = imageRelativePath;
-                        objDM.LastModifiedBy = _loginUserDetail.LoginId;
-                        objDM.LastModifiedOnUTC = DateTime.UtcNow;
-
-                        if (await _apiDbContext.SaveChangesAsync() > 0)
-                        {
-                            // Delete the previous image from the folder
-                            if (File.Exists(imageFullPath))
-                                File.Delete(imageFullPath);
-
-                            return _mapper.Map<ProductSM>(objDM);
-                        }
-                    }
-                    return null;
-                }
-                else
-                {
-                    throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, "Product to update not found, add as new instead.");
-                }
+                return null;
             }
-            return null;
+
+            // Find the product entity based on the productId
+            var productEntity = await _apiDbContext.Products.FindAsync(productId);
+            if (productEntity == null)
+            {
+                return null; // Product not found
+            }
+
+            // Find the product detail entity based on productDetailId and productId
+            var productDetailEntity = await _apiDbContext.ProductDetails
+                .Where(x => x.ProductId == productId && x.Id == productDetailId)
+                .FirstOrDefaultAsync();
+
+            if (productDetailEntity == null)
+            {
+                return null; // Product detail not found
+            }
+
+            // Begin a transaction to ensure atomicity
+            using var transaction = await _apiDbContext.Database.BeginTransactionAsync();
+
+            // Update the main product fields
+            productEntity.Name = updatedProductSM.Name;
+            productEntity.CategoryId = productEntity.CategoryId;
+            productEntity.BrandId = productEntity.BrandId;
+            productEntity.UnitId = productEntity.UnitId;
+            productEntity.LastModifiedBy = _loginUserDetail.LoginId;
+            productEntity.LastModifiedOnUTC = DateTime.UtcNow;
+
+            _apiDbContext.Products.Update(productEntity);
+
+            // Update the product detail fields
+            productDetailEntity.WarehouseId = productDetailEntity.WarehouseId;
+            productDetailEntity.SupplierId = productDetailEntity.SupplierId;
+            productDetailEntity.Code = productDetailEntity.Code;
+            productDetailEntity.Quantity = updatedProductSM.Quantity;
+            productDetailEntity.Price = updatedProductSM.Price;
+            productDetailEntity.LastModifiedBy = _loginUserDetail.LoginId;
+            productDetailEntity.LastModifiedOnUTC = DateTime.UtcNow;
+
+            // If a new image is provided, update the image
+            if (!string.IsNullOrEmpty(updatedProductSM.Image))
+            {
+                var productImageRelativePath = await SaveFromBase64(updatedProductSM.Image);
+                productDetailEntity.Image = productImageRelativePath;
+            }
+
+            _apiDbContext.ProductDetails.Update(productDetailEntity);
+
+            // Save changes for both product and product detail
+            await _apiDbContext.SaveChangesAsync();
+
+            // Commit the transaction
+            await transaction.CommitAsync();
+
+            // Return the updated product details
+            var result = new ProductSM()
+            {
+                Id = productEntity.Id,
+                Name = productEntity.Name,
+                CategoryId = (int)productEntity.CategoryId,
+                BrandId = productEntity.BrandId,
+                UnitId = productEntity.UnitId,
+                WarehouseId = productDetailEntity.WarehouseId,
+                SupplierId = productDetailEntity.SupplierId,
+                Code = productDetailEntity.Code,
+                Quantity = productDetailEntity.Quantity,
+                Price = productDetailEntity.Price,
+                Image = ConvertImagePathToBase64(productDetailEntity.Image),
+                ProductDetailId = productDetailEntity.Id,
+                CreatedBy = productEntity.CreatedBy,
+                CreatedOnUTC = productEntity.CreatedOnUTC,
+                LastModifiedBy = productDetailEntity.LastModifiedBy,
+                LastModifiedOnUTC = productDetailEntity.LastModifiedOnUTC,
+            };
+
+            return result;
         }
+
 
         #endregion Update
 
@@ -253,7 +486,7 @@ namespace Duha.SIMS.BAL.Product
             if (itemToDelete != null)
             {
                 //retrieve Product image relativePath to delete it from the folder as well
-                var Image = itemToDelete.Image;
+                //var Image = itemToDelete.Image;
 
                 _apiDbContext.Products.Remove(itemToDelete);
 
@@ -261,8 +494,8 @@ namespace Duha.SIMS.BAL.Product
                 if (await _apiDbContext.SaveChangesAsync() > 0)
                 {
                     //get full resume path from relative resume path
-                    if (File.Exists(Path.GetFullPath(Image)))
-                        File.Delete(Image);
+                    /*if (File.Exists(Path.GetFullPath(Image)))
+                        File.Delete(Image);*/
 
                     return new DeleteResponseRoot(true, $"Product with Id {id} deleted successfully!");
                 }
@@ -347,8 +580,22 @@ namespace Duha.SIMS.BAL.Product
             catch (Exception ex)
             {
                 // Handle exceptions and return null
-                return ex.Message;
+                return null;
             }
+        }
+
+        static string ConvertImagePathToBase64(string imagePath)
+        {
+            if (imagePath != null)
+            {
+
+
+                // Read the image file and convert it to base64 string
+                byte[] imageBytes = File.ReadAllBytes(imagePath);
+                string base64String = Convert.ToBase64String(imageBytes);
+                return base64String;
+            }
+            return null;
         }
         #endregion Private Functions
     }
