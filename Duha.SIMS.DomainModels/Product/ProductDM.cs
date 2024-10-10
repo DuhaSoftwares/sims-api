@@ -1,8 +1,4 @@
 ﻿using Duha.SIMS.DomainModels.Base;
-using Duha.SIMS.DomainModels.Client;
-using Duha.SIMS.DomainModels.Customer;
-using Duha.SIMS.DomainModels.Warehouse;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

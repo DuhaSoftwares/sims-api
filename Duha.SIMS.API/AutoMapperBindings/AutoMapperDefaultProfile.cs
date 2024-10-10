@@ -13,6 +13,8 @@ using Duha.SIMS.ServiceModels.Product;
 using Duha.SIMS.ServiceModels.Warehouse;
 using Duha.SIMS.DomainModels.Customer;
 using Duha.SIMS.ServiceModels.Customer;
+using Duha.SIMS.DomainModels.Invoice;
+using Duha.SIMS.ServiceModels.Invoice;
 
 namespace Duha.SIMS.API.AutoMapperBindings
 {
@@ -33,6 +35,7 @@ namespace Duha.SIMS.API.AutoMapperBindings
             CreateMap<CategoryVariantDM, CategoryVariantSM>().ReverseMap();
             CreateMap<CustomerDM, CustomerSM>().ReverseMap();
             CreateMap<SupplierDM, SupplierSM>().ReverseMap();
+            CreateMap<PurchaseHistoryDM, ServiceModels.Invoice.PurchaseHistorySM>().ReverseMap();
             CreateMap<GenderDM, GenderSM>().ReverseMap();
             CreateMap<CategoryLevelDM, CategoryLevelSM>().ReverseMap();
             CreateMap<StorageTypeDM, StorageTypeSM>().ReverseMap();

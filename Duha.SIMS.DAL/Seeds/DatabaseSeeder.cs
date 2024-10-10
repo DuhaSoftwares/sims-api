@@ -36,6 +36,9 @@ namespace Duha.SIMS.DAL.Seeds
                 SeedCategoryVariants(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
                 SeedCustomers(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
                 SeedSuppliers(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
+                SeedProduct(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
+                SeedProductDetails(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
+                SeedProductVariants(apiDb, defaultCreatedBy, defaultUpdatedBy, encryptorFunc);
                 return true;
             }
             return false;
@@ -320,8 +323,10 @@ namespace Duha.SIMS.DAL.Seeds
             var categories = new List<ProductCategoryDM>()
             {
                 new() {  Name = "Electronics", Level = CategoryLevelDM.Level1, LevelId = null, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
-                new() {  Name = "Clothing", Level = CategoryLevelDM.Level1, LevelId = null, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
-                new() {  Name = "Furniture", Level = CategoryLevelDM.Level1, LevelId = null, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "Mobile",      Level = CategoryLevelDM.Level2, LevelId = 1, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "Clothing",    Level = CategoryLevelDM.Level1, LevelId = null, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "Mens",        Level = CategoryLevelDM.Level2, LevelId = 3, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "Furniture",   Level = CategoryLevelDM.Level1, LevelId = null, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow}
 
             };
 
@@ -340,6 +345,12 @@ namespace Duha.SIMS.DAL.Seeds
                 new() {  Name = "RAM", VariantLevel =  VariantLevelDM.Level1, VariantId = null, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
                 new() {  Name = "ROM", VariantLevel =  VariantLevelDM.Level1, VariantId = null, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
                 new() {  Name = "Camera Pixels", VariantLevel =  VariantLevelDM.Level1, VariantId = null, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "4 GB", VariantLevel =  VariantLevelDM.Level2, VariantId = 1, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "4 GB", VariantLevel =  VariantLevelDM.Level2, VariantId = 2, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "8 GB", VariantLevel =  VariantLevelDM.Level2, VariantId = 1, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "8 GB", VariantLevel =  VariantLevelDM.Level2, VariantId = 2, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "S",  VariantLevel =  VariantLevelDM.Level2, VariantId = 3, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "XL", VariantLevel =  VariantLevelDM.Level2, VariantId = 3, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
 
             };
 
@@ -398,6 +409,51 @@ namespace Duha.SIMS.DAL.Seeds
         }
 
         #endregion Suppliers
+
+        #region Product with Product Details
+
+        private void SeedProduct(ApiDbContext apiDb, string defaultCreatedBy, string defaultUpdatedBy, Func<string, string> encryptorFunc)
+        {
+            var products = new List<ProductDM>()
+            {
+                new() {  Name = "Product 1", BrandId = 1,CategoryId = 2, UnitId = 1, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  Name = "Product 2", BrandId = 1,CategoryId = 4, UnitId = 2, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+
+            };
+            apiDb.Products.AddRange(products);
+            apiDb.SaveChanges();
+        }
+
+        private void SeedProductDetails(ApiDbContext apiDb, string defaultCreatedBy, string defaultUpdatedBy, Func<string, string> encryptorFunc)
+        {
+            var productsDetails = new List<ProductDetailsDM>()
+            {
+                new() {  ProductId = 1, Quantity = 100, Price = 150000, SupplierId = 1, Image = "wwwroot/content/products/product1.jpeg", WarehouseId = 1, Code = "PROD001", CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  ProductId = 2, Quantity = 50, Price = 10000, SupplierId = 2, Image = "wwwroot/content/products/product2.jpeg", WarehouseId = 1, Code = "PROD002", CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                
+
+            };
+            apiDb.ProductDetails.AddRange(productsDetails);
+            apiDb.SaveChanges();
+        }
+
+        private void SeedProductVariants(ApiDbContext apiDb, string defaultCreatedBy, string defaultUpdatedBy, Func<string, string> encryptorFunc)
+        {
+            var productsVariants = new List<ProductVariantDM>()
+            {
+                new() {  ProductId = 1, VariantLevel1Id =1, VariantLevel2Id = 4, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  ProductId = 1, VariantLevel1Id =2, VariantLevel2Id = 5, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  ProductId = 2, VariantLevel1Id =2, VariantLevel2Id = 5, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+                new() {  ProductId = 2, VariantLevel1Id =2, VariantLevel2Id = 5, CreatedBy = defaultCreatedBy, CreatedOnUTC = DateTime.UtcNow},
+
+
+            };
+            apiDb.ProductVariants.AddRange(productsVariants);
+            apiDb.SaveChanges();
+        }
+
+
+        #endregion Product with Product Details
 
         #endregion Application Specific Tables
 

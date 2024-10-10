@@ -46,6 +46,14 @@ namespace Duha.SIMS.API.Controllers.Product
             return Ok(ModelConverter.FormNewSuccessResponse(listSM));
         }
 
+        [HttpGet("details")]
+        public async Task<ActionResult<ApiResponse<List<ProductSM>>>> GetAllProductDetailsProducts([FromQuery] int skip = 0, [FromQuery] int top = 10)
+        {
+            var listSM = await _productProcess.GetAllProductsDetailsProducts(skip, top);
+
+            return Ok(ModelConverter.FormNewSuccessResponse(listSM));
+        }
+
 
         [HttpGet("count")]
         public async Task<ActionResult<ApiResponse<IntResponseRoot>>> GetCount()
@@ -67,6 +75,14 @@ namespace Duha.SIMS.API.Controllers.Product
             var listSM = await _productProcess.GetProductDetailsById(id);
 
             return Ok(ModelConverter.FormNewSuccessResponse(listSM));
+        }
+
+        [HttpGet("detail/productDetailId")]
+        public async Task<ActionResult<ApiResponse<ProductSM>>> GetProductDetailsByProductDetailId(int productDetailId)
+        {
+            var singleSM = await _productProcess.GetProductsBasedOnProductDetailId(productDetailId);
+
+            return Ok(ModelConverter.FormNewSuccessResponse(singleSM));
         }
 
         [HttpGet("supplier/id")]

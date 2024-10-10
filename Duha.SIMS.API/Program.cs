@@ -48,6 +48,7 @@ builder.Services.AddScoped<ProductProcess>();
 builder.Services.AddScoped<VariantProcess>();
 builder.Services.AddScoped<CustomerProcess>();
 builder.Services.AddScoped<SupplierProcess>();
+builder.Services.AddScoped<PurchaseProcess>();
 
 // Add Identity services
 builder.Services.AddIdentity<AuthenticUserSM, IdentityRole>()

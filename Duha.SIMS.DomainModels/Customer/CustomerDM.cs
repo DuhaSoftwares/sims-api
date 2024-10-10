@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using Duha.SIMS.DomainModels.Enums;
+using Duha.SIMS.DomainModels.Invoice;
 
 namespace Duha.SIMS.DomainModels.Customer
 {
@@ -20,7 +21,9 @@ namespace Duha.SIMS.DomainModels.Customer
         public string City { get; set; }
         public string ZipCode { get; set; }
         public string Address { get; set; }
+        public CustomerGroupDM CustomerGroup { get; set; }
 
-        public CustomerGroupDM CustomerGroup { get; set; } 
+        public ICollection<PurchaseHistoryDM> Purchases { get; set; }
+        public ICollection<MoneyTransactionHistoryDM> MoneyTransactionHistories { get; set; }
     }
 }

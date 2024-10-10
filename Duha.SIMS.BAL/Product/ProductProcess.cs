@@ -92,6 +92,79 @@ namespace Duha.SIMS.BAL.Product
 
         #endregion Get All
 
+        #region Get All and By Id Product Details
+
+        #region Get By ProductId
+        /// <summary>
+        /// Fetches the the Product from the database, with images in base 64 format
+        /// </summary>
+        /// <returns>
+        /// If Successful, Returns ProductSM otherwise return null
+        /// </returns>
+        public async Task<ProductSM> GetProductsBasedOnProductDetailId(int id)
+        {
+            var item = await _apiDbContext.ProductDetails.Where(x => x.Id == id)
+                .FirstOrDefaultAsync();
+            // Return an empty list instead of null if there are no items
+            if (item == null)
+            {
+                return null;
+            }
+            var dm = await _apiDbContext.Products.FindAsync(item.ProductId);
+            var res = new ProductSM()
+            {
+                Name = dm.Name,
+                Id = dm.Id,
+                CategoryId = (int)dm.CategoryId,
+                BrandId = dm.BrandId,
+                UnitId = dm.UnitId,
+                WarehouseId = item.WarehouseId,
+                SupplierId = item.SupplierId,
+                Code = item.Code,
+                Quantity = item.Quantity,
+                Price = item.Price,
+                Image = ConvertImagePathToBase64(item.Image),
+                ProductDetailId = item.Id,
+                CreatedBy = dm.CreatedBy,
+                CreatedOnUTC = dm.CreatedOnUTC,
+                LastModifiedBy = item.LastModifiedBy,
+                LastModifiedOnUTC = item.LastModifiedOnUTC,
+            };
+            return res;
+        }
+        #endregion Get By ProductId
+
+        #region Get All
+        /// <summary>
+        /// Fetches all the Products from the database, with images in base 64 format
+        /// </summary>
+        /// <returns>
+        /// If Successful, Returns List of ProductSM otherwise return null
+        /// </returns>
+        public async Task<List<ProductSM>> GetAllProductsDetailsProducts(int skip, int top)
+        {
+            var itemsFromDb = await _apiDbContext.ProductDetails
+                .OrderByDescending(c => c.CreatedOnUTC)
+                .Skip(skip).Take(top)
+                .ToListAsync();
+            var response = new List<ProductSM>();
+            // Return an empty list instead of null if there are no items
+            if (itemsFromDb == null || itemsFromDb.Count == 0)
+            {
+                return null;
+            }
+            foreach (var item in itemsFromDb)
+            {
+                var sm = await GetProductsBasedOnProductDetailId(item.Id);
+                response.Add(sm);
+            }
+            return response;
+        }
+        #endregion Get All
+
+
+        #endregion Get All Get All and By Id Product Details
+
         #region Get Product Details By Id
         /// <summary>
         /// Get Products By Using ProductId
@@ -371,7 +444,6 @@ namespace Duha.SIMS.BAL.Product
 
 
         #endregion Add
-
 
         #region Update
         /// <summary>

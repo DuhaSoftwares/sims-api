@@ -5,6 +5,7 @@ using Duha.SIMS.DomainModels.Warehouse;
 using Duha.SIMS.DomainModels.Product;
 using Microsoft.EntityFrameworkCore;
 using Duha.SIMS.DomainModels.Customer;
+using Duha.SIMS.DomainModels.Invoice;
 
 namespace Duha.SIMS.DAL.Contexts
 {
@@ -33,6 +34,8 @@ namespace Duha.SIMS.DAL.Contexts
         public DbSet<CategoryVariantDM> CategoryVariants { get; set; }
         public DbSet<ProductVariantDM> ProductVariants { get; set; }
         public DbSet<CustomerDM> Customers { get; set; }
+        public DbSet<PurchaseHistoryDM> Purchases { get; set; }
+        public DbSet<MoneyTransactionHistoryDM> MoneyTransactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

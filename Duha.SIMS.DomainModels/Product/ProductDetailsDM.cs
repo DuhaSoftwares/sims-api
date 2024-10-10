@@ -1,6 +1,7 @@
 ﻿using Duha.SIMS.DomainModels.Base;
 using Duha.SIMS.DomainModels.Client;
 using Duha.SIMS.DomainModels.Customer;
+using Duha.SIMS.DomainModels.Invoice;
 using Duha.SIMS.DomainModels.Warehouse;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -27,6 +28,8 @@ namespace Duha.SIMS.DomainModels.Product
         public int Quantity { get; set; }
         public decimal Price { get; set; }
         public string? Image { get; set; }
+
+        public ICollection<PurchaseHistoryDM> Purchases { get; set; }
 
     }
 }
