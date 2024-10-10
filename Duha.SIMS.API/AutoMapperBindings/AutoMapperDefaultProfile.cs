@@ -35,13 +35,15 @@ namespace Duha.SIMS.API.AutoMapperBindings
             CreateMap<CategoryVariantDM, CategoryVariantSM>().ReverseMap();
             CreateMap<CustomerDM, CustomerSM>().ReverseMap();
             CreateMap<SupplierDM, SupplierSM>().ReverseMap();
-            CreateMap<PurchaseHistoryDM, ServiceModels.Invoice.PurchaseHistorySM>().ReverseMap();
+            CreateMap<PurchaseHistoryDM, PurchaseHistorySM>().ReverseMap();
+            CreateMap<MoneyTransactionHistoryDM, MoneyTransactionHistorySM>().ReverseMap();
             CreateMap<GenderDM, GenderSM>().ReverseMap();
             CreateMap<CategoryLevelDM, CategoryLevelSM>().ReverseMap();
             CreateMap<StorageTypeDM, StorageTypeSM>().ReverseMap();
             CreateMap<RoleTypeDM, RoleTypeSM>().ReverseMap();
             CreateMap<VariantLevelDM, VariantLevelSM>().ReverseMap();
             CreateMap<CustomerGroupDM, CustomerGroupSM>().ReverseMap();
+            CreateMap<PaymentMethodTypeDM, PaymentMethodTypeSM>().ReverseMap();
         }
     }
 }

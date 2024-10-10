@@ -155,5 +155,61 @@ namespace Duha.SIMS.API.Controllers.Customer
             }
         }
         #endregion Delete
+
+        #region Transactions
+
+        [HttpPost("transaction")]
+        public async Task<ActionResult<ApiResponse<MoneyTransactionHistorySM>>> MoneyTransaction([FromBody] ApiRequest<MoneyTransactionHistorySM> apiRequest)
+        {
+            #region Check Request
+
+            var innerReq = apiRequest?.ReqData;
+            if (innerReq == null)
+            {
+                return BadRequest(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_ReqDataNotFormed, ApiErrorTypeSM.InvalidInputData_NoLog));
+            }
+
+            #endregion Check Request
+
+            var addedSM = await _customerProcess.MoneyTransactionByCustomer(innerReq);
+            if (addedSM != null)
+            {
+                return ModelConverter.FormNewSuccessResponse(addedSM);
+            }
+            else
+            {
+                return BadRequest(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_PassedDataNotSaved, ApiErrorTypeSM.NoRecord_NoLog));
+            }
+        }
+
+        #endregion Transactions
+
+        #region Outstanding Balance
+
+        [HttpGet("outstandingBalance")]
+        public async Task<ActionResult<ApiResponse<OutstandingBalanceHistorySM>>> OutstandingBalance(int customerId)
+        {
+            #region Check Request
+
+            if (customerId < 1)
+            {
+                return BadRequest(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_PassedDataNotSaved, ApiErrorTypeSM.NoRecord_NoLog));
+
+            }
+
+            #endregion Check Request
+
+            var addedSM = await _customerProcess.OutstandingBalance(customerId);
+            if (addedSM != null)
+            {
+                return ModelConverter.FormNewSuccessResponse(addedSM);
+            }
+            else
+            {
+                return BadRequest(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_PassedDataNotSaved, ApiErrorTypeSM.NoRecord_NoLog));
+            }
+        }
+
+        #endregion Outstanding Balance
     }
 }

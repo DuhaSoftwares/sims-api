@@ -1,6 +1,5 @@
 ﻿using Duha.SIMS.ServiceModels.Base;
 using Duha.SIMS.ServiceModels.Enums;
-using System.ComponentModel.DataAnnotations;
 
 namespace Duha.SIMS.ServiceModels.Customer
 {

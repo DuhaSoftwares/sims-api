@@ -5,14 +5,9 @@ using Duha.SIMS.DAL.Contexts;
 using Duha.SIMS.DomainModels.Customer;
 using Duha.SIMS.DomainModels.Enums;
 using Duha.SIMS.DomainModels.Invoice;
-using Duha.SIMS.DomainModels.Product;
-using Duha.SIMS.ServiceModels.Base;
 using Duha.SIMS.ServiceModels.CommonResponse;
-using Duha.SIMS.ServiceModels.Enums;
 using Duha.SIMS.ServiceModels.Invoice;
 using Duha.SIMS.ServiceModels.LoggedInIdentity;
-using Duha.SIMS.ServiceModels.Product;
-using Microsoft.EntityFrameworkCore;
 
 namespace Duha.SIMS.BAL.Product
 {

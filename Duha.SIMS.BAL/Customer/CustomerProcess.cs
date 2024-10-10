@@ -3,9 +3,11 @@ using Duha.SIMS.BAL.Base;
 using Duha.SIMS.BAL.Exceptions;
 using Duha.SIMS.DAL.Contexts;
 using Duha.SIMS.DomainModels.Customer;
+using Duha.SIMS.DomainModels.Enums;
 using Duha.SIMS.ServiceModels.CommonResponse;
 using Duha.SIMS.ServiceModels.Customer;
 using Duha.SIMS.ServiceModels.Enums;
+using Duha.SIMS.ServiceModels.Invoice;
 using Duha.SIMS.ServiceModels.LoggedInIdentity;
 using Microsoft.EntityFrameworkCore;
 
@@ -212,6 +214,100 @@ namespace Duha.SIMS.BAL.Customer
             return new DeleteResponseRoot(false, "Customer not found");
         }
         #endregion Delete
+
+        #region Customer Transaction
+        public async Task<MoneyTransactionHistorySM> MoneyTransactionByCustomer(MoneyTransactionHistorySM objSM)
+        {
+            // Check if the customer exists in the database
+            var existingCustomer = await _apiDbContext.Customers.FindAsync(objSM.CustomerId);
+            if (existingCustomer == null)
+            {
+                throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog,
+                    "The specified customer does not exist in the system. Please add the customer first and try again.");
+            }
+
+            // Check if the amount is valid
+            if (objSM.Amount <= 0)
+            {
+                throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog,
+                    "Invalid transaction amount. Please enter a positive value for the amount.");
+            }
+
+            // Create a new transaction record
+            var moneyTransferHistory = new MoneyTransactionHistoryDM()
+            {
+                Amount = objSM.Amount,
+                DateOfTransaction = objSM.DateOfTransaction,
+                PaymentMethod = (PaymentMethodTypeDM)objSM.PaymentMethod,
+                CustomerId = objSM.CustomerId,
+                CreatedBy = _loginUserDetail.LoginId,
+                CreatedOnUTC = DateTime.UtcNow
+            };
+
+            // Add the transaction to the database
+            await _apiDbContext.MoneyTransactions.AddAsync(moneyTransferHistory);
+
+            // Save the changes and return the object if successful
+            if (await _apiDbContext.SaveChangesAsync() > 0)
+            {
+                objSM.Id = moneyTransferHistory.Id;
+                return objSM;
+            }
+
+            // If the save operation fails, throw an exception
+            throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog,
+                "An error occurred while processing the transaction. Please try again later.");
+        }
+
+
+        #endregion Customer Transaction
+
+        #region Get Customer Outstanding Balance
+
+        public async Task<OutstandingBalanceHistorySM> OutstandingBalance(int customerId)
+        {
+            // Check if the customer exists in the database
+            var customer = await _apiDbContext.Customers.FindAsync(customerId);
+            if (customer == null)
+            {
+                throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog,
+                    "Customer not found. Please ensure the customer ID is correct or add the customer to the system before checking the balance.");
+            }
+
+            // Retrieve the customer's purchase history
+            var purchaseHistory = new List<PurchaseHistorySM>();
+            var existingPurchaseHistory = await _apiDbContext.Purchases
+                .Where(x => x.CustomerId == customerId)
+                .ToListAsync();
+
+            if (existingPurchaseHistory.Count > 0)
+            {
+                purchaseHistory = _mapper.Map<List<PurchaseHistorySM>>(existingPurchaseHistory);
+            }
+
+            // Calculate the total amount paid by the customer
+            var moneyPaid = await _apiDbContext.MoneyTransactions
+                .Where(x => x.CustomerId == customerId)
+                .SumAsync(x => x.Amount);
+
+            // Calculate the total purchase amount by the customer
+            var totalBalance = await _apiDbContext.Purchases
+                .Where(x => x.CustomerId == customerId)
+                .SumAsync(x => x.TotalPrice);
+
+            // Prepare and return the response with the outstanding balance
+            var response = new OutstandingBalanceHistorySM()
+            {
+                CustomerName = customer.Name,
+                OutstandingBalance = totalBalance - moneyPaid,
+                Purchases = purchaseHistory
+            };
+
+            return response;
+        }
+
+
+        #endregion Get Customer Outstanding Balance
 
         #region Private Functions
         #endregion Private Functions
