@@ -5,6 +5,7 @@ using DocumentFormat.OpenXml.Vml.Office;
 using Duha.SIMS.BAL.Base;
 using Duha.SIMS.BAL.Exceptions;
 using Duha.SIMS.DAL.Contexts;
+using Duha.SIMS.DomainModels.Enums;
 using Duha.SIMS.DomainModels.Product;
 using Duha.SIMS.ServiceModels.CommonResponse;
 using Duha.SIMS.ServiceModels.LoggedInIdentity;
@@ -256,6 +257,121 @@ namespace Duha.SIMS.BAL.Product
 
         #endregion Get Suppliers products
 
+        #region Products in Category
+
+        public async Task<List<ProductSM>> GetProductsByCategoryIdAsync(int categoryId)
+        {
+            // Initialize categoryIds list to store Level 2 category IDs if applicable
+            List<int> categoryIds = null;
+
+            // Check if the given category is a Level 1 category
+            var level1Category = await _apiDbContext.ProductCategories
+                .FirstOrDefaultAsync(x => x.Id == categoryId && x.Level == CategoryLevelDM.Level1);
+
+            if (level1Category != null)
+            {
+                // If it's a Level 1 category, retrieve associated Level 2 category IDs
+                categoryIds = await _apiDbContext.ProductCategories
+                    .Where(x => x.LevelId == categoryId)
+                    .Select(x => x.Id)
+                    .ToListAsync();
+            }
+
+            // Check if the given category is a Level 2 category
+            var level2Category = await _apiDbContext.ProductCategories
+                .FirstOrDefaultAsync(x => x.Id == categoryId && x.Level == CategoryLevelDM.Level2);
+
+            if (level2Category != null)
+            {
+                // If it's a Level 2 category, use its ID directly
+                categoryIds = new List<int> { level2Category.Id };
+            }
+
+            // If no valid category was found, return a user-friendly error
+            if (categoryIds == null || !categoryIds.Any())
+            {
+                throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog,
+                    "The specified category was not found or it does not have any associated subcategories. Please verify the category and try again.");
+            }
+
+            // Fetch the products corresponding to the category and map to the service model
+            var productDetails = await _apiDbContext.ProductDetails
+                .Where(pd => categoryIds.Contains(pd.Products.CategoryId))
+                .Include(pd => pd.Products)
+                .OrderByDescending(pd => pd.CreatedOnUTC)
+                .ToListAsync();
+
+            // If no products were found for the given category, return a message
+            if (!productDetails.Any())
+            {
+                throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog,
+                    "No products were found for the selected category. Please try another category.");
+            }
+
+            // Map the fetched products to the ProductSM model
+            var productList = productDetails.Select(item => new ProductSM
+            {
+                Id = item.Products.Id,
+                Name = item.Products.Name,
+                CategoryId = item.Products.CategoryId,
+                BrandId = item.Products.BrandId,
+                UnitId = item.Products.UnitId,
+                WarehouseId = item.WarehouseId,
+                SupplierId = item.SupplierId,
+                Code = item.Code,
+                Quantity = item.Quantity,
+                Price = item.Price,
+                Image = ConvertImagePathToBase64(item.Image),
+                ProductDetailId = item.Id,
+                CreatedBy = item.Products.CreatedBy,
+                CreatedOnUTC = item.Products.CreatedOnUTC,
+                LastModifiedBy = item.LastModifiedBy,
+                LastModifiedOnUTC = item.LastModifiedOnUTC
+            }).ToList();
+
+            return productList;
+        }
+
+
+        #endregion Products in Category
+
+        #region Products in Warehouse
+
+        public async Task<List<ProductSM>> GetProductsByWarehouseId(int warehouseId)
+        {
+            // Get the list of products and their corresponding details for the given supplierId
+            var warehouseproducts = await _apiDbContext.ProductDetails
+                .Where(pd => pd.WarehouseId == warehouseId)
+                .Include(pd => pd.Products)
+                .OrderByDescending(c => c.CreatedOnUTC)
+                .ToListAsync();
+
+            // Map the result to ProductSM
+            var productList = warehouseproducts.Select(item => new ProductSM
+            {
+                Id = item.Products.Id,
+                Name = item.Products.Name,
+                CategoryId = item.Products.CategoryId,
+                BrandId = item.Products.BrandId,
+                UnitId = item.Products.UnitId,
+                WarehouseId = item.WarehouseId,
+                SupplierId = item.SupplierId,
+                Code = item.Code,
+                Quantity = item.Quantity,
+                Price = item.Price,
+                Image = ConvertImagePathToBase64(item.Image),
+                ProductDetailId = item.Id,
+                CreatedBy = item.Products.CreatedBy,
+                CreatedOnUTC = item.Products.CreatedOnUTC,
+                LastModifiedBy = item.LastModifiedBy,
+                LastModifiedOnUTC = item.LastModifiedOnUTC
+            }).ToList();
+
+            return productList;
+        }
+
+        #endregion Products in Warehouse
+
         #region Get product by ProductId and productDetailid
 
         /// <summary>
@@ -454,28 +570,24 @@ namespace Duha.SIMS.BAL.Product
         /// <returns>
         /// If successful, returns the updated ProductSM; otherwise, returns null.
         /// </returns>
-        public async Task<ProductSM?> UpdateProductByIdAndProductDetailId(int productId, int productDetailId, ProductSM updatedProductSM)
+        public async Task<ProductSM?> UpdateProductByIdAndProductDetailId(int productDetailId, ProductSM updatedProductSM)
         {
             if (updatedProductSM == null)
             {
                 return null;
             }
-
-            // Find the product entity based on the productId
-            var productEntity = await _apiDbContext.Products.FindAsync(productId);
-            if (productEntity == null)
-            {
-                return null; // Product not found
-            }
-
-            // Find the product detail entity based on productDetailId and productId
             var productDetailEntity = await _apiDbContext.ProductDetails
-                .Where(x => x.ProductId == productId && x.Id == productDetailId)
+                .Where(x => x.Id == productDetailId)
                 .FirstOrDefaultAsync();
-
             if (productDetailEntity == null)
             {
                 return null; // Product detail not found
+            }
+            // Find the product entity based on the productId
+            var productEntity = await _apiDbContext.Products.FindAsync(productDetailEntity.ProductId);
+            if (productEntity == null)
+            {
+                return null; // Product not found
             }
 
             // Begin a transaction to ensure atomicity
@@ -483,18 +595,10 @@ namespace Duha.SIMS.BAL.Product
 
             // Update the main product fields
             productEntity.Name = updatedProductSM.Name;
-            productEntity.CategoryId = productEntity.CategoryId;
-            productEntity.BrandId = productEntity.BrandId;
-            productEntity.UnitId = productEntity.UnitId;
             productEntity.LastModifiedBy = _loginUserDetail.LoginId;
             productEntity.LastModifiedOnUTC = DateTime.UtcNow;
 
             _apiDbContext.Products.Update(productEntity);
-
-            // Update the product detail fields
-            productDetailEntity.WarehouseId = productDetailEntity.WarehouseId;
-            productDetailEntity.SupplierId = productDetailEntity.SupplierId;
-            productDetailEntity.Code = productDetailEntity.Code;
             productDetailEntity.Quantity = updatedProductSM.Quantity;
             productDetailEntity.Price = updatedProductSM.Price;
             productDetailEntity.LastModifiedBy = _loginUserDetail.LoginId;
@@ -550,26 +654,29 @@ namespace Duha.SIMS.BAL.Product
         /// <returns>
         /// A DeleteResponseRoot indicating whether the deletion was successful or not.
         /// </returns>
-        public async Task<DeleteResponseRoot> DeleteProductsById(int id)
+        public async Task<DeleteResponseRoot> DeleteProductsById(int productDetailId)
         {
             // Check if a Product with the specified Id is present in the database
-            var itemToDelete = await _apiDbContext.Products.FindAsync(id);
+            var productDetail = await _apiDbContext.ProductDetails.FindAsync(productDetailId);
 
-            if (itemToDelete != null)
+            if (productDetail != null)
             {
+                var product = await _apiDbContext.Products.FindAsync(productDetail.ProductId);
                 //retrieve Product image relativePath to delete it from the folder as well
-                //var Image = itemToDelete.Image;
+                var Image = productDetail.Image;
 
-                _apiDbContext.Products.Remove(itemToDelete);
+                _apiDbContext.ProductDetails.Remove(productDetail);
 
                 // If save changes is successful, return a success response
                 if (await _apiDbContext.SaveChangesAsync() > 0)
                 {
+                    _apiDbContext.Products.Remove(product);
+                    await _apiDbContext.SaveChangesAsync();
                     //get full resume path from relative resume path
-                    /*if (File.Exists(Path.GetFullPath(Image)))
-                        File.Delete(Image);*/
+                    if (File.Exists(Path.GetFullPath(Image)))
+                        File.Delete(Image);
 
-                    return new DeleteResponseRoot(true, $"Product with Id {id} deleted successfully!");
+                    return new DeleteResponseRoot(true, $"Product deleted successfully!");
                 }
             }
             // If no Product with the specified Id is found, return a failure response

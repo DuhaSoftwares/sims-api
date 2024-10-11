@@ -93,14 +93,21 @@ namespace Duha.SIMS.API.Controllers.Product
             return Ok(ModelConverter.FormNewSuccessResponse(listSM));
         }
 
-        [HttpGet("productId/productDetailId")]
-        public async Task<ActionResult<ApiResponse<ProductSM>>> GetProductDetail(int productId, int productDetailId)
+        [HttpGet("warehouse/id")]
+        public async Task<ActionResult<ApiResponse<List<ProductSM>>>> GetWarehouseProductDetails(int id)
         {
-            var listSM = await _productProcess.GetProductDetailsByIdAndProductDetailId(productId, productDetailId);
+            var listSM = await _productProcess.GetProductsByWarehouseId(id);
 
             return Ok(ModelConverter.FormNewSuccessResponse(listSM));
         }
 
+        [HttpGet("category/id")]
+        public async Task<ActionResult<ApiResponse<List<ProductSM>>>> GetProductDetailsByCategoryId(int id)
+        {
+            var listSM = await _productProcess.GetProductsByCategoryIdAsync(id);
+
+            return Ok(ModelConverter.FormNewSuccessResponse(listSM));
+        }
         #endregion Get Single
 
         #region Add
@@ -131,8 +138,8 @@ namespace Duha.SIMS.API.Controllers.Product
         #endregion Add
 
         #region Put
-        [HttpPut("{id}/{productDetailsId}")]
-        public async Task<ActionResult<ApiResponse<ProductSM>>> Put(int id,int productDetailsId, [FromBody] ApiRequest<ProductSM> apiRequest)
+        [HttpPut("{productDetailsId}")]
+        public async Task<ActionResult<ApiResponse<ProductSM>>> Put(int productDetailsId, [FromBody] ApiRequest<ProductSM> apiRequest)
         {
             #region Check Request
 
@@ -141,15 +148,9 @@ namespace Duha.SIMS.API.Controllers.Product
             {
                 return BadRequest(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_ReqDataNotFormed, ApiErrorTypeSM.InvalidInputData_NoLog));
             }
-
-            if (id <= 0)
-            {
-                return BadRequest(ModelConverter.FormNewErrorResponse(DomainConstantsRoot.DisplayMessagesRoot.Display_IdInvalid, ApiErrorTypeSM.InvalidInputData_NoLog));
-            }
-
             #endregion Check Request
 
-            var resp = await _productProcess.UpdateProductByIdAndProductDetailId(id, productDetailsId, innerReq);
+            var resp = await _productProcess.UpdateProductByIdAndProductDetailId(productDetailsId, innerReq);
             if (resp != null)
             {
                 return Ok(ModelConverter.FormNewSuccessResponse(resp));

@@ -226,19 +226,29 @@ namespace Duha.SIMS.BAL.Product
         /// <returns></returns>
         public async Task<List<VariantsSM>> GetCategoryVariantsByCategoryId(int categoryId)
         {
+            var level1CatId = 0;
             var category = await _apiDbContext.ProductCategories.Where(x => x.Id == categoryId && x.Level == CategoryLevelDM.Level1).FirstOrDefaultAsync();
-            if(category == null)
+            if(category != null)
             {
-                throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, "Category Not Found or Category is not level 1 category");
+                level1CatId = category.Id;
+                
             }
+            var level2Category = await _apiDbContext.ProductCategories.Where(x => x.Id == categoryId && x.Level == CategoryLevelDM.Level2).FirstOrDefaultAsync();
+            if (level2Category != null)
+            {
+                level1CatId = (int)level2Category.LevelId;
+            }
+            if(level1CatId == 0)
+            {
+                throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, "Category Not Found");
+            }
+
             // Fetch all product variants for the specified product ID
             var productVariantIds = await _apiDbContext.CategoryVariants
-                .Where(pv => pv.ProductCategoryId == categoryId)
+                .Where(pv => pv.ProductCategoryId == level1CatId)
                 .Select(pv => pv.VariantId)
                 .Distinct()
                 .ToListAsync();
-
-
             // Create a list to store the final response
             var response = new List<VariantsSM>();
 
@@ -297,19 +307,17 @@ namespace Duha.SIMS.BAL.Product
         /// </returns>
         public async Task<VariantSM> AddVariantAsync(VariantSM newVariant, int categoryId)
         {
+            // Begin transaction
+            await using var transaction = await _apiDbContext.Database.BeginTransactionAsync();
+
             // Check the level and LevelId to ensure validity
             if (newVariant.VariantLevel == VariantLevelSM.Level1)
             {
                 newVariant.VariantId = null;
-                // Level 1 Variant should have LevelId as NULL or 0
-                if (newVariant.VariantId != null && newVariant.VariantId != 0)
-                {
-                    throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, "Level 1 Variants cannot have a LevelId.");
-                }
             }
             else if (newVariant.VariantLevel == VariantLevelSM.Level2)
             {
-                // Level 2 Variant should have a valid LevelId referencing a Level 1 Variant
+                // Level 2 Variant must have a valid LevelId referencing a Level 1 Variant
                 var parentLevel1Variant = await _apiDbContext.Variants
                     .OrderByDescending(c => c.CreatedOnUTC)
                     .FirstOrDefaultAsync(c => c.Id == newVariant.VariantId && c.VariantLevel == VariantLevelDM.Level1);
@@ -321,8 +329,8 @@ namespace Duha.SIMS.BAL.Product
             }
             else
             {
-                // If the level is not 1 or 2, throw an exception
-                throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, "Invalid Level. Allowed values: 1 or 2.");
+                // Invalid level exception
+                throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, "Invalid Variant Level. Allowed values: 1 or 2.");
             }
 
             // Map the service model to the entity model
@@ -330,29 +338,42 @@ namespace Duha.SIMS.BAL.Product
             variantEntity.CreatedBy = _loginUserDetail.LoginId;
             variantEntity.CreatedOnUTC = DateTime.UtcNow;
 
-            // Add the new Variant to the database
+            // Add the new variant to the database
             await _apiDbContext.Variants.AddAsync(variantEntity);
+            await _apiDbContext.SaveChangesAsync(); // Save variant before proceeding to Category association
 
-            if (await _apiDbContext.SaveChangesAsync() > 0)
+            // Check if the category exists and is Level 1
+            
+
+            // If the variant is Level 1, associate it with the category
+            if (variantEntity.VariantLevel == VariantLevelDM.Level1)
             {
-                if(variantEntity.VariantLevel == VariantLevelDM.Level1)
+                var categoryExist = await _apiDbContext.ProductCategories.AnyAsync(x => x.Id == categoryId && x.Level == CategoryLevelDM.Level1);
+                if (!categoryExist)
                 {
-                    var cateoryVariant = new CategoryVariantDM()
-                    {
-                        VariantId = variantEntity.Id,
-                        ProductCategoryId = categoryId,
-                        CreatedBy = _loginUserDetail.LoginId,
-                        CreatedOnUTC = DateTime.UtcNow,
-                    };
-                    _apiDbContext.CategoryVariants.Add(cateoryVariant);
-                    await _apiDbContext.SaveChangesAsync();
+                    throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog,
+                        "The specified category either does not exist or is not a Level 1 category. Please check the category details and try again.");
                 }
-                var response = await GetById(variantEntity.Id);
-                return response;
+                var categoryVariant = new CategoryVariantDM()
+                {
+                    VariantId = variantEntity.Id,
+                    ProductCategoryId = categoryId,
+                    CreatedBy = _loginUserDetail.LoginId,
+                    CreatedOnUTC = DateTime.UtcNow,
+                };
+
+                _apiDbContext.CategoryVariants.Add(categoryVariant);
+                await _apiDbContext.SaveChangesAsync();
             }
 
-            throw new SIMSException(DomainModels.Base.ExceptionTypeDM.FatalLog, "Something went wrong while adding the new Variant.");
+            // Commit the transaction
+            await transaction.CommitAsync();
+
+            // Retrieve and return the newly added variant details
+            var response = await GetById(variantEntity.Id);
+            return response;
         }
+
 
 
         #endregion Add
